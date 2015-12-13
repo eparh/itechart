@@ -1,18 +1,20 @@
 package persistence.dao;
 
 
-import persistence.model.Contact;
 
-import javax.management.InstanceAlreadyExistsException;
+import persistence.model.Attach;
+import persistence.model.Contact;
+import persistence.model.Phone;
 import java.util.List;
 
 public interface ContactDao {
-    Contact getById(Long contactId);
+    Contact getById(Long idContact);
 
-    void save(Contact contact) throws InstanceAlreadyExistsException;
+    void insert(Contact contact);
 
-    void insert(List<Contact> listContact);
+    void deleteContact(Long idContact);
 
-    void delete(int id);
-
-    List<Contact> gedfdf
+    List<Contact> getAll();
+    List<Phone> getPhones(Long idContact);
+    List<Attach> getAttach(Long idContact);
+}

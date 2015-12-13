@@ -31,12 +31,14 @@ public class Servlet extends HttpServlet {
         ActionCommand command = client.defineCommand(request);
         page = command.execute(request);
         if (page != null) {
+            System.out.println(page);
             RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(page);
             dispatcher.forward(request, response);
         } else {
-            page = "jsp/menu.jsp";
-            request.setAttribute("error", "Incorrect situation");
-            response.sendRedirect(page);
+            System.out.printf("pizda");
+            //page = "jsp/main.jsp";
+            //request.setAttribute("error", "Incorrect situation");
+           // response.sendRedirect(page);
         }
     }
 }

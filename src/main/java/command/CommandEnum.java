@@ -1,8 +1,6 @@
 package command;
 
-/**
- * Created by zhenya on 24.10.15.
- */
+
 public enum CommandEnum {
     IMPORT{
         {
@@ -11,12 +9,17 @@ public enum CommandEnum {
     },
     SHOW{
         {
-            // this.command = new ShowCommand();
+            this.command = new ShowCommand();
+        }
+    },
+    PHONE{
+        {
+            this.command = new PhoneCommand();
         }
     },
     DELETE{
         {
-           // this.command = new DeleteCommand();
+            this.command = new DeleteCommand();
         }
     };
     ActionCommand command;

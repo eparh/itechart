@@ -2,9 +2,6 @@ package command;
 
 import javax.servlet.http.HttpServletRequest;
 
-/**
- * Created by zhenya on 24.10.15.
- */
 public class ActionFactory {
     public ActionCommand defineCommand(HttpServletRequest request) {
         ActionCommand current = new EmptyCommand();

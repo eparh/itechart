@@ -17,18 +17,15 @@ public class DbUtil {
         Properties props = new Properties();
         FileInputStream fis = null;
         MysqlDataSource mysqlDS = null;
-        try {
-            fis = new FileInputStream("db.properties");
-            props.load(fis);
+           // fis = new FileInputStream("classpath: /db.properties");
+           // props.load(fis);
             mysqlDS = new MysqlDataSource();
-            mysqlDS.setURL(props.getProperty("MYSQL_DB_URL"));
-            mysqlDS.setUser(props.getProperty("MYSQL_DB_USERNAME"));
-            mysqlDS.setPassword(props.getProperty("MYSQL_DB_PASSWORD"));
-            mysqlDS.setCharacterEncoding(props.getProperty("MYSQL_CHAR_ENCODING"));
-            mysqlDS.setUseUnicode(Boolean.getBoolean(props.getProperty("MYSQL_USE_UNICODE")));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+            mysqlDS.setURL("jdbc:mysql://localhost:3306/mydb");
+            mysqlDS.setUser("root");
+            //mysqlDS.setPassword("");
+           // mysqlDS.setCharacterEncoding(props.getProperty("MYSQL_CHAR_ENCODING"));
+           // mysqlDS.setUseUnicode(Boolean.getBoolean(props.getProperty("MYSQL_USE_UNICODE")));
+
         return mysqlDS;
     }
 }
