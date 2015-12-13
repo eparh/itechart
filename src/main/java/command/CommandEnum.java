@@ -2,9 +2,9 @@ package command;
 
 
 public enum CommandEnum {
-    IMPORT{
+    SAVE{
         {
-           // this.command = new ImportCommand();
+            this.command = new SaveCommand();
         }
     },
     SHOW{
