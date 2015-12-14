@@ -31,7 +31,6 @@ public class Servlet extends HttpServlet {
         ActionCommand command = client.defineCommand(request);
         page = command.execute(request);
         if (page != null) {
-            System.out.println(page);
             RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(page);
             dispatcher.forward(request, response);
         } else {

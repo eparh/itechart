@@ -18,6 +18,11 @@ function addPhone(id){
 
 function saveContact(){
     var form= document.getElementById("form");
+    var name = form['name'].value;
+    var surname = form['surname'].value;
+    if (name == null || name == ""|| surname == null || surname == "") {
+        return false;
+    }
     form.command.value = 'save';
     form.submit();
 }

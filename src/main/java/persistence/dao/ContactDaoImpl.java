@@ -9,10 +9,7 @@ import persistence.model.Phone;
 
 import javax.management.InstanceAlreadyExistsException;
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -108,6 +105,35 @@ public class ContactDaoImpl implements ContactDao {
     @Override
     public void insert(Contact contact) {
 
+        try (Connection connection = source.getConnection()){
+
+            try (PreparedStatement statement = connection.prepareStatement("INSERT INTO Contact(`name`,surname,middName,birthday,email," +
+                            " gender,maritStatus,`national`, photo, website, company, idAddress ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)")) {
+
+                statement.setString(1,contact.getName());
+                statement.setString(2,contact.getSurname());
+                statement.setString(3,contact.getMidName());
+                statement.setDate(4,contact.getBirthday());
+                statement.setString(5,contact.getEmail());
+                statement.setString(6,contact.getGender());
+                statement.setString(7,contact.getMaritStatus());
+                statement.setString(8,contact.getNationality());
+                statement.setString(9,contact.getPhoto());
+                statement.setString(10,contact.getSite());
+                statement.setString(11,contact.getCompany());
+
+                System.out.println(contact.getFullName());
+                long id = setAdds(contact);
+                statement.setLong(12, id);
+
+
+                statement.executeUpdate();
+            }
+
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -185,5 +211,30 @@ public class ContactDaoImpl implements ContactDao {
             throw new RuntimeException(e);
         }
         return address;
+    }
+
+    private long setAdds(Contact contact){
+
+        Adds adds = contact.getAddress();
+        try (Connection connection = source.getConnection();
+             PreparedStatement statement = connection.prepareStatement("INSERT INTO Address (country, city, address, `index`) VALUES (?, ?, ?, ?)",
+                     Statement.RETURN_GENERATED_KEYS)){
+
+            statement.setString(1, adds.getCountry());
+            statement.setString(2,adds.getCity());
+            statement.setString(3,adds.getAddress());
+            statement.setString(4,adds.getIndex());
+
+
+            statement.executeUpdate();
+
+            ResultSet generatedKeys = statement.getGeneratedKeys();
+            generatedKeys.next();
+
+            return generatedKeys.getLong(1);
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

@@ -244,7 +244,7 @@
         </table>
         </div>
 
-        <button onclick="" class="btn-default" value="Save">
+        <button form="form" onclick="saveContact()" class="btn-default">Save</button>
     </div>
 
 

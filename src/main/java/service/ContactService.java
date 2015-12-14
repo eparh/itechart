@@ -11,4 +11,5 @@ public interface ContactService {
 
     List<Contact> getContacts();
     void deleteContact(Long id);
+    void insertContact(Contact contact);
 }
