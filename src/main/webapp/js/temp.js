@@ -9,8 +9,8 @@ function openbox(id) {
     }
 }
 
-function addPhone(){
-    var form= document.getElementById("form");
+function addPhone(id){
+    var form = document.getElementById(id);
     form.command.value ='phone';
     form.mode.value= 'add';
     form.submit();
@@ -20,7 +20,6 @@ function saveContact(){
     var form= document.getElementById("form");
     var name = form['name'].value;
     var surname = form['surname'].value;
-    console.log('hi');
     if (name == null || name == ""|| surname == null || surname == "") {
         return false;
     }

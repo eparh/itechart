@@ -21,6 +21,7 @@ public class SaveCommand implements ActionCommand{
     public String execute(HttpServletRequest request) {
 
         this.request = request;
+
         Contact contact = makeContact();
         contactService.insertContact(contact);
         return "/controller?command=show";

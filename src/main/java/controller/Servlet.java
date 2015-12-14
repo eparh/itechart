@@ -26,6 +26,7 @@ public class Servlet extends HttpServlet {
 
     private void processRequest(HttpServletRequest request,HttpServletResponse response) throws ServletException, IOException {
         String page = null;
+        request.setCharacterEncoding("UTF-8");
         // определение команды, пришедшей из JSP
         ActionFactory client = new ActionFactory();
         ActionCommand command = client.defineCommand(request);

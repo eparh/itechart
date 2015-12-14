@@ -36,7 +36,7 @@
         <br/><br/><br/><br/><br/><br/><br/><br/>
 
 
-        <form id="form" action="/controller" class="form-horizontal" method="post" role="form">
+        <form id="form" action="/controller" class="form-horizontal" method="post" accept-charset="utf-8" role="form">
             <input type="hidden" name="command">
             <input type="hidden" name="mode" value="add">
 
@@ -206,7 +206,7 @@
 
                     </div>
 
-                    <button form="form" onclick="addPhone('form')" class="btn-default">Save</button>
+                    <button form="form" onclick="addPhone()" class="btn-default">Save</button>
                     <button onclick="openbox('Wrapp')" class="btn-default">Cancel</button>
 
                 </div>
