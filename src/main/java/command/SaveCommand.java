@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Enumeration;
 
 public class SaveCommand implements ActionCommand{
 
@@ -29,6 +30,7 @@ public class SaveCommand implements ActionCommand{
 
     private Contact makeContact(){
 
+        System.out.println(request.getParameter("hi"));
         Contact contact = new Contact();
         contact.setName(request.getParameter("name"));
         contact.setSurname(request.getParameter("surname"));

@@ -5,7 +5,7 @@
     <title>Create contact</title>
     <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-    <script type="text/javascript" src="/js/script.js"></script>
+    <script type="text/javascript" src="/js/temp.js"></script>
     <link rel="stylesheet" href="/style/create.css">
 </head>
 <body>
@@ -26,14 +26,14 @@
 
 
     <div class="container">
-
-        <h2 align="center">Create contact</h2>
         <a href="/jsp/photo.jsp">
-            <img src="/images/noavatar.png" style="float:left; width: 128px; height: 128px ;">
+            <img src="/images/noavatar.png" style="float:left; width: 17%; height: 22% ; margin: 1% auto auto auto;">
 
         </a>
+        <h1 style="margin: 2% auto 14% 45%">Create contact</h1>
 
-        <br/><br/><br/><br/><br/><br/><br/><br/>
+
+
 
 
         <form id="form" action="/controller" class="form-horizontal" method="post" accept-charset="utf-8" role="form">
@@ -155,8 +155,7 @@
             <div id='tt'>
 
                 <div class="container">
-                    <div class="form-horizontal">
-
+                    <form id="telephone" class="form-horizontal" accept-charset="utf-8" role="form">
 
 
                         <div style="margin: auto auto 2% auto">
@@ -166,21 +165,21 @@
                         <div class="form-group">
                             <label class="control-label col-sm-2" for="countryCode">Country code:</label>
                             <div class="col-sm-2">
-                                <input form="form"  type="text" class="form-control" id="countryCode" name="countryCode" placeholder="Country code">
+                                <input  type="text" class="form-control" id="countryCode" name="countryCode" placeholder="Country code">
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label class="control-label col-sm-2" for="operatorCode">Operator code:</label>
                             <div class="col-sm-2">
-                                <input form="form" type="text" class="form-control" id="operatorCode" name="operatorCode" placeholder="Operator code">
+                                <input type="text" class="form-control" id="operatorCode" name="operatorCode" placeholder="Operator code">
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label class="control-label col-sm-2" for="phone">Telephone:</label>
                             <div class="col-sm-5">
-                                <input form="form" type="tel" class="form-control" id="phone" name="phone" placeholder="Telephone">
+                                <input type="tel" class="form-control" id="phone" name="phone" placeholder="Telephone">
                             </div>
                         </div>
 
@@ -188,7 +187,7 @@
                         <div class="form-group">
                             <label for="kind" class="control-label col-sm-2">Kind:</label>
                             <div class="col-sm-5">
-                                <select form="form" name="kind" class="form-control" id="kind">
+                                <select name="kind" class="form-control" id="kind">
                                     <option>Home</option>
                                     <option>Mobile</option>
                                 </select>
@@ -198,15 +197,15 @@
                         <div class="form-group">
                             <label class="control-label col-sm-2" for="comment">Comment:</label>
                             <div class="col-sm-5">
-                                <textarea form="form" class="form-control" rows="5" name="comment" id="comment" placeholder="Type your comment..."></textarea>
+                                <textarea  class="form-control" rows="5" name="comment" id="comment" placeholder="Type your comment..."></textarea>
                             </div>
                         </div>
 
 
 
-                    </div>
+                    </form>
 
-                    <button form="form" onclick="addPhone()" class="btn-default">Save</button>
+                    <button  onclick="phoneService.addPhone()" class="btn-default">Save</button>
                     <button onclick="openbox('Wrapp')" class="btn-default">Cancel</button>
 
                 </div>
@@ -220,7 +219,7 @@
 
 
         <div>
-        <table class="table">
+        <table class="table" id="phoneTable">
             <thead>
             <tr>
                 <th></th>
@@ -230,10 +229,10 @@
             </tr>
             </thead>
             <tbody>
-                <c:forEach items="${phones}" var="phone">
+                <c:forEach items="${phones}" var="phone" varStatus="status">
                     <tr>
                         <td>
-                            <input type="checkbox" name="phones"  value="${phone.id}">
+                            <input type="checkbox" name="phones" value="${status.count}">
                         </td>
                         <td>${phone.getFullPhone()}</td>
                         <td>${ phone.kind }</td>

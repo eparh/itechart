@@ -8,6 +8,7 @@ import java.util.Enumeration;
 import java.util.List;
 
 public class PhoneCommand implements ActionCommand {
+    private static List<Phone> phones;
     @Override
     public String execute(HttpServletRequest request) {
         String mode = request.getParameter("mode");
@@ -22,7 +23,8 @@ public class PhoneCommand implements ActionCommand {
 
     private void addPhone(HttpServletRequest request){
         Object temp = request.getAttribute("phones");
-        List<Phone> phones;
+
+
         if(temp!= null){
             phones = (ArrayList<Phone>)temp;
         } else{
@@ -32,6 +34,7 @@ public class PhoneCommand implements ActionCommand {
         phone.setCountryCode(request.getParameter("countryCode"));
         phone.setOperatorCode(request.getParameter("operatorCode"));
         phone.setNumber(request.getParameter("phone"));
+        phone.setKind(request.getParameter("kind"));
         phone.setComment(request.getParameter("comment"));
         phones.add(phone);
         request.setAttribute("phones",phones);
