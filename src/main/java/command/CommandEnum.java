@@ -12,11 +12,6 @@ public enum CommandEnum {
             this.command = new ShowCommand();
         }
     },
-    PHONE{
-        {
-            this.command = new PhoneCommand();
-        }
-    },
     DELETE{
         {
             this.command = new DeleteCommand();

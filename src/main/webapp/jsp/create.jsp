@@ -6,7 +6,7 @@
     <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
     <script type="text/javascript" src="/js/temp.js"></script>
-    <link rel="stylesheet" href="/style/create.css">
+    <link rel="stylesheet" href="/style/temp.css">
 </head>
 <body>
 
@@ -31,8 +31,6 @@
 
         </a>
         <h1 style="margin: 2% auto 14% 45%">Create contact</h1>
-
-
 
 
 
@@ -151,7 +149,7 @@
         </form>
 
 
-        <div id="Wrapp" style="display:none">
+        <div id="phonePopUp" style="display:none">
             <div id='tt'>
 
                 <div class="container">
@@ -159,7 +157,7 @@
 
 
                         <div style="margin: auto auto 2% auto">
-                             <div class="close" onclick="openbox('Wrapp')">x</div>
+                             <div class="close" onclick="phoneService.cancelPhone()">x</div>
                         </div>
 
                         <div class="form-group">
@@ -205,21 +203,25 @@
 
                     </form>
 
-                    <button  onclick="phoneService.addPhone()" class="btn-default">Save</button>
-                    <button onclick="openbox('Wrapp')" class="btn-default">Cancel</button>
+                    <button  onclick="phoneService.savePhone()" class="btn-default">Save</button>
+                    <button onclick="phoneService.cancelPhone()" class="btn-default">Cancel</button>
 
                 </div>
 
 
             </div>
         </div>
-        <div>
-            <button onclick="openbox('Wrapp')" class="btn-default">Add phone</button>
+        <div style="float: right;">
+            <button onclick="phoneService.addPhone()" class="btn-default">Add phone</button>
+            <button onclick="phoneService.deletePhone()" class="btn-default">Delete phone</button>
+            <button onclick="phoneService.editPhone()" class="btn-default">Edit phone</button>
         </div>
 
 
         <div>
-        <table class="table" id="phoneTable">
+        <input type="hidden" name="phoneCount" form="form" value="0">
+
+            <table class="table" >
             <thead>
             <tr>
                 <th></th>
@@ -228,27 +230,14 @@
                 <th>Commment</th>
             </tr>
             </thead>
-            <tbody>
-                <c:forEach items="${phones}" var="phone" varStatus="status">
-                    <tr>
-                        <td>
-                            <input type="checkbox" name="phones" value="${status.count}">
-                        </td>
-                        <td>${phone.getFullPhone()}</td>
-                        <td>${ phone.kind }</td>
-                        <td>${ phone.comment }</td>
-                    </tr>
-                </c:forEach>
+            <tbody id="phoneTable">
+
             </tbody>
         </table>
         </div>
 
         <button form="form" onclick="saveContact()" class="btn-default">Save</button>
     </div>
-
-
-
-
 
 
 
