@@ -3,18 +3,16 @@ package service;
 import persistence.dao.ContactDao;
 import persistence.dao.DaoFactory;
 import persistence.model.Contact;
+import persistence.model.Phone;
 
 import java.util.List;
 
 
 public class ContactServiceImpl implements ContactService{
-
     private ContactDao contactDao;
-
     public ContactServiceImpl() {
         this.contactDao = DaoFactory.getContactDao();
     }
-
 
     @Override
     public List<Contact> getContacts() {
@@ -27,7 +25,13 @@ public class ContactServiceImpl implements ContactService{
     }
 
     @Override
-    public void insertContact(Contact contact){
-        contactDao.insert(contact);
+    public long insertContact(Contact contact) {
+        return contactDao.insert(contact);
     }
+
+    @Override
+    public void addPhone(Phone phone) {
+        contactDao.setPhone(phone);
+    }
+
 }

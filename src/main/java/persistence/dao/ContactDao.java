@@ -10,9 +10,11 @@ import java.util.List;
 public interface ContactDao {
     Contact getById(Long idContact);
 
-    void insert(Contact contact);
+    long insert(Contact contact);
 
     void deleteContact(Long idContact);
+
+    public void setPhone(Phone phone);
 
     List<Contact> getAll();
     List<Phone> getPhones(Long idContact);

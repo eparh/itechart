@@ -46,10 +46,6 @@ public class ContactDaoImpl implements ContactDao {
                     //Получаем адрес
                     Long idAddress = set.getLong("idAddress");
                     contact.setAddress(getAdds(idAddress));
-
-
-
-
                 }
             }
         } catch (SQLException e) {
@@ -57,8 +53,6 @@ public class ContactDaoImpl implements ContactDao {
         }
         return contact;
     }
-
-
 
     @Override
     public void deleteContact(Long idContact) {
@@ -73,11 +67,9 @@ public class ContactDaoImpl implements ContactDao {
 
     }
 
-
-
     @Override
     public List<Phone> getPhones(Long idContact){
-        List<Phone> list = new ArrayList<Phone>();
+        List<Phone> list = new ArrayList<>();
         try (Connection connection = source.getConnection();
              PreparedStatement statement = connection.prepareStatement("SELECT * FROM Telephone " +
                      "WHERE idContact = ?")) {
@@ -101,15 +93,30 @@ public class ContactDaoImpl implements ContactDao {
         return list;
     }
 
+    @Override
+    public void setPhone(Phone phone){
+        try (Connection connection = source.getConnection()){
+            try (PreparedStatement statement = connection.prepareStatement("INSERT INTO Telephone(countryCode,operatorCode,`number`,kind,comment," +
+                    "idContact ) VALUES (?,?,?,?,?,?)")) {
+                statement.setString(1,phone.getCountryCode());
+                statement.setString(2,phone.getOperatorCode());
+                statement.setString(3,phone.getNumber());
+                statement.setString(4,phone.getKind());
+                statement.setString(5,phone.getComment());
+                statement.setLong(6,phone.getIdContact());
+
+                statement.executeUpdate();
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     @Override
-    public void insert(Contact contact) {
-
-        try (Connection connection = source.getConnection()){
-
+    public long insert(Contact contact) {
+        try (Connection connection = source.getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement("INSERT INTO Contact(`name`,surname,middName,birthday,email," +
-                            " gender,maritStatus,`national`, photo, website, company, idAddress ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)")) {
-
+                    " gender,maritStatus,`national`, photo, website, company, idAddress ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)",Statement.RETURN_GENERATED_KEYS)) {
                 statement.setString(1,contact.getName());
                 statement.setString(2,contact.getSurname());
                 statement.setString(3,contact.getMidName());
@@ -122,12 +129,14 @@ public class ContactDaoImpl implements ContactDao {
                 statement.setString(10,contact.getSite());
                 statement.setString(11,contact.getCompany());
 
-                System.out.println(contact.getFullName());
                 long id = setAdds(contact);
                 statement.setLong(12, id);
 
-
                 statement.executeUpdate();
+                ResultSet generatedKeys = statement.getGeneratedKeys();
+                generatedKeys.next();
+
+                return generatedKeys.getLong(1);
             }
 
 
@@ -214,25 +223,20 @@ public class ContactDaoImpl implements ContactDao {
     }
 
     private long setAdds(Contact contact){
-
         Adds adds = contact.getAddress();
         try (Connection connection = source.getConnection();
              PreparedStatement statement = connection.prepareStatement("INSERT INTO Address (country, city, address, `index`) VALUES (?, ?, ?, ?)",
                      Statement.RETURN_GENERATED_KEYS)){
-
             statement.setString(1, adds.getCountry());
             statement.setString(2,adds.getCity());
             statement.setString(3,adds.getAddress());
             statement.setString(4,adds.getIndex());
 
-
             statement.executeUpdate();
 
             ResultSet generatedKeys = statement.getGeneratedKeys();
             generatedKeys.next();
-
             return generatedKeys.getLong(1);
-
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

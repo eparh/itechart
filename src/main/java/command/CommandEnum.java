@@ -17,6 +17,7 @@ public enum CommandEnum {
             this.command = new DeleteCommand();
         }
     };
+
     ActionCommand command;
     public ActionCommand getCurrentCommand() {
         return command;
