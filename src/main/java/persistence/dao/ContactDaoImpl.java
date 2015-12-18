@@ -7,7 +7,6 @@ import persistence.model.Attach;
 import persistence.model.Contact;
 import persistence.model.Phone;
 
-import javax.management.InstanceAlreadyExistsException;
 import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
@@ -37,9 +36,9 @@ public class ContactDaoImpl implements ContactDao {
                     contact.setMaritStatus(set.getString("maritStatus"));
                     contact.setCompany(set.getString("company"));
                     contact.setBirthday(set.getDate("birthday"));
-                    contact.setGender("gender");
-                    contact.setNationality("national");
-                    contact.setSite("website");
+                    contact.setGender(set.getString("gender"));
+                    contact.setNationality(set.getString("national"));
+                    contact.setSite(set.getString("website"));
                     contact.setEmail(set.getString("email"));
                     contact.setPhoto(set.getString("photo"));
 

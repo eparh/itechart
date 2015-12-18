@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Enumeration;
 import java.util.List;
 
-public class DeleteCommand implements ActionCommand{
+public class DeleteCommand implements ActionCommand {
     private ContactService contactService = ServiceFactory.getContactService();
     @Override
     public String execute(HttpServletRequest request) {

@@ -24,9 +24,6 @@ public class Contact {
     private List<Part> attachs = new ArrayList<>();
     private String photo;
 
-
-
-
     public Long getId() {
 
         return id;
@@ -107,9 +104,6 @@ public class Contact {
     public void setPhoto(String photo) {
         this.photo = photo;
     }
-
-
-
 
     public String getFullName() {
         String temp = surname + " " + name;

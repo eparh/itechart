@@ -119,7 +119,6 @@ var phoneService = {
         this.count++;
         this.mode = 0;
         openbox(this.popUp);
-
     },
 
     cancelPhone: function () {

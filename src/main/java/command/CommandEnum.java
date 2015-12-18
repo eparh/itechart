@@ -16,6 +16,11 @@ public enum CommandEnum {
         {
             this.command = new DeleteCommand();
         }
+    },
+    GET{
+        {
+            this.command = new GetCommand();
+        }
     };
 
     ActionCommand command;

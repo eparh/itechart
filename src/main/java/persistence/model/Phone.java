@@ -1,6 +1,5 @@
 package persistence.model;
 
-
 public class Phone {
     private Long idPhone;
     private String countryCode;
@@ -9,8 +8,6 @@ public class Phone {
     private String kind;
     private String comment;
     private Long idContact;
-
-
 
     public Long getIdPhone() {
         return idPhone;
@@ -71,6 +68,7 @@ public class Phone {
     public String getFullPhone() {
         return  countryCode + " "+ operatorCode + " " + number;
     }
+
     @Override
     public String toString() {
         return  countryCode + " "+ operatorCode + " " + number;

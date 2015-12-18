@@ -17,6 +17,8 @@ public interface ContactDao {
     public void setPhone(Phone phone);
 
     List<Contact> getAll();
+
     List<Phone> getPhones(Long idContact);
+
     List<Attach> getAttach(Long idContact);
 }

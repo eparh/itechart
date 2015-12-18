@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
     <link rel="stylesheet" href="/style/main.css">
     <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
+    <script type="text/javascript" src="/js/main.js"></script>
 </head>
 <body>
 
@@ -16,9 +17,9 @@
             </div>
             <div>
                 <ul class="nav navbar-nav">
-                    <li><a href="/jsp/create.jsp"><span class="glyphicon glyphicon-plus"></span>Add contact</a></li>
-                    <li><a href="/jsp/edit.jsp"><span class="glyphicon glyphicon-pencil"></span>Edit contact</a></li>
-                    <li><a href="javascript:{}" onclick="document.getElementById('delete').submit(); return false;"><span class="glyphicon glyphicon-trash"></span> Delete contact</a></li>
+                    <li><a href="/jsp/contact.jsp"><span class="glyphicon glyphicon-plus"></span>Add contact</a></li>
+                    <li><a href="javascript:{}" onclick="getContact(); return false;"><span class="glyphicon glyphicon-pencil"></span>Edit contact</a></li>
+                    <li><a href="javascript:{}" onclick="deleteContact(); return false;"><span class="glyphicon glyphicon-trash"></span> Delete contact</a></li>
                     <li><a href="/jsp/search.jsp"><span class="glyphicon glyphicon-search"></span> Search contacts</a></li>
                     <li><a href="/jsp/email.jsp"><span class="glyphicon glyphicon-send"></span> Send Email </a></li>
                 </ul>
@@ -26,8 +27,9 @@
         </div>
     </nav>
 
-    <form action="/controller" id="delete" method="post">
-        <input type="hidden" name="command" form="delete" value="delete">
+    <form action="/controller" id="checkbox" method="post">
+        <input type="hidden" name="command"  value="delete">
+        <input type="hidden" name="idContact">
     </form>
 
     <table class="table table-striped .table-bordered .table-hover">
@@ -40,13 +42,13 @@
                 <th>Company</th>
             </tr>
         </thead>
-        <tbody>
-            <c:forEach items="${contacts}" var="contact">
+        <tbody id="table">
+            <c:forEach items="${contacts}" var="contact" varStatus="num">
                 <tr>
                     <td>
-                        <input type="checkbox" name="marked" form="delete" value="${contact.id}">
+                        <input type="checkbox" name="marked" form="checkbox" value="${contact.id}">
                     </td>
-                    <td><a href="/jsp/edit.jsp">${ contact.getFullName()}</a></td>
+                    <td><a href="javascript:{}" onclick="getContactByClick(${ num.count }); return false;">${ contact.getFullName()}</a></td>
                     <td>${ contact.birthday}</td>
                     <td>${ contact.address }</td>
                     <td>${ contact.company }</td>

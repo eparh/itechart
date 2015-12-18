@@ -34,4 +34,13 @@ public class ContactServiceImpl implements ContactService{
         contactDao.setPhone(phone);
     }
 
+    @Override
+    public Contact getContact(long id){
+        return contactDao.getById(id);
+    }
+
+    @Override
+    public List<Phone> getPhones(long id) {
+        return contactDao.getPhones(id);
+    }
 }
