@@ -7,11 +7,11 @@ import java.util.List;
 
 
 public interface ContactService {
-    List<Contact> getContacts();
+    List<Contact> getShowContacts();
 
     void deleteContact(Long id);
 
-    long insertContact(Contact contact);
+    long setContact(Contact contact);
 
     void addPhone(Phone phone);
 

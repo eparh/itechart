@@ -11,8 +11,9 @@ function openbox(id) {
 }
 
 
-function saveContact(title) {
+function saveContact() {
     var form= document.getElementById("form");
+    console.log("hi");
     var name = form['name'].value;
     var surname = form['surname'].value;
 
@@ -20,19 +21,12 @@ function saveContact(title) {
         return false;
     }
 
-    if (title == 'Create contact') {
-        form.command.value = 'add';
-    }else {
-        form.command.value = 'update';
-    }
-
-    alert(form.command.value);
+    form.command.value = 'save';
     form.submit();
 }
 
 
 var phoneService = {
-
     count: 0,
     pos : 0,
     popUp: 'phonePopUp',
@@ -131,9 +125,5 @@ var phoneService = {
         document.getElementById("telephone").reset();
         openbox(this.popUp);
     }
-
-
-
-
 }
 

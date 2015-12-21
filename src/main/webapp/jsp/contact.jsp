@@ -5,7 +5,7 @@
     <title>Create contact</title>
     <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-    <script type="text/javascript" src="/js/temp.js"></script>
+    <script type="text/javascript" src="/js/contact.js"></script>
     <link rel="stylesheet" href="/style/temp.css">
 </head>
 <body>
@@ -30,11 +30,12 @@
     <c:if test="${title == null}">
         <c:set var="title"  value="Create contact"/>
     </c:if>
-    <h1 style="margin: 2% auto 14% 45%"> ${title}</h1>
+    <h1  style="margin: 2% auto 14% 45%"> ${title}</h1>
 
     <form id="form" action="/controller" class="form-horizontal" method="post" accept-charset="utf-8" role="form">
-        <input type="hidden" name="command">
-        <input type="hidden" name="mode" value="add">
+        <input type="hidden" name="command" value="save">
+
+        <input type="hidden" name="idContact" value="${contact.id}">
 
         <div class="form-group">
             <label class="control-label col-sm-2" for="name">Name:</label>
@@ -110,13 +111,13 @@
             </div>
         </div>
 
+        <input type="hidden" name="idAddress" value="${contact.address.idAddress}">
+
         <div class="form-group">
             <label class="control-label col-sm-2" for="country">Address:</label>
-
             <div class="col-sm-10">
                 <input type="text" value="${contact.address.country}" class="form-control" id="country" name="country" placeholder="Enter country">
             </div>
-
         </div>
 
         <div class="form-group">
@@ -217,16 +218,18 @@
                         <input type='checkbox'  name='phones'/>
                     </td>
                     <td><input type='text' form='form' value="${ phone.getFullPhone()}" readonly/></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td><input type='text' form='form' name="kind+${ num.count }" value="${ phone.kind}" readonly/></td>
+                    <td><input type='text' form='form' name="comment+${ num.count }" value="${ phone.comment}" readonly/></td>
+                    <td><input type='hidden' form='form' name="countryCode+${ num.count }" value="${ phone.countryCode}" readonly/></td>
+                    <td><input type='hidden' form='form' name="operatorCode+${ num.count }" value="${ phone.operatorCode}" readonly/></td>
+                    <td><input type='hidden' form='form' name="number+${ num.count }" value="${ phone.number}" readonly/></td>
                 </tr>
             </c:forEach>
             </tbody>
         </table>
     </div>
 
-    <button form="form" onclick="saveContact()" class="btn-default">Save</button>
+    <button form="form" type="submit" class="btn-default">Save</button>
 </div>
 
 </body>

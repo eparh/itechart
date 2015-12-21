@@ -12,12 +12,13 @@ public class Adds {
     @Override
     public String toString() {
         String temp = "";
-        if(country != null) temp += country;
-        if (city != null){
+
+        if(country != null && !"".equals(country)) temp += country;
+        if (city != null && !"".equals(city)){
             if(! temp.equals("")) temp += ", ";
             temp += city;
         }
-        if (address != null){
+        if (address != null && !"".equals(address)){
             if(! temp.equals("")) temp +=", ";
             temp += address;
         }

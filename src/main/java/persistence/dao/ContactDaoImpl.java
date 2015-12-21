@@ -112,35 +112,65 @@ public class ContactDaoImpl implements ContactDao {
     }
 
     @Override
-    public long insert(Contact contact) {
-        try (Connection connection = source.getConnection()) {
-            try (PreparedStatement statement = connection.prepareStatement("INSERT INTO Contact(`name`,surname,middName,birthday,email," +
-                    " gender,maritStatus,`national`, photo, website, company, idAddress ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)",Statement.RETURN_GENERATED_KEYS)) {
-                statement.setString(1,contact.getName());
-                statement.setString(2,contact.getSurname());
-                statement.setString(3,contact.getMidName());
-                statement.setDate(4,contact.getBirthday());
-                statement.setString(5,contact.getEmail());
-                statement.setString(6,contact.getGender());
-                statement.setString(7,contact.getMaritStatus());
-                statement.setString(8,contact.getNationality());
-                statement.setString(9,contact.getPhoto());
-                statement.setString(10,contact.getSite());
-                statement.setString(11,contact.getCompany());
+    public long setContact(Contact contact) {
+        Long idContact = contact.getId();
+        if( idContact == null ) {
+            try (Connection connection = source.getConnection()) {
+                try (PreparedStatement statement = connection.prepareStatement("INSERT INTO Contact(`name`,surname,middName,birthday,email," +
+                        " gender,maritStatus,`national`, photo, website, company, idAddress ) VALUES (?,?,?,?,?,?,?,?,?,?,?,? )", Statement.RETURN_GENERATED_KEYS)) {
+                    statement.setString(1, contact.getName());
+                    statement.setString(2, contact.getSurname());
+                    statement.setString(3, contact.getMidName());
+                    statement.setDate(4, contact.getBirthday());
+                    statement.setString(5, contact.getEmail());
+                    statement.setString(6, contact.getGender());
+                    statement.setString(7, contact.getMaritStatus());
+                    statement.setString(8, contact.getNationality());
+                    statement.setString(9, contact.getPhoto());
+                    statement.setString(10, contact.getSite());
+                    statement.setString(11, contact.getCompany());
 
-                long id = setAdds(contact);
-                statement.setLong(12, id);
+                    long id = setAdds(contact);
+                    statement.setLong(12, id);
 
-                statement.executeUpdate();
-                ResultSet generatedKeys = statement.getGeneratedKeys();
-                generatedKeys.next();
+                    statement.executeUpdate();
+                    ResultSet generatedKeys = statement.getGeneratedKeys();
+                    generatedKeys.next();
 
-                return generatedKeys.getLong(1);
+                    return generatedKeys.getLong(1);
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
             }
+        } else {
+            try (Connection connection = source.getConnection()) {
 
+                try (PreparedStatement statement = connection.prepareStatement("UPDATE Contact  SET surname = ?, `name`= ?, middName = ?," +
+                        " birthday = ?,  email = ?, gender = ? , maritStatus = ?, `national`= ?, " +
+                        "photo = ? , website = ?, company = ?, idAddress = ? WHERE idContact = ?")) {
+                    statement.setString(1,contact.getSurname());
+                    statement.setString(2,contact.getName());
+                    statement.setString(3,contact.getMidName());
+                    statement.setDate(4,contact.getBirthday());
+                    statement.setString(5,contact.getEmail());
+                    statement.setString(6,contact.getGender());
+                    statement.setString(7,contact.getMaritStatus());
+                    statement.setString(8,contact.getNationality());
+                    statement.setString(9,contact.getPhoto());
+                    statement.setString(10,contact.getSite());
+                    statement.setString(11,contact.getCompany());
 
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+                    long id = setAdds(contact);
+                    statement.setLong(12, id);
+
+                    statement.setLong(13, idContact);
+                    statement.executeUpdate();
+
+                    return idContact;
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 
@@ -170,7 +200,7 @@ public class ContactDaoImpl implements ContactDao {
     }
 
     @Override
-    public List<Contact> getAll() {
+    public List<Contact> getShowContacts() {
         List<Contact> list = new ArrayList<Contact>();
 
         try (Connection connection = source.getConnection();
@@ -223,21 +253,40 @@ public class ContactDaoImpl implements ContactDao {
 
     private long setAdds(Contact contact){
         Adds adds = contact.getAddress();
-        try (Connection connection = source.getConnection();
-             PreparedStatement statement = connection.prepareStatement("INSERT INTO Address (country, city, address, `index`) VALUES (?, ?, ?, ?)",
-                     Statement.RETURN_GENERATED_KEYS)){
-            statement.setString(1, adds.getCountry());
-            statement.setString(2,adds.getCity());
-            statement.setString(3,adds.getAddress());
-            statement.setString(4,adds.getIndex());
+        Long idAddress = adds.getIdAddress();
+        if(idAddress == null) {
+            try (Connection connection = source.getConnection();
+                 PreparedStatement statement = connection.prepareStatement("INSERT INTO Address (country, city, address, `index`) VALUES (?, ?, ?, ?)",
+                         Statement.RETURN_GENERATED_KEYS)) {
+                statement.setString(1, adds.getCountry());
+                statement.setString(2, adds.getCity());
+                statement.setString(3, adds.getAddress());
+                statement.setString(4, adds.getIndex());
 
-            statement.executeUpdate();
+                statement.executeUpdate();
 
-            ResultSet generatedKeys = statement.getGeneratedKeys();
-            generatedKeys.next();
-            return generatedKeys.getLong(1);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+                ResultSet generatedKeys = statement.getGeneratedKeys();
+                generatedKeys.next();
+                return generatedKeys.getLong(1);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        } else {
+            try (Connection connection = source.getConnection();
+                 PreparedStatement statement = connection.prepareStatement("UPDATE Address SET country = ? , city = ?, address = ?, `index` = ?" +
+                         " WHERE idAddress = ?")) {
+                statement.setString(1, adds.getCountry());
+                statement.setString(2, adds.getCity());
+                statement.setString(3, adds.getAddress());
+                statement.setString(4, adds.getIndex());
+                statement.setLong(5, idAddress);
+
+                statement.executeUpdate();
+
+                return idAddress;
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 }

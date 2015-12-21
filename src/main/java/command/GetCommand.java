@@ -33,8 +33,11 @@ public class GetCommand implements ActionCommand {
 
         Contact contact = contactService.getContact(idContact);
         List<Phone> phones = contactService.getPhones(idContact);
+
         request.setAttribute("contact",contact);
         request.setAttribute("title","Edit contact");
+        request.setAttribute("phones",phones);
+
         return "/jsp/contact.jsp";
     }
 }

@@ -20,15 +20,18 @@ public class SaveCommand implements ActionCommand{
         this.request = request;
 
         Contact contact = makeContact();
-        long idContact = contactService.insertContact(contact);
-        setPhones(idContact);
+        long idContact = contactService.setContact(contact);
+        getPhones(idContact);
 
         return "/controller?command=show";
     }
 
     private Contact makeContact() {
         Contact contact = new Contact();
-
+        String strID = request.getParameter("idContact");
+        if(!"".equals(strID)) {
+            contact.setId(Long.parseLong(strID));
+        }
         contact.setName(request.getParameter("name"));
         contact.setSurname(request.getParameter("surname"));
         contact.setMidName(request.getParameter("middname"));
@@ -62,6 +65,10 @@ public class SaveCommand implements ActionCommand{
 
     private Adds getAdds() {
         Adds adds = new Adds();
+        String strID = request.getParameter("idAddress");
+        if(!"".equals(strID)) {
+            adds.setIdAddress(Long.parseLong(strID));
+        }
         adds.setCountry(request.getParameter("country"));
         adds.setAddress(request.getParameter("address"));
         adds.setCity(request.getParameter("city"));
@@ -69,7 +76,7 @@ public class SaveCommand implements ActionCommand{
         return adds;
     }
 
-    private void setPhones(long idContact) {
+    private void getPhones(long idContact) {
         int count = Integer.parseInt(request.getParameter("phoneCount"));
         for(int i=0;i< count; i++){
             Phone phone = new Phone();

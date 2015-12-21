@@ -12,7 +12,7 @@ public class ShowCommand implements ActionCommand {
     private ContactService contactService = ServiceFactory.getContactService();
     @Override
     public String execute(HttpServletRequest request) {
-        List<Contact> contacts= contactService.getContacts();
+        List<Contact> contacts= contactService.getShowContacts();
         request.setAttribute("contacts", contacts);
         return "/jsp/main.jsp";
     }

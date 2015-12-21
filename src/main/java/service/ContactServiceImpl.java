@@ -15,8 +15,8 @@ public class ContactServiceImpl implements ContactService{
     }
 
     @Override
-    public List<Contact> getContacts() {
-        return contactDao.getAll();
+    public List<Contact> getShowContacts() {
+        return contactDao.getShowContacts();
     }
 
     @Override
@@ -25,8 +25,8 @@ public class ContactServiceImpl implements ContactService{
     }
 
     @Override
-    public long insertContact(Contact contact) {
-        return contactDao.insert(contact);
+    public long setContact(Contact contact) {
+        return contactDao.setContact(contact);
     }
 
     @Override

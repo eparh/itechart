@@ -10,13 +10,13 @@ import java.util.List;
 public interface ContactDao {
     Contact getById(Long idContact);
 
-    long insert(Contact contact);
+    long setContact(Contact contact);
 
     void deleteContact(Long idContact);
 
-    public void setPhone(Phone phone);
+    void setPhone(Phone phone);
 
-    List<Contact> getAll();
+    List<Contact> getShowContacts();
 
     List<Phone> getPhones(Long idContact);
 
