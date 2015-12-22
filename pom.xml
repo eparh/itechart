@@ -45,7 +45,7 @@
           <target>1.8</target>
         </configuration>
       </plugin>
-    </plugins>
+    </plugins>к
     <resources>
       <resource>
         <directory>src/main/resources</directory>

@@ -7,7 +7,6 @@ function openbox(id) {
     else {
         div.style.display = 'block';
     }
-
 }
 
 var phoneService = {
@@ -21,7 +20,6 @@ var phoneService = {
         openbox(this.popUp);
 
         var table = document.getElementById("phoneTable");
-
 
         if (this.mode == 0) {
             var i = table.rows.length;
