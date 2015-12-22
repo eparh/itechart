@@ -17,7 +17,6 @@ public class GetCommand implements ActionCommand {
         Long idContact =(long) -1;
         if(! "".equals(temp)) {
             idContact = Long.parseLong(temp);
-            System.out.println(idContact);
         } else {
             String[] chosen = request.getParameterValues("marked");
 

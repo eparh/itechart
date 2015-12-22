@@ -10,18 +10,22 @@ import javax.servlet.http.HttpServletRequest;
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-public class SaveCommand implements ActionCommand{
+public class SaveCommand implements ActionCommand {
     private ContactService contactService = ServiceFactory.getContactService();
     private HttpServletRequest request;
 
     @Override
     public String execute(HttpServletRequest request) {
         this.request = request;
-
         Contact contact = makeContact();
         long idContact = contactService.setContact(contact);
-        getPhones(idContact);
+        savePhones(idContact);
 
         return "/controller?command=show";
     }
@@ -76,17 +80,34 @@ public class SaveCommand implements ActionCommand{
         return adds;
     }
 
-    private void getPhones(long idContact) {
-        int count = Integer.parseInt(request.getParameter("phoneCount"));
-        for(int i=0;i< count; i++){
-            Phone phone = new Phone();
-            phone.setCountryCode(request.getParameter("countryCode"+i));
-            phone.setOperatorCode(request.getParameter("operatorCode"+i));
-            phone.setNumber(request.getParameter("phone"+i));
-            phone.setKind(request.getParameter("kind"+i));
-            phone.setComment(request.getParameter("comment"+i));
-            phone.setIdContact(idContact);
-            contactService.addPhone(phone);
+    private List<Phone> getPhones(long idContact) {
+        List<Phone> phones = new ArrayList<>();
+        Enumeration<String> paramNames = request.getParameterNames();
+        Pattern pattern = Pattern.compile("phone\\d+");
+
+        while(paramNames.hasMoreElements()) {
+            String paramName = paramNames.nextElement();
+            Matcher matcher = pattern.matcher(paramName);
+            if( matcher.matches()) {
+                System.out.println(paramName);
+                System.out.println(paramName.substring(5));
+                long i = Long.parseLong(paramName.substring(5));
+                Phone phone = new Phone();
+                phone.setCountryCode(request.getParameter("countryCode" + i));
+                phone.setOperatorCode(request.getParameter("operatorCode" + i));
+                phone.setNumber(request.getParameter("phone" + i));
+                phone.setKind(request.getParameter("kind" + i));
+                phone.setComment(request.getParameter("comment" + i));
+                phone.setIdContact(idContact);
+                phones.add(phone);
+            }
         }
+        return phones;
+    }
+
+    private void savePhones(long idContact) {
+        List<Phone> phones = getPhones(idContact);
+        System.out.println(phones);
+        contactService.savePhones(idContact, phones);
     }
 }

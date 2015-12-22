@@ -30,6 +30,7 @@
     <c:if test="${title == null}">
         <c:set var="title"  value="Create contact"/>
     </c:if>
+
     <h1  style="margin: 2% auto 14% 45%"> ${title}</h1>
 
     <form id="form" action="/controller" class="form-horizontal" method="post" accept-charset="utf-8" role="form">
@@ -201,7 +202,6 @@
         <button onclick="phoneService.editPhone()" class="btn-default">Edit phone</button>
     </div>
     <div>
-        <input type="hidden" name="phoneCount" form="form" value="0">
         <table class="table" >
             <thead>
             <tr>
@@ -218,11 +218,11 @@
                         <input type='checkbox'  name='phones'/>
                     </td>
                     <td><input type='text' form='form' value="${ phone.getFullPhone()}" readonly/></td>
-                    <td><input type='text' form='form' name="kind+${ num.count }" value="${ phone.kind}" readonly/></td>
-                    <td><input type='text' form='form' name="comment+${ num.count }" value="${ phone.comment}" readonly/></td>
-                    <td><input type='hidden' form='form' name="countryCode+${ num.count }" value="${ phone.countryCode}" readonly/></td>
-                    <td><input type='hidden' form='form' name="operatorCode+${ num.count }" value="${ phone.operatorCode}" readonly/></td>
-                    <td><input type='hidden' form='form' name="number+${ num.count }" value="${ phone.number}" readonly/></td>
+                    <td><input type='text' form='form' name="kind${ num.count - 1 }" value="${ phone.kind}" readonly/></td>
+                    <td><input type='text' form='form' name="comment${ num.count - 1 }" value="${ phone.comment}" readonly/></td>
+                    <td><input type='hidden' form='form' name="countryCode${ num.count - 1}" value="${ phone.countryCode}" readonly/></td>
+                    <td><input type='hidden' form='form' name="operatorCode${ num.count - 1}" value="${ phone.operatorCode}" readonly/></td>
+                    <td><input type='hidden' form='form' name="phone${ num.count - 1}" value="${ phone.number}" readonly/></td>
                 </tr>
             </c:forEach>
             </tbody>

@@ -13,7 +13,7 @@ public interface ContactService {
 
     long setContact(Contact contact);
 
-    void addPhone(Phone phone);
+    void savePhones(long idContact, List<Phone> phones);
 
     Contact getContact(long id);
 

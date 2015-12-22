@@ -30,8 +30,8 @@ public class ContactServiceImpl implements ContactService{
     }
 
     @Override
-    public void addPhone(Phone phone) {
-        contactDao.setPhone(phone);
+    public void savePhones(long idContact, List<Phone> phones) {
+        contactDao.setPhones(idContact,phones);
     }
 
     @Override

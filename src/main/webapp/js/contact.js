@@ -10,40 +10,21 @@ function openbox(id) {
 
 }
 
-
-function saveContact() {
-    var form= document.getElementById("form");
-    console.log("hi");
-    var name = form['name'].value;
-    var surname = form['surname'].value;
-
-    if (name == null || name == ""|| surname == null || surname == "") {
-        return false;
-    }
-
-    form.command.value = 'save';
-    form.submit();
-}
-
-
 var phoneService = {
-    count: 0,
     pos : 0,
     popUp: 'phonePopUp',
     mode: 0,
 
     savePhone: function () {
         var form= document.getElementById("telephone");
-        var i = this.pos;
 
         openbox(this.popUp);
 
         var table = document.getElementById("phoneTable");
 
-        if(this.mode == 0) {
 
-            document.getElementById("form").phoneCount.value = this.count;
-
+        if (this.mode == 0) {
+            var i = table.rows.length;
             var row = table.insertRow(i);
             var cell1 = row.insertCell(0);
             var cell2 = row.insertCell(1);
@@ -53,16 +34,15 @@ var phoneService = {
             var cell6 = row.insertCell(5);
             var cell7 = row.insertCell(6);
         }  else {
-
+            var i = this.pos;
             var row = table.rows[i];
             var cell1 = row.cells[0];
-            var cell2 = row.cells[1];;
-            var cell3 = row.cells[2];;
-            var cell4 = row.cells[3];;
-            var cell5 = row.cells[4];;
-            var cell6 = row.cells[5];;
-            var cell7 = row.cells[6];;
-
+            var cell2 = row.cells[1];
+            var cell3 = row.cells[2];
+            var cell4 = row.cells[3];
+            var cell5 = row.cells[4];
+            var cell6 = row.cells[5];
+            var cell7 = row.cells[6];
         }
 
         cell1.innerHTML = "<input type='checkbox'  name='phones'/>";
@@ -85,8 +65,6 @@ var phoneService = {
         for (var i=checkboxes.length - 1; i>=0; i--) {
 
             if (checkboxes[i].checked) {
-                this.count--;
-                document.getElementById("form").phoneCount.value = this.count;
                 table.deleteRow(i);
             }
         }
@@ -115,8 +93,6 @@ var phoneService = {
     },
 
     addPhone: function () {
-        this.pos = this.count;
-        this.count++;
         this.mode = 0;
         openbox(this.popUp);
     },

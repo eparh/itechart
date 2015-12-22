@@ -55,15 +55,7 @@ public class ContactDaoImpl implements ContactDao {
 
     @Override
     public void deleteContact(Long idContact) {
-        System.out.println(idContact);
-        try (Connection connection = source.getConnection()){
-            PreparedStatement statement = connection.prepareStatement("delete from Contact where idContact = ?");
-            statement.setLong(1, idContact);
-            statement.execute();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-
+        deleteOnStatement("delete from Contact where idContact = ?",idContact);
     }
 
     @Override
@@ -93,7 +85,7 @@ public class ContactDaoImpl implements ContactDao {
     }
 
     @Override
-    public void setPhone(Phone phone){
+    public void insertPhone(Phone phone){
         try (Connection connection = source.getConnection()){
             try (PreparedStatement statement = connection.prepareStatement("INSERT INTO Telephone(countryCode,operatorCode,`number`,kind,comment," +
                     "idContact ) VALUES (?,?,?,?,?,?)")) {
@@ -112,70 +104,26 @@ public class ContactDaoImpl implements ContactDao {
     }
 
     @Override
-    public long setContact(Contact contact) {
-        Long idContact = contact.getId();
-        if( idContact == null ) {
-            try (Connection connection = source.getConnection()) {
-                try (PreparedStatement statement = connection.prepareStatement("INSERT INTO Contact(`name`,surname,middName,birthday,email," +
-                        " gender,maritStatus,`national`, photo, website, company, idAddress ) VALUES (?,?,?,?,?,?,?,?,?,?,?,? )", Statement.RETURN_GENERATED_KEYS)) {
-                    statement.setString(1, contact.getName());
-                    statement.setString(2, contact.getSurname());
-                    statement.setString(3, contact.getMidName());
-                    statement.setDate(4, contact.getBirthday());
-                    statement.setString(5, contact.getEmail());
-                    statement.setString(6, contact.getGender());
-                    statement.setString(7, contact.getMaritStatus());
-                    statement.setString(8, contact.getNationality());
-                    statement.setString(9, contact.getPhoto());
-                    statement.setString(10, contact.getSite());
-                    statement.setString(11, contact.getCompany());
-
-                    long id = setAdds(contact);
-                    statement.setLong(12, id);
-
-                    statement.executeUpdate();
-                    ResultSet generatedKeys = statement.getGeneratedKeys();
-                    generatedKeys.next();
-
-                    return generatedKeys.getLong(1);
-                }
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        } else {
-            try (Connection connection = source.getConnection()) {
-
-                try (PreparedStatement statement = connection.prepareStatement("UPDATE Contact  SET surname = ?, `name`= ?, middName = ?," +
-                        " birthday = ?,  email = ?, gender = ? , maritStatus = ?, `national`= ?, " +
-                        "photo = ? , website = ?, company = ?, idAddress = ? WHERE idContact = ?")) {
-                    statement.setString(1,contact.getSurname());
-                    statement.setString(2,contact.getName());
-                    statement.setString(3,contact.getMidName());
-                    statement.setDate(4,contact.getBirthday());
-                    statement.setString(5,contact.getEmail());
-                    statement.setString(6,contact.getGender());
-                    statement.setString(7,contact.getMaritStatus());
-                    statement.setString(8,contact.getNationality());
-                    statement.setString(9,contact.getPhoto());
-                    statement.setString(10,contact.getSite());
-                    statement.setString(11,contact.getCompany());
-
-                    long id = setAdds(contact);
-                    statement.setLong(12, id);
-
-                    statement.setLong(13, idContact);
-                    statement.executeUpdate();
-
-                    return idContact;
-                }
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
+    public void setPhones(long idContact, List<Phone> phones) {
+        deletePhones(idContact);
+        for(Phone phone : phones) {
+            insertPhone(phone);
         }
     }
 
     @Override
-    public List<Attach> getAttach(Long idContact){
+    public long setContact(Contact contact) {
+        Long idContact = contact.getId();
+        if( idContact == null ) {
+            return insertContact(contact);
+        } else {
+            updateContact(contact);
+            return idContact;
+        }
+    }
+
+    @Override
+    public List<Attach> getAttach(Long idContact) {
         List<Attach> list = new ArrayList<Attach>();
         try (Connection connection = source.getConnection();
              PreparedStatement statement = connection.prepareStatement("SELECT * FROM Attachment " +
@@ -230,7 +178,7 @@ public class ContactDaoImpl implements ContactDao {
         return list;
     }
 
-    private Adds getAdds(Long idAddress){
+    private Adds getAdds(Long idAddress) {
         Adds address = new Adds();
         try (Connection connection = source.getConnection();
              PreparedStatement statement = connection.prepareStatement("SELECT * FROM Address " +
@@ -251,7 +199,7 @@ public class ContactDaoImpl implements ContactDao {
         return address;
     }
 
-    private long setAdds(Contact contact){
+    private long setAdds(Contact contact) {
         Adds adds = contact.getAddress();
         Long idAddress = adds.getIdAddress();
         if(idAddress == null) {
@@ -287,6 +235,80 @@ public class ContactDaoImpl implements ContactDao {
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
+        }
+    }
+
+    private void deletePhones(long idContact){
+       deleteOnStatement("Delete from Telephone where idContact = ?", idContact);
+    }
+
+    private long insertContact(Contact contact) {
+        try (Connection connection = source.getConnection()) {
+            try (PreparedStatement statement = connection.prepareStatement("INSERT INTO Contact(`name`,surname,middName,birthday,email," +
+                    " gender,maritStatus,`national`, photo, website, company, idAddress ) VALUES (?,?,?,?,?,?,?,?,?,?,?,? )", Statement.RETURN_GENERATED_KEYS)) {
+                statement.setString(1, contact.getName());
+                statement.setString(2, contact.getSurname());
+                statement.setString(3, contact.getMidName());
+                statement.setDate(4, contact.getBirthday());
+                statement.setString(5, contact.getEmail());
+                statement.setString(6, contact.getGender());
+                statement.setString(7, contact.getMaritStatus());
+                statement.setString(8, contact.getNationality());
+                statement.setString(9, contact.getPhoto());
+                statement.setString(10, contact.getSite());
+                statement.setString(11, contact.getCompany());
+
+                long id = setAdds(contact);
+                statement.setLong(12, id);
+
+                statement.executeUpdate();
+                ResultSet generatedKeys = statement.getGeneratedKeys();
+                generatedKeys.next();
+
+                return generatedKeys.getLong(1);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void updateContact(Contact contact) {
+        try (Connection connection = source.getConnection()) {
+
+            try (PreparedStatement statement = connection.prepareStatement("UPDATE Contact  SET surname = ?, `name`= ?, middName = ?," +
+                    " birthday = ?,  email = ?, gender = ? , maritStatus = ?, `national`= ?, " +
+                    "photo = ? , website = ?, company = ?, idAddress = ? WHERE idContact = ?")) {
+                statement.setString(1,contact.getSurname());
+                statement.setString(2,contact.getName());
+                statement.setString(3,contact.getMidName());
+                statement.setDate(4,contact.getBirthday());
+                statement.setString(5,contact.getEmail());
+                statement.setString(6,contact.getGender());
+                statement.setString(7,contact.getMaritStatus());
+                statement.setString(8,contact.getNationality());
+                statement.setString(9,contact.getPhoto());
+                statement.setString(10,contact.getSite());
+                statement.setString(11,contact.getCompany());
+
+                long id = setAdds(contact);
+                statement.setLong(12, id);
+
+                statement.setLong(13, contact.getId());
+
+                statement.executeUpdate();
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void deleteOnStatement(String string, long idContact){
+        try (Connection connection = source.getConnection()){
+            PreparedStatement statement = connection.prepareStatement(string);
+            statement.setLong(1, idContact);
+            statement.execute();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 }
