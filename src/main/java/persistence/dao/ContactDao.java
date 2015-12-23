@@ -12,9 +12,11 @@ public interface ContactDao {
 
     long setContact(Contact contact);
 
+    long countContacts();
+
     void deleteContact(Long idContact);
 
-    List<Contact> getShowContacts();
+    List<Contact> getShowContacts(long start, long count);
 
     void insertPhone(Phone phone);
 

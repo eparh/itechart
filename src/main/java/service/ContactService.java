@@ -7,7 +7,7 @@ import java.util.List;
 
 
 public interface ContactService {
-    List<Contact> getShowContacts();
+    List<Contact> getShowContacts(long start, long count);
 
     void deleteContact(Long id);
 
@@ -18,4 +18,6 @@ public interface ContactService {
     Contact getContact(long id);
 
     List<Phone> getPhones(long id);
+
+    long countContacts();
 }

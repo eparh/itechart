@@ -155,21 +155,21 @@
                     <div class="form-group">
                         <label class="control-label col-sm-2" for="countryCode">Country code:</label>
                         <div class="col-sm-2">
-                            <input  type="text" class="form-control" id="countryCode" name="countryCode" placeholder="Country code">
+                            <input  type="number" min="0" class="form-control" id="countryCode" name="countryCode" placeholder="Country code">
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label class="control-label col-sm-2" for="operatorCode">Operator code:</label>
                         <div class="col-sm-2">
-                            <input type="text" class="form-control" id="operatorCode" name="operatorCode" placeholder="Operator code">
+                            <input type="number" min="0" class="form-control" id="operatorCode" name="operatorCode" placeholder="Operator code">
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label class="control-label col-sm-2" for="phone">Telephone:</label>
                         <div class="col-sm-5">
-                            <input type="tel" class="form-control" id="phone" name="phone" placeholder="Telephone">
+                            <input type="number" min="0" class="form-control" id="phone" name="phone" placeholder="Telephone">
                         </div>
                     </div>
 

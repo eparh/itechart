@@ -8,15 +8,15 @@ import persistence.model.Phone;
 import java.util.List;
 
 
-public class ContactServiceImpl implements ContactService{
+public class ContactServiceImpl implements ContactService {
     private ContactDao contactDao;
     public ContactServiceImpl() {
         this.contactDao = DaoFactory.getContactDao();
     }
 
     @Override
-    public List<Contact> getShowContacts() {
-        return contactDao.getShowContacts();
+    public List<Contact> getShowContacts(long start, long count) {
+        return contactDao.getShowContacts(start,count);
     }
 
     @Override
@@ -42,5 +42,10 @@ public class ContactServiceImpl implements ContactService{
     @Override
     public List<Phone> getPhones(long id) {
         return contactDao.getPhones(id);
+    }
+
+    @Override
+    public long countContacts() {
+        return contactDao.countContacts();
     }
 }

@@ -123,6 +123,19 @@ public class ContactDaoImpl implements ContactDao {
     }
 
     @Override
+    public long countContacts() {
+        try (Connection connection = source.getConnection();
+             Statement statement = connection.createStatement()) {
+             try (ResultSet set = statement.executeQuery("SELECT COUNT(*) AS total FROM Contact")) {
+                 set.next();
+                 return set.getLong("total");
+             }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
     public List<Attach> getAttach(Long idContact) {
         List<Attach> list = new ArrayList<Attach>();
         try (Connection connection = source.getConnection();
@@ -148,12 +161,14 @@ public class ContactDaoImpl implements ContactDao {
     }
 
     @Override
-    public List<Contact> getShowContacts() {
+    public List<Contact> getShowContacts(long start, long count) {
         List<Contact> list = new ArrayList<Contact>();
 
         try (Connection connection = source.getConnection();
              PreparedStatement statement = connection.prepareStatement("SELECT idContact, name, surname, middName," +
-                     "birthday, company, idAddress from Contact")) {
+                     "birthday, company, idAddress from Contact LIMIT ? , ?")) {
+            statement.setLong((int)1,start);
+            statement.setLong((int)2,count);
             try (ResultSet set = statement.executeQuery()) {
                 while (set.next()) {
                     Contact contact = new Contact();
@@ -239,7 +254,7 @@ public class ContactDaoImpl implements ContactDao {
     }
 
     private void deletePhones(long idContact){
-       deleteOnStatement("Delete from Telephone where idContact = ?", idContact);
+        deleteOnStatement("Delete from Telephone where idContact = ?", idContact);
     }
 
     private long insertContact(Contact contact) {

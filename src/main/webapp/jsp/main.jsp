@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
     <link rel="stylesheet" href="/style/main.css">
     <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
-
+    <script type="text/javascript" src="/js/main.js"></script>
 </head>
 <body>
 
@@ -28,16 +28,21 @@
 </nav>
 
 <form action="/controller" id="checkbox" method="post">
-    <input type="hidden" name="command"  value="delete">
+    <input type="hidden" name="command">
     <input type="hidden" name="idContact">
 </form>
 
-<div style="">
+<form action="/controller" id="paging" method="post">
+    <input type="hidden" name="command"  value="show">
+</form>
+
+
+<div>
     <label for="countRecords" class="control-label col-sm-3">Show by records per page:</label>
     <div class="col-sm-1">
-        <select name="countRecords" class="form-control" id="countRecords">
-            <option>10</option>
-            <option>20</option>
+        <select onchange="chgRecordsPerPage()" name="countRecords"  form="paging" class="form-control" id="countRecords">
+            <option value="10" ${param.countRecords == '10' ? 'selected' : ''}>10</option>
+            <option value="20" ${param.countRecords == '20' ? 'selected' : ''}>20</option>
         </select>
     </div>
 </div>
@@ -67,12 +72,19 @@
     </tbody>
 </table>
 
-<div class="container" >
-    <div align="center">
-        <ul id="pageNavPosition" class="pagination"></ul>
-    </div>
+<span style="float: left; margin: 2% auto auto 5%; ">
+    <p><b> Total pages: ${pages}</b></p>
+</span>
+<div align="center">
+    <ul class="pagination">
+        <li onclick="prev()"><span class="glyphicon glyphicon-menu-left"></span></li>
+        <li>
+                <span class="col-sm-6">
+                    <input type="number" form="paging" class="form-control" name="pageNumber" min="1" max="${pages}" value="${pageNumber}">
+                </span>
+        </li>
+        <li onclick="next()"><span class="glyphicon glyphicon-menu-right"></span></li>
+    </ul>
 </div>
-
-<script type="text/javascript" src="/js/main.js"></script>
 </body>
 </html>

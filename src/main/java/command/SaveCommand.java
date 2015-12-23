@@ -70,9 +70,11 @@ public class SaveCommand implements ActionCommand {
     private Adds getAdds() {
         Adds adds = new Adds();
         String strID = request.getParameter("idAddress");
+
         if(!"".equals(strID)) {
             adds.setIdAddress(Long.parseLong(strID));
         }
+
         adds.setCountry(request.getParameter("country"));
         adds.setAddress(request.getParameter("address"));
         adds.setCity(request.getParameter("city"));
@@ -89,8 +91,6 @@ public class SaveCommand implements ActionCommand {
             String paramName = paramNames.nextElement();
             Matcher matcher = pattern.matcher(paramName);
             if( matcher.matches()) {
-                System.out.println(paramName);
-                System.out.println(paramName.substring(5));
                 long i = Long.parseLong(paramName.substring(5));
                 Phone phone = new Phone();
                 phone.setCountryCode(request.getParameter("countryCode" + i));
@@ -107,7 +107,6 @@ public class SaveCommand implements ActionCommand {
 
     private void savePhones(long idContact) {
         List<Phone> phones = getPhones(idContact);
-        System.out.println(phones);
         contactService.savePhones(idContact, phones);
     }
 }
