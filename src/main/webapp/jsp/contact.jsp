@@ -5,8 +5,8 @@
     <title>Create contact</title>
     <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-    <script type="text/javascript" src="/js/contact.js"></script>
-    <link rel="stylesheet" href="/style/contact.css">
+    <script type="text/javascript" src="/js/temp.js"></script>
+    <link rel="stylesheet" href="/style/1.css">
 </head>
 <body>
 <nav class="navbar navbar-inverse">
@@ -23,15 +23,15 @@
 </nav>
 
 <div class="container">
-    <a href="/jsp/photo.jsp">
-        <img src="/images/noavatar.png" style="float:left; width: 17%; height: 22% ; margin: 1% auto auto auto;">
+    <a href="javascript:{}" onclick="openbox('photoPopUp'); return false;">
+        <img src="/images/noavatar.png">
     </a>
 
     <c:if test="${title == null}">
         <c:set var="title"  value="Create contact"/>
     </c:if>
 
-    <h1  style="margin: 2% auto 14% 45%"> ${title}</h1>
+    <h1> ${title}</h1>
 
     <form id="form" action="/controller" class="form-horizontal" method="post" accept-charset="utf-8" role="form">
         <input type="hidden" name="command" value="save">
@@ -145,7 +145,7 @@
     </form>
 
     <div id="phonePopUp" style="display:none">
-        <div id='tt'>
+        <div class='tt'>
             <div class="container">
                 <form id="telephone" class="form-horizontal" accept-charset="utf-8" role="form">
                     <div style="margin: auto auto 2% auto">
@@ -162,14 +162,14 @@
                     <div class="form-group">
                         <label class="control-label col-sm-2" for="operatorCode">Operator code:</label>
                         <div class="col-sm-2">
-                            <input type="number" min="0" class="form-control" id="operatorCode" name="operatorCode" placeholder="Operator code">
+                            <input type="number" min="0" class="form-control" id="operatorCode" name="operatorCode" placeholder="Operator code" required>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label class="control-label col-sm-2" for="phone">Telephone:</label>
                         <div class="col-sm-5">
-                            <input type="number" min="0" class="form-control" id="phone" name="phone" placeholder="Telephone">
+                            <input type="number" min="0" class="form-control" id="phone" name="phone" placeholder="Telephone" required>
                         </div>
                     </div>
 
@@ -196,6 +196,24 @@
             </div>
         </div>
     </div>
+
+    <div id="photoPopUp" style="display:none">
+        <div id='photoTT'>
+            <div class="container">
+                <form id="photoForm" class="form-horizontal" accept-charset="utf-8" role="form">
+                    <div style="margin: auto auto 2% auto">
+                        <div class="close" onclick="cancelPhoto()">x</div>
+                    </div>
+                    <label class="control-label" for="photo">Select File</label>
+                    <input id="photo" type="file" name="photo" class="file"  readonly accept="image/*" required>
+                </form>
+
+                <button  class="btn-default">Save</button>
+                <button  onclick="cancelPhoto()" class="btn-default">Cancel</button>
+            </div>
+        </div>
+    </div>
+
     <div style="float: right;">
         <button onclick="phoneService.addPhone()" class="btn-default">Add phone</button>
         <button onclick="phoneService.deletePhone()" class="btn-default">Delete phone</button>
@@ -228,7 +246,6 @@
             </tbody>
         </table>
     </div>
-
     <button form="form" type="submit" class="btn-default">Save</button>
 </div>
 

@@ -1,76 +1,110 @@
-function deleteContact(){
-    var form = document.getElementById('checkbox');
-    form.command.value = 'delete';
-    form.submit();
-}
-function getContact(){
-    var form = document.getElementById('checkbox');
-    form.command.value = 'get';
-    form.idContact.value = '';
-    form.submit();
-}
-function getContactByClick(num){
-    var form = document.getElementById('checkbox');
-    var table = document.getElementById('table');
-    var row = table.rows[num-1];
-    var id = row.cells[0].firstElementChild.value;
-    form.command.value = 'get';
-    form.idContact.value = id;
-    form.submit();
-}
+function openbox(id) {
+    var div = document.getElementById(id);
 
-function Pager(tableName, itemsPerPage) {
-    this.currentPage = 1;
-    this.pages = 0;
-
-    this.showRecords = function(from, to) {
-        var rows = document.getElementById(tableName).rows;
-        // i starts from 1 to skip table header row
-        for (var i = 1; i < rows.length; i++) {
-            if (i < from || i > to)
-                rows[i].style.display = 'none';
-            else
-                rows[i].style.display = '';
-        }
+    if(div.style.display == 'block') {
+        div.style.display = 'none';
     }
-
-    this.showPage = function(pageNumber) {
-        this.currentPage = pageNumber;
-
-        var from = (pageNumber - 1) * itemsPerPage + 1;
-        var to = from + itemsPerPage - 1;
-        this.showRecords(from, to);
-    }
-
-    this.prev = function() {
-        if (this.currentPage > 1) {
-            this.showPage(this.currentPage - 1);
-        }
-    }
-
-    this.next = function() {
-        if (this.currentPage < this.pages) {
-            this.showPage(this.currentPage + 1);
-        }
-    }
-
-    this.init = function() {
-        var rows = document.getElementById(tableName).rows;
-        var records = (rows.length - 1);
-        this.pages = Math.ceil(records / itemsPerPage);
-    }
-
-    this.showPageNav = function(pagerName, positionId) {
-        var element = document.getElementById(positionId);
-        var pagerHtml = '<li onclick="pager.prev()"><span class="glyphicon glyphicon-menu-left"></span></li>';
-        for (var page = 1; page <= this.pages; page++) {
-            pagerHtml += '<li onclick="pager.showPage(' + page + ')"><span>' + page + '</span></li>';
-        }
-        pagerHtml += '<li onclick="pager.next()"><span class="glyphicon glyphicon-menu-right"></span></li>';
-        element.innerHTML = pagerHtml;
+    else {
+        div.style.display = 'block';
     }
 }
-var pager = new Pager('results', 1);
-pager.init();
-pager.showPageNav('pager', 'pageNavPosition');
-pager.showPage(1);
+function cancelPhoto() {
+    document.getElementById("photoForm").reset;
+    openbox("photoPopUp");
+}
+
+var phoneService = {
+    pos : 0,
+    popUp: 'phonePopUp',
+    mode: 0,
+
+    savePhone: function () {
+        var form= document.getElementById("telephone");
+        if (form.operatorCode.value == "" || form.phone.value == "" ) {
+            alert("Please, fill required fields");
+            return false;
+        }
+        openbox(this.popUp);
+
+        var table = document.getElementById("phoneTable");
+
+        if (this.mode == 0) {
+            var i = table.rows.length;
+            var row = table.insertRow(i);
+            var cell1 = row.insertCell(0);
+            var cell2 = row.insertCell(1);
+            var cell3 = row.insertCell(2);
+            var cell4 = row.insertCell(3);
+            var cell5 = row.insertCell(4);
+            var cell6 = row.insertCell(5);
+            var cell7 = row.insertCell(6);
+        }  else {
+            var i = this.pos;
+            var row = table.rows[i];
+            var cell1 = row.cells[0];
+            var cell2 = row.cells[1];
+            var cell3 = row.cells[2];
+            var cell4 = row.cells[3];
+            var cell5 = row.cells[4];
+            var cell6 = row.cells[5];
+            var cell7 = row.cells[6];
+        }
+
+        cell1.innerHTML = "<input type='checkbox'  name='phones'/>";
+
+        var fullPhone = form.countryCode.value +  form.operatorCode.value +  form.phone.value;
+        cell2.innerHTML ="<input type='text' form='form' value='"+ fullPhone +"' readonly/>";
+
+        cell3.innerHTML ="<input type='text' form='form' name='kind"+i+"' value='"+form.kind.value+"' readonly/>";
+        cell4.innerHTML ="<input type='text'form='form' name='comment"+i+"' value='"+form.comment.value+"' readonly/>";
+        cell5.innerHTML ="<input type='hidden'form='form' name='countryCode"+i+"' value='"+form.countryCode.value+"' />";
+        cell6.innerHTML ="<input type='hidden'form='form' name='operatorCode"+i+"' value='"+form.operatorCode.value+"' />";
+        cell7.innerHTML ="<input type='hidden'form='form' name='phone"+i+"' value='"+form.phone.value+"' />";
+        form.reset();
+    },
+
+    deletePhone: function () {
+        var table = document.getElementById("phoneTable");
+        var checkboxes = document.getElementsByName('phones');
+
+        for (var i=checkboxes.length - 1; i>=0; i--) {
+
+            if (checkboxes[i].checked) {
+                table.deleteRow(i);
+            }
+        }
+    },
+
+    editPhone: function () {
+        var form= document.getElementById("telephone");
+        var table = document.getElementById("phoneTable");
+        var checkboxes = document.getElementsByName('phones');
+
+        for (var i=0; i<checkboxes.length; i++) {
+            if (checkboxes[i].checked) {
+                var row = table.rows[i];
+                form.countryCode.value = row.cells[4].childNodes[0].value;
+                form.operatorCode.value = row.cells[5].childNodes[0].value;
+                form.phone.value = row.cells[6].childNodes[0].value;
+                form.kind.value = row.cells[2].childNodes[0].value;
+                form.comment.value = row.cells[3].childNodes[0].value;
+                this.pos = i;
+                this.mode = 1;
+                openbox(this.popUp);
+                break;
+            }
+        }
+
+    },
+
+    addPhone: function () {
+        this.mode = 0;
+        openbox(this.popUp);
+    },
+
+    cancelPhone: function () {
+        document.getElementById("telephone").reset();
+        openbox(this.popUp);
+    }
+}
+

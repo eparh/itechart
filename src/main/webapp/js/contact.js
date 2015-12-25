@@ -8,6 +8,10 @@ function openbox(id) {
         div.style.display = 'block';
     }
 }
+function cancelPhoto() {
+    document.getElementById("photoForm").reset;
+    openbox("photoPopUp");
+}
 
 var phoneService = {
     pos : 0,
