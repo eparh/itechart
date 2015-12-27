@@ -1,7 +1,5 @@
 package persistence.model;
 
-//Вопрос по поводу конструктора!Проверка значений, гетеры и сетеры
-
 public class Adds {
     private String country;
     private String city;
@@ -22,6 +20,10 @@ public class Adds {
             if(! temp.equals("")) temp +=", ";
             temp += address;
         }
+        if (index != null && !"".equals(index)){
+            if(! temp.equals("")) temp +=", ";
+            temp += index;
+        }
         return temp;
     }
 
@@ -38,7 +40,6 @@ public class Adds {
     }
 
     public void setCountry(String country) {
-        //check
         this.country = country;
     }
 
@@ -47,7 +48,6 @@ public class Adds {
     }
 
     public void setCity(String city) {
-        //check
         this.city = city;
     }
 
@@ -56,7 +56,6 @@ public class Adds {
     }
 
     public void setAddress(String address) {
-        //check
         this.address = address;
     }
 
@@ -65,7 +64,6 @@ public class Adds {
     }
 
     public void setIndex(String index) {
-        //check
         this.index = index;
     }
 }

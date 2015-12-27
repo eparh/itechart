@@ -20,8 +20,8 @@ var phoneService = {
 
     savePhone: function () {
         var form= document.getElementById("telephone");
-        if (form.operatorCode.value == "" || form.phone.value == "" ) {
-            alert("Please, fill required fields");
+        if (form.operatorCode.value == "" || form.phone.value == "" || form.operatorCode.value > 1000) {
+           // alert("Please, fill required fields");
             return false;
         }
         openbox(this.popUp);

@@ -5,6 +5,8 @@ package persistence.dao;
 import persistence.model.Attach;
 import persistence.model.Contact;
 import persistence.model.Phone;
+import persistence.model.SearchCriteria;
+
 import java.util.List;
 
 public interface ContactDao {
@@ -12,11 +14,11 @@ public interface ContactDao {
 
     long setContact(Contact contact);
 
-    long countContacts();
+    long countContacts(SearchCriteria criteria);
 
     void deleteContact(Long idContact);
 
-    List<Contact> getShowContacts(long start, long count);
+    List<Contact> getShowContacts(SearchCriteria criteria);
 
     void insertPhone(Phone phone);
 

@@ -20,8 +20,7 @@ public class Contact {
     private String company;
     private String maritStatus;
     private Adds address;
-    private List<Phone> phones = new ArrayList<>();
-    private List<Part> attachs = new ArrayList<>();
+
     private String photo;
 
     public Long getId() {
@@ -135,9 +134,5 @@ public class Contact {
 
     public void setMidName(String midName) {
         this.midName = midName;
-    }
-
-    public void addPhone(Phone phone){
-        phones.add(phone);
     }
 }

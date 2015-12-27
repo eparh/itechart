@@ -4,7 +4,11 @@ import persistence.dao.ContactDao;
 import persistence.dao.DaoFactory;
 import persistence.model.Contact;
 import persistence.model.Phone;
+import persistence.model.SearchCriteria;
 
+import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 
@@ -15,8 +19,8 @@ public class ContactServiceImpl implements ContactService {
     }
 
     @Override
-    public List<Contact> getShowContacts(long start, long count) {
-        return contactDao.getShowContacts(start,count);
+    public List<Contact> getShowContacts(SearchCriteria criteria) {
+        return contactDao.getShowContacts(criteria);
     }
 
     @Override
@@ -45,7 +49,22 @@ public class ContactServiceImpl implements ContactService {
     }
 
     @Override
-    public long countContacts() {
-        return contactDao.countContacts();
+    public long countContacts(SearchCriteria criteria) {
+        return contactDao.countContacts(criteria);
+    }
+
+    @Override
+    public Date stringToDate(String stringDate) {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = null;
+        if(stringDate != null && !stringDate.equals("")) {
+            try {
+                java.util.Date utilDate = formatter.parse(stringDate);
+                date = new Date(utilDate.getTime());
+            } catch (ParseException e) {
+                throw new RuntimeException();
+            }
+        }
+        return date;
     }
 }

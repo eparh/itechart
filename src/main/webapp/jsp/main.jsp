@@ -31,11 +31,23 @@
     <input type="hidden" name="command">
     <input type="hidden" name="idContact">
 </form>
-
+${session.s_name}
+${s_surname}
 <form action="/controller" id="paging" method="post">
     <input type="hidden" name="command"  value="show">
+    <input type="hidden" name="s_name" value="${s_name}">
+    <input type="hidden" name="s_surname" value="${s_surname}">
+    <input type="hidden" name="s_midname" value="${s_midname}">
+    <input type="hidden" name="s_gender" value="${s_gender}">
+    <input type="hidden" name="s_national" value="${s_national}">
+    <input type="hidden" name="s_maritStatus" value="${s_maritStatus}">
+    <input type="hidden" name="s_country" value="${s_country}">
+    <input type="hidden" name="s_city" value="${s_city}">
+    <input type="hidden" name="s_address" value="${s_address}">
+    <input type="hidden" name="s_index" value="${s_index}">
+    <input type="hidden" name="s_birthdayFrom" value="${s_birthdayFrom}">
+    <input type="hidden" name="s_birthdayTO" value="${s_birthdayTO}">
 </form>
-
 
 <div>
     <label for="countRecords" class="control-label col-sm-3">Show by records per page:</label>

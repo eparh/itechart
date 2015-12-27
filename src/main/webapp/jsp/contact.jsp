@@ -5,7 +5,7 @@
     <title>Create contact</title>
     <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-    <script type="text/javascript" src="/js/temp.js"></script>
+    <script type="text/javascript" src="/js/contact.js"></script>
     <link rel="stylesheet" href="/style/1.css">
 </head>
 <body>
@@ -34,7 +34,19 @@
     <h1> ${title}</h1>
 
     <form id="form" action="/controller" class="form-horizontal" method="post" accept-charset="utf-8" role="form">
+        <input type="hidden" name="s_name" value="${s_name}">
+        <input type="hidden" name="s_surname" value="${s_surname}">
+        <input type="hidden" name="s_midname" value="${s_midname}">
+        <input type="hidden" name="s_gender" value="${s_gender}">
+        <input type="hidden" name="s_national" value="${s_national}">
+        <input type="hidden" name="s_maritStatus" value="${s_maritStatus}">
+        <input type="hidden" name="s_country" value="${s_country}">
+        <input type="hidden" name="s_city" value="${s_city}">
+        <input type="hidden" name="s_address" value="${s_address}">
+        <input type="hidden" name="s_index" value="${s_index}">
         <input type="hidden" name="command" value="save">
+        <input type="hidden" name="s_birthdayFrom" value="${s_birthdayFrom}">
+        <input type="hidden" name="s_birthdayTO" value="${s_birthdayTO}">
 
         <input type="hidden" name="idContact" value="${contact.id}">
 
@@ -155,7 +167,7 @@
                     <div class="form-group">
                         <label class="control-label col-sm-2" for="countryCode">Country code:</label>
                         <div class="col-sm-2">
-                            <input  type="number" min="0" class="form-control" id="countryCode" name="countryCode" placeholder="Country code">
+                            <input  type="number" min="0" class="form-control" max="1000" id="countryCode" name="countryCode" placeholder="Country code">
                         </div>
                     </div>
 

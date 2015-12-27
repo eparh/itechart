@@ -2,12 +2,14 @@ package service;
 
 import persistence.model.Contact;
 import persistence.model.Phone;
+import persistence.model.SearchCriteria;
 
+import java.sql.Date;
 import java.util.List;
 
 
 public interface ContactService {
-    List<Contact> getShowContacts(long start, long count);
+    List<Contact> getShowContacts(SearchCriteria criteria);
 
     void deleteContact(Long id);
 
@@ -19,5 +21,7 @@ public interface ContactService {
 
     List<Phone> getPhones(long id);
 
-    long countContacts();
+    long countContacts(SearchCriteria criteria);
+
+    Date stringToDate(String stringDate);
 }

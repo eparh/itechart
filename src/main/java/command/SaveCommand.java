@@ -39,7 +39,7 @@ public class SaveCommand implements ActionCommand {
         contact.setName(request.getParameter("name"));
         contact.setSurname(request.getParameter("surname"));
         contact.setMidName(request.getParameter("middname"));
-        contact.setBirthday(getDate());
+        contact.setBirthday(contactService.stringToDate(request.getParameter("birthday")));
         contact.setEmail(request.getParameter("email"));
         contact.setGender(request.getParameter("gender"));
         contact.setMaritStatus(request.getParameter("maritStatus"));
@@ -50,21 +50,6 @@ public class SaveCommand implements ActionCommand {
         contact.setAddress(getAdds());
 
         return contact;
-    }
-
-    private Date getDate() {
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        Date date = null;
-        String stringDate = request.getParameter("birthday");
-        if(stringDate != null && !stringDate.equals("")) {
-            try {
-                java.util.Date utilDate = formatter.parse(stringDate);
-                date = new Date(utilDate.getTime());
-            } catch (ParseException e) {
-                throw new RuntimeException();
-            }
-        }
-        return date;
     }
 
     private Adds getAdds() {

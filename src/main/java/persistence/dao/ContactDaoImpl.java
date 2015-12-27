@@ -2,10 +2,7 @@ package persistence.dao;
 
 
 import persistence.DbUtil;
-import persistence.model.Adds;
-import persistence.model.Attach;
-import persistence.model.Contact;
-import persistence.model.Phone;
+import persistence.model.*;
 
 import javax.sql.DataSource;
 import java.sql.*;
@@ -15,6 +12,9 @@ import java.util.List;
 public class ContactDaoImpl implements ContactDao {
     public static final ContactDao INSTANCE = new ContactDaoImpl();
     private DataSource source = DbUtil.getMySQLDataSource();
+    private String query;
+    private List<String> paramStrList;
+    private List<Date> paramDateList;
 
     private ContactDaoImpl() {
 
@@ -24,8 +24,8 @@ public class ContactDaoImpl implements ContactDao {
     public Contact getById(Long idContact) {
         Contact contact = new Contact();
         try (Connection connection = source.getConnection();
-             PreparedStatement statement = connection.prepareStatement("SELECT * FROM Contact " +
-                     "WHERE idContact = ?")) {
+             PreparedStatement statement = connection.prepareStatement("SELECT * FROM Contact AS c LEFT JOIN Address AS a " +
+                     "ON c.idAddress = a.idAddress WHERE idContact = ?")) {
             statement.setString(1, Long.toString(idContact));
             try (ResultSet set = statement.executeQuery()) {
                 while (set.next()) {
@@ -43,8 +43,13 @@ public class ContactDaoImpl implements ContactDao {
                     contact.setPhoto(set.getString("photo"));
 
                     //Получаем адрес
-                    Long idAddress = set.getLong("idAddress");
-                    contact.setAddress(getAdds(idAddress));
+                    Adds adds = new Adds();
+                    adds.setIdAddress(set.getLong("idAddress"));
+                    adds.setCountry(set.getString("country"));
+                    adds.setCity(set.getString("city"));
+                    adds.setAddress(set.getString("address"));
+                    adds.setIndex(set.getString("index"));
+                    contact.setAddress(adds);
                 }
             }
         } catch (SQLException e) {
@@ -123,16 +128,32 @@ public class ContactDaoImpl implements ContactDao {
     }
 
     @Override
-    public long countContacts() {
+    public long countContacts(SearchCriteria criteria) {
+        long total = 0;
+        paramStrList = new ArrayList<>();
+        paramDateList = new ArrayList<>();
+        query = "SELECT COUNT(*) AS total from Contact AS c LEFT JOIN Address AS a ON c.idAddress = a.idAddress";
+        query = makeSelectQuery(query,criteria);
         try (Connection connection = source.getConnection();
-             Statement statement = connection.createStatement()) {
-             try (ResultSet set = statement.executeQuery("SELECT COUNT(*) AS total FROM Contact")) {
-                 set.next();
-                 return set.getLong("total");
-             }
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            int index = 1;
+            for(String param: paramStrList){
+                statement.setString(index, param);
+                index ++;
+            }
+            for(Date date: paramDateList){
+                statement.setDate(index, date);
+                index ++;
+            }
+            try (ResultSet set = statement.executeQuery()) {
+                while (set.next()) {
+                    total = set.getLong("total");
+                }
+            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+        return total;
     }
 
     @Override
@@ -161,14 +182,27 @@ public class ContactDaoImpl implements ContactDao {
     }
 
     @Override
-    public List<Contact> getShowContacts(long start, long count) {
-        List<Contact> list = new ArrayList<Contact>();
-
+    public List<Contact> getShowContacts(SearchCriteria criteria) {
+        paramStrList = new ArrayList<>();
+        paramDateList = new ArrayList<>();
+        List<Contact> list = new ArrayList<>();
+        query = "SELECT idContact, `name`, surname, middName, birthday, company, country, city, address," +
+                " `index` from Contact AS c LEFT JOIN Address AS a ON c.idAddress = a.idAddress";
+        query = makeSelectQuery(query,criteria);
+        query +=" LIMIT ? , ?";
         try (Connection connection = source.getConnection();
-             PreparedStatement statement = connection.prepareStatement("SELECT idContact, name, surname, middName," +
-                     "birthday, company, idAddress from Contact LIMIT ? , ?")) {
-            statement.setLong((int)1,start);
-            statement.setLong((int)2,count);
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            int index = 1;
+            for(String param: paramStrList){
+                statement.setString(index, param);
+                index ++;
+            }
+            for(Date date: paramDateList){
+                statement.setDate(index, date);
+                index ++;
+            }
+            statement.setLong(index,criteria.getStart());
+            statement.setLong(++index,criteria.getCount());
             try (ResultSet set = statement.executeQuery()) {
                 while (set.next()) {
                     Contact contact = new Contact();
@@ -178,11 +212,13 @@ public class ContactDaoImpl implements ContactDao {
                     contact.setMidName(set.getString("middName"));
                     contact.setCompany(set.getString("company"));
                     contact.setBirthday(set.getDate("birthday"));
-                    //contact.setPhoto(set.getString("photo"));
 
-                    //Получаем адрес
-                    Long idAddress = set.getLong("idAddress");
-                    contact.setAddress(getAdds(idAddress));
+                    Adds adds = new Adds();
+                    adds.setCountry(set.getString("country"));
+                    adds.setCity(set.getString("city"));
+                    adds.setAddress(set.getString("address"));
+                    adds.setIndex(set.getString("index"));
+                    contact.setAddress(adds);
 
                     list.add(contact);
                 }
@@ -191,27 +227,6 @@ public class ContactDaoImpl implements ContactDao {
             throw new RuntimeException(e);
         }
         return list;
-    }
-
-    private Adds getAdds(Long idAddress) {
-        Adds address = new Adds();
-        try (Connection connection = source.getConnection();
-             PreparedStatement statement = connection.prepareStatement("SELECT * FROM Address " +
-                     "WHERE idAddress = ?")) {
-            statement.setString(1, Long.toString(idAddress));
-            try (ResultSet set = statement.executeQuery()) {
-                while (set.next()) {
-                    address.setCountry(set.getString("country"));
-                    address.setAddress(set.getString("address"));
-                    address.setCity(set.getString("city"));
-                    address.setIndex(set.getString("index"));
-                    address.setIdAddress(set.getLong("idAddress"));
-                }
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return address;
     }
 
     private long setAdds(Contact contact) {
@@ -325,5 +340,74 @@ public class ContactDaoImpl implements ContactDao {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private String makeSelectQuery(String query,SearchCriteria criteria) {
+        String word = " WHERE ";
+        if (criteria.getName() != null && ! "".equals(criteria.getName())) {
+            query += word +"`name` = ?";
+            paramStrList.add(criteria.getName());
+            word = " AND ";
+        }
+        if (criteria.getSurname() != null && ! "".equals(criteria.getSurname())) {
+            query += word +"surname = ?";
+            paramStrList.add(criteria.getSurname());
+            word = " AND ";
+        }
+        if (criteria.getMidName() != null && ! "".equals(criteria.getMidName())) {
+            query += word +"middname = ?";
+            paramStrList.add(criteria.getMidName());
+            word = " AND ";
+        }
+        if (criteria.getGender() != null && ! "".equals(criteria.getGender())) {
+            query += word +"gender = ?";
+            paramStrList.add(criteria.getGender());
+            word = " AND ";
+        }
+        if (criteria.getNationality() != null && ! "".equals(criteria.getNationality())) {
+            query += word +"national = ?";
+            paramStrList.add(criteria.getNationality());
+            word = " AND ";
+        }
+        if (criteria.getMaritStatus() != null && ! "".equals(criteria.getMaritStatus())) {
+            query += word+ "maritStatus = ?";
+            paramStrList.add(criteria.getMaritStatus());
+            word = " AND ";
+        }
+        if (criteria.getCountry() != null && ! "".equals(criteria.getCountry())) {
+            query += word+ "country = ?";
+            paramStrList.add(criteria.getCountry());
+            word = " AND ";
+        }
+        if (criteria.getCity() != null && ! "".equals(criteria.getCity())) {
+            query += word+ "city = ?";
+            paramStrList.add(criteria.getCity());
+            word = " AND ";
+        }
+        if (criteria.getAddress() != null && ! "".equals(criteria.getAddress())) {
+            query += word+ "address = ?";
+            paramStrList.add(criteria.getAddress());
+            word = " AND ";
+        }
+        if (criteria.getIndex() != null && ! "".equals(criteria.getIndex())) {
+            query += word+ "`index` = ?";
+            paramStrList.add(criteria.getIndex());
+            word = " AND ";
+        }
+        if (criteria.getBirthday_from() != null && criteria.getBirthday_to() != null) {
+            query += word + "birthday BETWEEN ? AND ?";
+            paramDateList.add(criteria.getBirthday_from());
+            paramDateList.add(criteria.getBirthday_to());
+        } else {
+            if (criteria.getBirthday_from() != null) {
+                query += word + "birthday >= ?";
+                paramDateList.add(criteria.getBirthday_from());
+            }
+            if (criteria.getBirthday_to() != null) {
+                query += word + "birthday <= ?";
+                paramDateList.add(criteria.getBirthday_to());
+            }
+        }
+        return query;
     }
 }

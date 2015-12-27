@@ -20,7 +20,14 @@ var phoneService = {
 
     savePhone: function () {
         var form= document.getElementById("telephone");
-
+        if (form.operatorCode.value == "" || form.phone.value == "") {
+             alert("Please, fill required fields");
+            return false;
+        }
+        if (form.countryCode.value > 1000 ||  form.phone.value > 99999999 || form.operatorCode.value > 1000) {
+            alert("Please, check input fields");
+            return false;
+        }
         openbox(this.popUp);
 
         var table = document.getElementById("phoneTable");
@@ -49,7 +56,8 @@ var phoneService = {
 
         cell1.innerHTML = "<input type='checkbox'  name='phones'/>";
 
-        var fullPhone = form.countryCode.value +  form.operatorCode.value +  form.phone.value;
+        var fullPhone = form.countryCode.value +" " +form.operatorCode.value +" "+ form.phone.value;
+
         cell2.innerHTML ="<input type='text' form='form' value='"+ fullPhone +"' readonly/>";
 
         cell3.innerHTML ="<input type='text' form='form' name='kind"+i+"' value='"+form.kind.value+"' readonly/>";
