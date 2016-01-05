@@ -52,4 +52,3 @@ function countCheked() {
         if (checkboxes[i].checked)  count++;
     return count;
 }
-alert("HI");

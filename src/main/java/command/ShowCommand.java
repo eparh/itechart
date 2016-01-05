@@ -37,7 +37,6 @@ public class ShowCommand implements ActionCommand {
             settings.countPages(total);
         }
 
-
         List<Contact> contacts= contactService.getShowContacts(criteria,settings);
         session.setAttribute("criteria",criteria);
         session.setAttribute("settings",settings);
@@ -50,8 +49,6 @@ public class ShowCommand implements ActionCommand {
         ViewSettings settings = new ViewSettings();
         HttpSession session = request.getSession();
         String requestCount = request.getParameter("countRecords");
-        System.out.println("mode:"+ mode);
-
 
         //Смотрим, проводил ли пользователь действия на текущей странице
         if (requestCount == null) {

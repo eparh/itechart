@@ -11,6 +11,11 @@
         <div class="navbar-header">
             <a class="navbar-brand" href="/controller?command=show" ><span class="glyphicon glyphicon-user"></span>My Contacts</a>
         </div>
+        div>
+        <ul class="nav navbar-nav">
+            <li><a href="/jsp/contact.jsp"><span class="glyphicon glyphicon-plus"></span>Add contact</a></li>
+        </ul>
+    </div>
     </div>
 </nav>
 <div class="container">

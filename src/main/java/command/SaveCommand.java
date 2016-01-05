@@ -35,32 +35,51 @@ public class SaveCommand implements ActionCommand {
     }
 
     private String getAvatar()  {
-        String SAVE_DIR = "uploadFiles";
+        String SAVE_DIR = "images";
         String PARAM_FILE = "avatar";
         // gets absolute path of the web application
         String appPath = request.getServletContext().getRealPath("");
         // constructs path of the directory to save uploaded file
-        String savePath = appPath +  File.separator + SAVE_DIR;
-
+        String savePath = appPath + SAVE_DIR;
+        String path = null;
         // creates the save directory if it does not exists
         File fileSaveDir = new File(savePath);
         if (!fileSaveDir.exists()) {
             fileSaveDir.mkdir();
         }
 
-
         try {
             Part filePart = request.getPart(PARAM_FILE);
-            filePart.write(savePath + File.separator + 1);
-            System.out.println(savePath + File.separator + 1);
+            String fileName = extractFileName(filePart);
+            if(filePart.getSize()>0){
+                path = savePath + File.separator + fileName;
+                filePart.write(path);
+                File avatar = new File(path);
+                System.out.println(avatar.exists());
+                System.out.println(avatar.canRead());
+                System.out.println(avatar.canExecute());
+                System.out.println(avatar.canWrite());
 
+                System.out.println(path);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ServletException e) {
             e.printStackTrace();
         }
 
-        return  savePath + File.separator + 1;
+        return path;
+    }
+
+    private String extractFileName(Part part) {
+        String contentDisp = part.getHeader("content-disposition");
+        String[] items = contentDisp.split(";");
+        for (String s : items) {
+            if (s.trim().startsWith("filename")) {
+                return s.substring(s.indexOf("=") + 2, s.length()-1);
+            }
+        }
+        return "";
     }
 
     private Contact makeContact() {
@@ -82,10 +101,7 @@ public class SaveCommand implements ActionCommand {
         contact.setCompany(request.getParameter("company"));
         contact.setAddress(getAdds());
 
-        System.out.println(request.getParameter("avatar"));
-        if( request.getParameter("avatar") != null) {
-            contact.setPhoto(getAvatar());
-        }
+        contact.setPhoto(getAvatar());
 
         return contact;
     }

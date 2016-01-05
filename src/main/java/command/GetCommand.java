@@ -27,10 +27,8 @@ public class GetCommand implements ActionCommand {
 
         Contact contact = contactService.getContact(idContact);
 
-        // System.out.println(contact.getPhoto());
-
         List<Phone> phones = contactService.getPhones(idContact);
-
+        System.out.println(contact.getPhoto());
         request.setAttribute("contact",contact);
         request.setAttribute("title","Edit contact");
         request.setAttribute("phones",phones);
