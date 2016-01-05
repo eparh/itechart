@@ -8,7 +8,7 @@
     <script type="text/javascript" src="/js/contact.js"></script>
     <link rel="stylesheet" href="/style/1.css">
 </head>
-<body>
+<body  onload="selectAvatar()">
 <nav class="navbar navbar-inverse">
     <div class="container-fluid">
         <div class="navbar-header">
@@ -22,31 +22,42 @@
     </div>
 </nav>
 
-<div class="container">
-    <a href="javascript:{}" onclick="openbox('photoPopUp'); return false;">
-        <img src="/images/noavatar.png">
-    </a>
+<c:set var="photo"  value="${contact.photo}"/>
+<c:if test="${photo == null}">
+    <c:set var="photo"  value="/images/noavatar.png"/>
+</c:if>
+${contact.photo}
 
+<div class="container">
+    <a href="javascript:{}" onclick="document.getElementById('avatar').click()">
+        <img id="image" src="${photo}">
+    </a>
+    <input id="avatar" type="file" name="avatar" form="form" class="file" accept="image/*" style="display: none">
+
+    <c:set var="mode"  value="edit"/>
     <c:if test="${title == null}">
         <c:set var="title"  value="Create contact"/>
+        <c:set var="mode" value="add"/>
     </c:if>
 
     <h1> ${title}</h1>
 
-    <form id="form" action="/controller" class="form-horizontal" method="post" accept-charset="utf-8" role="form">
-        <input type="hidden" name="s_name" value="${s_name}">
-        <input type="hidden" name="s_surname" value="${s_surname}">
-        <input type="hidden" name="s_midname" value="${s_midname}">
-        <input type="hidden" name="s_gender" value="${s_gender}">
-        <input type="hidden" name="s_national" value="${s_national}">
-        <input type="hidden" name="s_maritStatus" value="${s_maritStatus}">
-        <input type="hidden" name="s_country" value="${s_country}">
-        <input type="hidden" name="s_city" value="${s_city}">
-        <input type="hidden" name="s_address" value="${s_address}">
-        <input type="hidden" name="s_index" value="${s_index}">
-        <input type="hidden" name="command" value="save">
-        <input type="hidden" name="s_birthdayFrom" value="${s_birthdayFrom}">
-        <input type="hidden" name="s_birthdayTO" value="${s_birthdayTO}">
+    <form id="form" action="/controller" class="form-horizontal" method="post" accept-charset="utf-8" enctype="multipart/form-data" role="form">
+        <input type="hidden" name="mode" value="${mode}">
+
+        <input type="hidden" name="command"  value="save">
+        <input type="hidden" name="s_name" value="${criteria.name}">
+        <input type="hidden" name="s_surname" value="${criteria.surname}">
+        <input type="hidden" name="s_midname" value="${criteria.midName}">
+        <input type="hidden" name="s_gender" value="${criteria.gender}">
+        <input type="hidden" name="s_national" value="${criteria.nationality}">
+        <input type="hidden" name="s_maritStatus" value="${criteria.maritStatus}">
+        <input type="hidden" name="s_country" value="${criteria.country}">
+        <input type="hidden" name="s_city" value="${criteria.city}">
+        <input type="hidden" name="s_address" value="${criteria.address}">
+        <input type="hidden" name="s_index" value="${criteria.index}">
+        <input type="hidden" name="s_birthdayFrom" value="${criteria.birthday_from}">
+        <input type="hidden" name="s_birthdayTO" value="${criteria.birthday_to}">
 
         <input type="hidden" name="idContact" value="${contact.id}">
 
@@ -205,23 +216,6 @@
 
                 <button  onclick="phoneService.savePhone()" class="btn-default">Save</button>
                 <button onclick="phoneService.cancelPhone()" class="btn-default">Cancel</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="photoPopUp" style="display:none">
-        <div id='photoTT'>
-            <div class="container">
-                <form id="photoForm" class="form-horizontal" accept-charset="utf-8" role="form">
-                    <div style="margin: auto auto 2% auto">
-                        <div class="close" onclick="cancelPhoto()">x</div>
-                    </div>
-                    <label class="control-label" for="photo">Select File</label>
-                    <input id="photo" type="file" name="photo" class="file"  readonly accept="image/*" required>
-                </form>
-
-                <button  class="btn-default">Save</button>
-                <button  onclick="cancelPhoto()" class="btn-default">Cancel</button>
             </div>
         </div>
     </div>

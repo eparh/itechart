@@ -6,7 +6,11 @@ import persistence.model.Phone;
 import service.ContactService;
 import service.ServiceFactory;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.Part;
+import java.io.File;
+import java.io.IOException;
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -30,6 +34,35 @@ public class SaveCommand implements ActionCommand {
         return "/controller?command=show";
     }
 
+    private String getAvatar()  {
+        String SAVE_DIR = "uploadFiles";
+        String PARAM_FILE = "avatar";
+        // gets absolute path of the web application
+        String appPath = request.getServletContext().getRealPath("");
+        // constructs path of the directory to save uploaded file
+        String savePath = appPath +  File.separator + SAVE_DIR;
+
+        // creates the save directory if it does not exists
+        File fileSaveDir = new File(savePath);
+        if (!fileSaveDir.exists()) {
+            fileSaveDir.mkdir();
+        }
+
+
+        try {
+            Part filePart = request.getPart(PARAM_FILE);
+            filePart.write(savePath + File.separator + 1);
+            System.out.println(savePath + File.separator + 1);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ServletException e) {
+            e.printStackTrace();
+        }
+
+        return  savePath + File.separator + 1;
+    }
+
     private Contact makeContact() {
         Contact contact = new Contact();
         String strID = request.getParameter("idContact");
@@ -48,6 +81,11 @@ public class SaveCommand implements ActionCommand {
         contact.setSite(request.getParameter("site"));
         contact.setCompany(request.getParameter("company"));
         contact.setAddress(getAdds());
+
+        System.out.println(request.getParameter("avatar"));
+        if( request.getParameter("avatar") != null) {
+            contact.setPhoto(getAvatar());
+        }
 
         return contact;
     }

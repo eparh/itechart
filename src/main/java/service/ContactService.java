@@ -3,13 +3,13 @@ package service;
 import persistence.model.Contact;
 import persistence.model.Phone;
 import persistence.model.SearchCriteria;
+import persistence.model.ViewSettings;
 
 import java.sql.Date;
 import java.util.List;
 
-
 public interface ContactService {
-    List<Contact> getShowContacts(SearchCriteria criteria);
+    List<Contact> getShowContacts(SearchCriteria criteria, ViewSettings settings);
 
     void deleteContact(Long id);
 

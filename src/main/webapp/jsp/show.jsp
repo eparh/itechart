@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
     <link rel="stylesheet" href="/style/main.css">
     <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
-    <script type="text/javascript" src="/js/main.js"></script>
+    <script type="text/javascript" src="/js/show.js"></script>
 </head>
 <body>
 
@@ -19,7 +19,7 @@
             <ul class="nav navbar-nav">
                 <li><a href="/jsp/contact.jsp"><span class="glyphicon glyphicon-plus"></span>Add contact</a></li>
                 <li><a href="javascript:{}" onclick="getContact(); return false;"><span class="glyphicon glyphicon-pencil"></span>Edit contact</a></li>
-                <li><a href="javascript:{}" onclick="deleteContact(); return false;"><span class="glyphicon glyphicon-trash"></span> Delete contact</a></li>
+                <li><a href="javascript:{}" onclick="deleteContact(); return false;"><span class="glyphicon glyphicon-trash"></span> Delete contacts</a></li>
                 <li><a href="/jsp/search.jsp"><span class="glyphicon glyphicon-search"></span> Search contacts</a></li>
                 <li><a href="/jsp/email.jsp"><span class="glyphicon glyphicon-send"></span> Send Email </a></li>
             </ul>
@@ -30,31 +30,20 @@
 <form action="/controller" id="checkbox" method="post">
     <input type="hidden" name="command">
     <input type="hidden" name="idContact">
+    <input type="hidden" name="mode">
 </form>
-${session.s_name}
-${s_surname}
+
 <form action="/controller" id="paging" method="post">
     <input type="hidden" name="command"  value="show">
-    <input type="hidden" name="s_name" value="${s_name}">
-    <input type="hidden" name="s_surname" value="${s_surname}">
-    <input type="hidden" name="s_midname" value="${s_midname}">
-    <input type="hidden" name="s_gender" value="${s_gender}">
-    <input type="hidden" name="s_national" value="${s_national}">
-    <input type="hidden" name="s_maritStatus" value="${s_maritStatus}">
-    <input type="hidden" name="s_country" value="${s_country}">
-    <input type="hidden" name="s_city" value="${s_city}">
-    <input type="hidden" name="s_address" value="${s_address}">
-    <input type="hidden" name="s_index" value="${s_index}">
-    <input type="hidden" name="s_birthdayFrom" value="${s_birthdayFrom}">
-    <input type="hidden" name="s_birthdayTO" value="${s_birthdayTO}">
+    <input type="hidden" name="mode"  value="paging">
 </form>
 
 <div>
     <label for="countRecords" class="control-label col-sm-3">Show by records per page:</label>
     <div class="col-sm-1">
         <select onchange="chgRecordsPerPage()" name="countRecords"  form="paging" class="form-control" id="countRecords">
-            <option value="10" ${param.countRecords == '10' ? 'selected' : ''}>10</option>
-            <option value="20" ${param.countRecords == '20' ? 'selected' : ''}>20</option>
+            <option value="10" ${settings.getCount() == '10' ? 'selected' : ''}>10</option>
+            <option value="20" ${settings.getCount() == '20' ? 'selected' : ''}>20</option>
         </select>
     </div>
 </div>
@@ -85,14 +74,14 @@ ${s_surname}
 </table>
 
 <span style="float: left; margin: 2% auto auto 5%; ">
-    <p><b> Total pages: ${pages}</b></p>
+    <p><b> Total pages: ${settings.pages}</b></p>
 </span>
 <div align="center">
     <ul class="pagination">
         <li onclick="prev()"><span class="glyphicon glyphicon-menu-left"></span></li>
         <li>
                 <span class="col-sm-6">
-                    <input type="number" form="paging" class="form-control" name="pageNumber" min="1" max="${pages}" value="${pageNumber}">
+                    <input type="number" form="paging" class="form-control" name="pageNumber" min="1" max="${settings.pages}" value="${settings.getPageNumber()}">
                 </span>
         </li>
         <li onclick="next()"><span class="glyphicon glyphicon-menu-right"></span></li>

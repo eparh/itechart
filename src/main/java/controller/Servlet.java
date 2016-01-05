@@ -3,6 +3,7 @@ package controller;
 import command.ActionCommand;
 import command.ActionFactory;
 
+
 import java.io.IOException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -14,7 +15,9 @@ import javax.servlet.http.HttpServletResponse;
 
 
 @WebServlet(name = "Servlet",urlPatterns = {"/controller"})
-@MultipartConfig
+@MultipartConfig(fileSizeThreshold=1024*1024*2, // 2MB
+                 maxFileSize=1024*1024*10,      // 10MB
+                 maxRequestSize=1024*1024*50)   // 50MB
 public class Servlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         processRequest(request,response);
@@ -25,7 +28,7 @@ public class Servlet extends HttpServlet {
     }
 
     private void processRequest(HttpServletRequest request,HttpServletResponse response) throws ServletException, IOException {
-        String page = null;
+        String page;
         request.setCharacterEncoding("UTF-8");
 
         // определение команды, пришедшей из JSP
@@ -36,10 +39,7 @@ public class Servlet extends HttpServlet {
             RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(page);
             dispatcher.forward(request, response);
         } else {
-            System.out.printf("pizda");
-            //page = "jsp/main.jsp";
-            //request.setAttribute("error", "Incorrect situation");
-           // response.sendRedirect(page);
+
         }
     }
 }

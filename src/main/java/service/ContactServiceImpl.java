@@ -5,12 +5,12 @@ import persistence.dao.DaoFactory;
 import persistence.model.Contact;
 import persistence.model.Phone;
 import persistence.model.SearchCriteria;
+import persistence.model.ViewSettings;
 
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
-
 
 public class ContactServiceImpl implements ContactService {
     private ContactDao contactDao;
@@ -19,8 +19,8 @@ public class ContactServiceImpl implements ContactService {
     }
 
     @Override
-    public List<Contact> getShowContacts(SearchCriteria criteria) {
-        return contactDao.getShowContacts(criteria);
+    public List<Contact> getShowContacts(SearchCriteria criteria,ViewSettings settings) {
+        return contactDao.getShowContacts(criteria,settings);
     }
 
     @Override

@@ -8,9 +8,19 @@ function openbox(id) {
         div.style.display = 'block';
     }
 }
-function cancelPhoto() {
-    document.getElementById("photoForm").reset;
-    openbox("photoPopUp");
+
+function selectAvatar() {
+    document.getElementById("avatar").onchange = function () {
+        var reader = new FileReader();
+
+        reader.onload = function (e) {
+            // get loaded data and render thumbnail.
+            document.getElementById("image").src = e.target.result;
+        };
+
+        // read the image file as a data URL.
+        reader.readAsDataURL(this.files[0]);
+    };
 }
 
 var phoneService = {
@@ -21,7 +31,7 @@ var phoneService = {
     savePhone: function () {
         var form= document.getElementById("telephone");
         if (form.operatorCode.value == "" || form.phone.value == "") {
-             alert("Please, fill required fields");
+            alert("Please, fill required fields");
             return false;
         }
         if (form.countryCode.value > 1000 ||  form.phone.value > 99999999 || form.operatorCode.value > 1000) {
@@ -112,4 +122,5 @@ var phoneService = {
         openbox(this.popUp);
     }
 }
+
 

@@ -3,10 +3,6 @@ package persistence.model;
 import java.sql.Date;
 
 public class SearchCriteria {
-    private long count = 10;
-    private long pageNumber = 1;
-
-
     private String surname;
     private String name;
     private String midName;
@@ -43,35 +39,6 @@ public class SearchCriteria {
 
     public void setIndex(String index) {
         this.index = index;
-    }
-
-    public long getCount() {
-        return count;
-    }
-
-    public void setCount(long count) {
-        this.count = count;
-    }
-
-    public long getPageNumber() {
-        return pageNumber;
-    }
-
-    public void setPageNumber(long pageNumber) {
-        this.pageNumber = pageNumber;
-    }
-
-    public long getStart() {
-
-        return (pageNumber - 1) * count;
-    }
-
-    public long getPages(long totalCount) {
-        long pages = totalCount / count;
-        if(totalCount % count != 0) {
-            pages ++;
-        }
-        return pages;
     }
 
     public String getMidName() {

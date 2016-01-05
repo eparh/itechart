@@ -1,13 +1,15 @@
 function deleteContact() {
     var form = document.getElementById('checkbox');
     form.command.value = 'delete';
-    form.submit();
+    form.mode.value = 'delete';
+    if( countCheked()>0 ) form.submit();
 }
+
 function getContact() {
     var form = document.getElementById('checkbox');
     form.command.value = 'get';
     form.idContact.value = '';
-    form.submit();
+    if( countCheked()>0 ) form.submit();
 }
 function getContactByClick(num) {
     var form = document.getElementById('checkbox');
@@ -37,3 +39,17 @@ function chgRecordsPerPage() {
     form.pageNumber.value = 1;
     form.submit();
 }
+function checkAll(checktoggle) {
+    var checkboxes = document.getElementsByName("marked");
+    for (var i=0; i<checkboxes.length; i++)  {
+        checkboxes[i].checked = checktoggle;
+    }
+}
+function countCheked() {
+    var checkboxes = document.getElementsByName("marked");
+    var count = 0;
+    for (var i=0; i<checkboxes.length; i++)
+        if (checkboxes[i].checked)  count++;
+    return count;
+}
+alert("HI");

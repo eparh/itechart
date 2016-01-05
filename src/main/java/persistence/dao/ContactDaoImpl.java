@@ -182,7 +182,7 @@ public class ContactDaoImpl implements ContactDao {
     }
 
     @Override
-    public List<Contact> getShowContacts(SearchCriteria criteria) {
+    public List<Contact> getShowContacts(SearchCriteria criteria, ViewSettings settings) {
         paramStrList = new ArrayList<>();
         paramDateList = new ArrayList<>();
         List<Contact> list = new ArrayList<>();
@@ -201,8 +201,8 @@ public class ContactDaoImpl implements ContactDao {
                 statement.setDate(index, date);
                 index ++;
             }
-            statement.setLong(index,criteria.getStart());
-            statement.setLong(++index,criteria.getCount());
+            statement.setLong(index,settings.getStart());
+            statement.setLong(++index,settings.getCount());
             try (ResultSet set = statement.executeQuery()) {
                 while (set.next()) {
                     Contact contact = new Contact();

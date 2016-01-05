@@ -19,11 +19,6 @@ public class GetCommand implements ActionCommand {
             idContact = Long.parseLong(temp);
         } else {
             String[] chosen = request.getParameterValues("marked");
-
-            if (chosen == null) {
-                return "/controller?command=show";
-            }
-
             for (String item : chosen) {
                 idContact = Long.parseLong(item);
                 break;
@@ -31,6 +26,9 @@ public class GetCommand implements ActionCommand {
         }
 
         Contact contact = contactService.getContact(idContact);
+
+        // System.out.println(contact.getPhoto());
+
         List<Phone> phones = contactService.getPhones(idContact);
 
         request.setAttribute("contact",contact);
