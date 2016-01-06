@@ -1,5 +1,6 @@
 package command;
 
+import com.sun.tools.doclets.formats.html.SourceToHTMLConverter;
 import service.ContactService;
 import service.ServiceFactory;
 
@@ -18,9 +19,9 @@ public class AvatarCommand implements ActionCommand {
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
         String temp = request.getParameter("idContact");
         Long idContact =(long) -1;
+        System.out.println("ID"+temp);
         if(! "".equals(temp)) idContact = Long.parseLong(temp);
         else {
             String[] chosen = request.getParameterValues("marked");
@@ -30,13 +31,15 @@ public class AvatarCommand implements ActionCommand {
             }
         }
 
-        byte[] imageBytes =  extractBytes(contactService.getPhoto(idContact));
+        System.out.println("ID"+idContact);
+        String path = contactService.getPhoto(idContact);
+        byte[] imageBytes =  extractBytes(path);
 
         response.setContentType("image/jpeg");
         response.setContentLength(imageBytes.length);
 
         response.getOutputStream().write(imageBytes);
-        return "/jsp/contact.jsp";
+        return null;
     }
 
     private byte[] extractBytes (String ImageName) throws IOException {

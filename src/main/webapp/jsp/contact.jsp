@@ -30,7 +30,7 @@ ${contact.photo}
 
 <div class="container">
     <a href="javascript:{}" onclick="document.getElementById('avatar').click()">
-        <img id="image" src="/controller?command=avatar">
+        <img id="image" src="/controller?command=avatar&idContact=${contact.id}">
     </a>
     <input id="avatar" type="file" name="avatar" form="form" class="file" accept="image/*" style="display: none">
 
@@ -46,18 +46,6 @@ ${contact.photo}
         <input type="hidden" name="mode" value="${mode}">
 
         <input type="hidden" name="command"  value="save">
-        <input type="hidden" name="s_name" value="${criteria.name}">
-        <input type="hidden" name="s_surname" value="${criteria.surname}">
-        <input type="hidden" name="s_midname" value="${criteria.midName}">
-        <input type="hidden" name="s_gender" value="${criteria.gender}">
-        <input type="hidden" name="s_national" value="${criteria.nationality}">
-        <input type="hidden" name="s_maritStatus" value="${criteria.maritStatus}">
-        <input type="hidden" name="s_country" value="${criteria.country}">
-        <input type="hidden" name="s_city" value="${criteria.city}">
-        <input type="hidden" name="s_address" value="${criteria.address}">
-        <input type="hidden" name="s_index" value="${criteria.index}">
-        <input type="hidden" name="s_birthdayFrom" value="${criteria.birthday_from}">
-        <input type="hidden" name="s_birthdayTO" value="${criteria.birthday_to}">
 
         <input type="hidden" name="idContact" value="${contact.id}">
 
