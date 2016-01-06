@@ -8,6 +8,7 @@ import service.ServiceFactory;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 import java.io.File;
 import java.io.IOException;
@@ -25,7 +26,7 @@ public class SaveCommand implements ActionCommand {
     private HttpServletRequest request;
 
     @Override
-    public String execute(HttpServletRequest request) {
+    public String execute(HttpServletRequest request, HttpServletResponse response) {
         this.request = request;
         Contact contact = makeContact();
         long idContact = contactService.setContact(contact);

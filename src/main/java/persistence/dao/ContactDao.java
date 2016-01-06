@@ -9,6 +9,10 @@ public interface ContactDao {
 
     long setContact(Contact contact);
 
+    String getPhoto(long idContact);
+
+    void setPhoto(long idContact, String path);
+
     long countContacts(SearchCriteria criteria);
 
     void deleteContact(Long idContact);

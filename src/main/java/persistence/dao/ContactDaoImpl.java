@@ -128,6 +128,35 @@ public class ContactDaoImpl implements ContactDao {
     }
 
     @Override
+    public String getPhoto(long idContact) {
+        String path = null;
+        try (Connection connection = source.getConnection();
+             PreparedStatement statement = connection.prepareStatement("SELECT photo FROM Contact WHERE idContact = ?")) {
+            statement.setLong(1, idContact);
+            try (ResultSet set = statement.executeQuery()) {
+                if (set.next()) {
+                   path = set.getString("photo");
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return path;
+    }
+
+    @Override
+    public void setPhoto(long idContact, String path) {
+        try (Connection connection = source.getConnection()) {
+            try (PreparedStatement statement = connection.prepareStatement("UPDATE Contact SET `photo`= ? WHERE `idContact`= ?")) {
+                statement.setString(1, path);
+                statement.setLong(2,idContact);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
     public long countContacts(SearchCriteria criteria) {
         long total = 0;
         paramStrList = new ArrayList<>();
@@ -162,7 +191,7 @@ public class ContactDaoImpl implements ContactDao {
         try (Connection connection = source.getConnection();
              PreparedStatement statement = connection.prepareStatement("SELECT * FROM Attachment " +
                      "WHERE idContact = ?")) {
-            statement.setString(1, Long.toString(idContact));
+            statement.setLong(1, idContact);
             try (ResultSet set = statement.executeQuery()) {
                 while (set.next()) {
                     Attach attach = new Attach();
@@ -275,7 +304,7 @@ public class ContactDaoImpl implements ContactDao {
     private long insertContact(Contact contact) {
         try (Connection connection = source.getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement("INSERT INTO Contact(`name`,surname,middName,birthday,email," +
-                    " gender,maritStatus,`national`, photo, website, company, idAddress ) VALUES (?,?,?,?,?,?,?,?,?,?,?,? )", Statement.RETURN_GENERATED_KEYS)) {
+                    " gender,maritStatus,`national`, website, company, idAddress ) VALUES (?,?,?,?,?,?,?,?,?,?,? )", Statement.RETURN_GENERATED_KEYS)) {
                 statement.setString(1, contact.getName());
                 statement.setString(2, contact.getSurname());
                 statement.setString(3, contact.getMidName());
@@ -284,12 +313,11 @@ public class ContactDaoImpl implements ContactDao {
                 statement.setString(6, contact.getGender());
                 statement.setString(7, contact.getMaritStatus());
                 statement.setString(8, contact.getNationality());
-                statement.setString(9, contact.getPhoto());
-                statement.setString(10, contact.getSite());
-                statement.setString(11, contact.getCompany());
+                statement.setString(9, contact.getSite());
+                statement.setString(10, contact.getCompany());
 
                 long id = setAdds(contact);
-                statement.setLong(12, id);
+                statement.setLong(11, id);
 
                 statement.executeUpdate();
                 ResultSet generatedKeys = statement.getGeneratedKeys();

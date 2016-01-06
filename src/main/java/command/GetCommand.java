@@ -6,13 +6,14 @@ import service.ContactService;
 import service.ServiceFactory;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 public class GetCommand implements ActionCommand {
     private ContactService contactService = ServiceFactory.getContactService();
 
     @Override
-    public String execute(HttpServletRequest request) {
+    public String execute(HttpServletRequest request, HttpServletResponse response) {
         String temp = request.getParameter("idContact");
         Long idContact =(long) -1;
         if(! "".equals(temp)) {
@@ -28,7 +29,7 @@ public class GetCommand implements ActionCommand {
         Contact contact = contactService.getContact(idContact);
 
         List<Phone> phones = contactService.getPhones(idContact);
-        System.out.println(contact.getPhoto());
+        //System.out.println(contact.getPhoto());
         request.setAttribute("contact",contact);
         request.setAttribute("title","Edit contact");
         request.setAttribute("phones",phones);

@@ -33,7 +33,7 @@ public class Servlet extends HttpServlet {
         // определение команды, пришедшей из JSP
         ActionFactory client = new ActionFactory();
         ActionCommand command = client.defineCommand(request);
-        page = command.execute(request);
+        page = command.execute(request,response);
         if (page != null) {
             RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(page);
             dispatcher.forward(request, response);

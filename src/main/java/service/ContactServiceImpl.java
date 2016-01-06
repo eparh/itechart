@@ -54,6 +54,16 @@ public class ContactServiceImpl implements ContactService {
     }
 
     @Override
+    public void setPhoto(long idContact, String path) {
+        contactDao.setPhoto(idContact,path);
+    }
+
+    @Override
+    public String getPhoto(long idContact) {
+       return contactDao.getPhoto(idContact);
+    }
+
+    @Override
     public Date stringToDate(String stringDate) {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         Date date = null;

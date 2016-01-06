@@ -13,6 +13,11 @@ public enum CommandEnum {
             this.command = new ShowCommand();
         }
     },
+    AVATAR{
+        {
+            this.command = new AvatarCommand();
+        }
+    },
 
     DELETE{
         {

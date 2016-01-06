@@ -23,5 +23,9 @@ public interface ContactService {
 
     long countContacts(SearchCriteria criteria);
 
+    void setPhoto(long idContact, String path);
+
+    String getPhoto(long idContact);
+
     Date stringToDate(String stringDate);
 }

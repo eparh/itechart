@@ -30,7 +30,7 @@ ${contact.photo}
 
 <div class="container">
     <a href="javascript:{}" onclick="document.getElementById('avatar').click()">
-        <img id="image" src="${photo}">
+        <img id="image" src="/controller?command=avatar">
     </a>
     <input id="avatar" type="file" name="avatar" form="form" class="file" accept="image/*" style="display: none">
 
