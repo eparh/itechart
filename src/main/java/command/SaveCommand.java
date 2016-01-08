@@ -12,12 +12,11 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 import java.io.File;
 import java.io.IOException;
-import java.sql.Date;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -35,49 +34,46 @@ public class SaveCommand implements ActionCommand {
         return "/controller?command=show";
     }
 
-    private String getAvatar()  {
-        String SAVE_DIR = "images";
-        String PARAM_FILE = "avatar";
-        // gets absolute path of the web application
-        String appPath = request.getServletContext().getRealPath("");
-        // constructs path of the directory to save uploaded file
-        String savePath = appPath + SAVE_DIR;
-        String path = null;
-        // creates the save directory if it does not exists
-        File fileSaveDir = new File(savePath);
-        if (!fileSaveDir.exists()) {
-            fileSaveDir.mkdir();
-        }
-
+    private String getSavePath(long idContact) {
+        Properties properties = new Properties();
         try {
-            Part filePart = request.getPart(PARAM_FILE);
-            String fileName = extractFileName(filePart);
-            if(filePart.getSize()>0){
-                path = savePath + File.separator + fileName;
-                filePart.write(path);
-                File avatar = new File(path);
-                System.out.println(avatar.exists());
-                System.out.println(avatar.canRead());
-                System.out.println(avatar.canExecute());
-                System.out.println(avatar.canWrite());
-
-                System.out.println(path);
-            }
+            properties.load(AvatarCommand.class.getResourceAsStream("/avatars.properties"));
         } catch (IOException e) {
             e.printStackTrace();
-        } catch (ServletException e) {
-            e.printStackTrace();
         }
-
-        return path;
+        String path = properties.getProperty("SAVE_AVATARS_PATH");
+        while(idContact != 0) {
+            path += File.separator + idContact % 10;
+            idContact /= 10;
+        }
+        return  path;
     }
 
-    private String extractFileName(Part part) {
+    private String getAvatar(long idContact) {
+        String savePath = getSavePath(idContact);
+        File fileSaveDir = new File(savePath);
+        if (!fileSaveDir.exists()) {
+            fileSaveDir.mkdirs();
+        }
+        try {
+            Part filePart = request.getPart("avatar");
+            if(filePart.getSize()>0){
+                savePath += File.separator + idContact + extractFileExtension(filePart);
+                filePart.write(savePath);
+            }
+        } catch (IOException | ServletException e ) {
+            e.printStackTrace();
+        }
+        return savePath;
+    }
+
+    private String extractFileExtension(Part part) {
         String contentDisp = part.getHeader("content-disposition");
         String[] items = contentDisp.split(";");
         for (String s : items) {
             if (s.trim().startsWith("filename")) {
-                return s.substring(s.indexOf("=") + 2, s.length()-1);
+                String fileName = s.substring(s.indexOf("=") + 2, s.length()-1);
+                return fileName.substring(fileName.indexOf("."));
             }
         }
         return "";
@@ -102,7 +98,7 @@ public class SaveCommand implements ActionCommand {
         contact.setCompany(request.getParameter("company"));
         contact.setAddress(getAdds());
 
-        contact.setPhoto(getAvatar());
+        contact.setPhoto(getAvatar(contact.getId()));
 
         return contact;
     }

@@ -22,10 +22,7 @@
     </div>
 </nav>
 
-<c:set var="photo"  value="${contact.photo}"/>
-<c:if test="${photo == null}">
-    <c:set var="photo"  value="/images/noavatar.png"/>
-</c:if>
+
 ${contact.photo}
 
 <div class="container">

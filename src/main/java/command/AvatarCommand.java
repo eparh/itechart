@@ -1,27 +1,21 @@
 package command;
 
-import com.sun.tools.doclets.formats.html.SourceToHTMLConverter;
 import service.ContactService;
 import service.ServiceFactory;
 
-import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferByte;
-import java.awt.image.WritableRaster;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+import java.util.Properties;
 
 public class AvatarCommand implements ActionCommand {
     private ContactService contactService = ServiceFactory.getContactService();
 
-
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        //Определение ID контакта
         String temp = request.getParameter("idContact");
-        Long idContact =(long) -1;
-        System.out.println("ID"+temp);
+        Long idContact =(long) - 1;
         if(! "".equals(temp)) idContact = Long.parseLong(temp);
         else {
             String[] chosen = request.getParameterValues("marked");
@@ -31,26 +25,41 @@ public class AvatarCommand implements ActionCommand {
             }
         }
 
-        System.out.println("ID"+idContact);
+        Properties properties = new Properties();
+        try {
+            properties.load(AvatarCommand.class.getResourceAsStream("/avatars.properties"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         String path = contactService.getPhoto(idContact);
-        byte[] imageBytes =  extractBytes(path);
 
-        response.setContentType("image/jpeg");
-        response.setContentLength(imageBytes.length);
+        if (path == null) {
+            String appPath = request.getServletContext().getRealPath("");
+            path = appPath + properties.getProperty("DEFAULT_AVATAR");
+        }
 
-        response.getOutputStream().write(imageBytes);
+        File file = new File(path);
+
+        int buffSize = Integer.parseInt(properties.getProperty("BUFFER_SIZE"));
+
+        response.reset();
+        response.setBufferSize(buffSize);
+        response.setContentType(properties.getProperty("CONTENT_TYPE"));
+        response.setHeader("Content-Length", String.valueOf(file.length()));
+        response.setHeader("Content-Disposition", "avatar; filename=\"" + file.getName() + "\"");
+
+        OutputStream out = response.getOutputStream();
+        FileInputStream in = new FileInputStream(file);
+        byte[] buffer = new byte[buffSize];
+        int length;
+        while ((length = in.read(buffer)) > 0) {
+            out.write(buffer, 0, length);
+        }
+        in.close();
+        out.flush();
+
         return null;
     }
 
-    private byte[] extractBytes (String ImageName) throws IOException {
-        // open image
-        File imgPath = new File(ImageName);
-        BufferedImage bufferedImage = ImageIO.read(imgPath);
-
-        // get DataBufferBytes from Raster
-        WritableRaster raster = bufferedImage .getRaster();
-        DataBufferByte data   = (DataBufferByte) raster.getDataBuffer();
-
-        return ( data.getData() );
-    }
 }
