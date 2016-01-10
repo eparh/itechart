@@ -147,9 +147,10 @@ public class ContactDaoImpl implements ContactDao {
     @Override
     public void setPhoto(long idContact, String path) {
         try (Connection connection = source.getConnection()) {
-            try (PreparedStatement statement = connection.prepareStatement("UPDATE Contact SET `photo`= ? WHERE `idContact`= ?")) {
+            try (PreparedStatement statement = connection.prepareStatement("UPDATE Contact SET photo = ? WHERE idContact = ?")) {
                 statement.setString(1, path);
                 statement.setLong(2,idContact);
+                statement.executeUpdate();
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -321,8 +322,8 @@ public class ContactDaoImpl implements ContactDao {
 
                 statement.executeUpdate();
                 ResultSet generatedKeys = statement.getGeneratedKeys();
-                generatedKeys.next();
 
+                generatedKeys.next();
                 return generatedKeys.getLong(1);
             }
         } catch (SQLException e) {
@@ -335,7 +336,7 @@ public class ContactDaoImpl implements ContactDao {
 
             try (PreparedStatement statement = connection.prepareStatement("UPDATE Contact  SET surname = ?, `name`= ?, middName = ?," +
                     " birthday = ?,  email = ?, gender = ? , maritStatus = ?, `national`= ?, " +
-                    "photo = ? , website = ?, company = ?, idAddress = ? WHERE idContact = ?")) {
+                    "website = ?, company = ?, idAddress = ? WHERE idContact = ?")) {
                 statement.setString(1,contact.getSurname());
                 statement.setString(2,contact.getName());
                 statement.setString(3,contact.getMidName());
@@ -344,14 +345,13 @@ public class ContactDaoImpl implements ContactDao {
                 statement.setString(6,contact.getGender());
                 statement.setString(7,contact.getMaritStatus());
                 statement.setString(8,contact.getNationality());
-                statement.setString(9,contact.getPhoto());
-                statement.setString(10,contact.getSite());
-                statement.setString(11,contact.getCompany());
+                statement.setString(9,contact.getSite());
+                statement.setString(10,contact.getCompany());
 
                 long id = setAdds(contact);
-                statement.setLong(12, id);
+                statement.setLong(11, id);
 
-                statement.setLong(13, contact.getId());
+                statement.setLong(12, contact.getId());
 
                 statement.executeUpdate();
             }

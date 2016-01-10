@@ -23,6 +23,24 @@ function selectAvatar() {
     };
 }
 
+function getDate() {
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth()+1; //January is 0!
+    var yyyy = today.getFullYear();
+
+    if(dd<10) {
+        dd='0'+dd
+    }
+
+    if(mm<10) {
+        mm='0'+mm
+    }
+    today = yyyy +'-'+mm+'-'+dd;
+
+    return today;
+}
+
 var phoneService = {
     pos : 0,
     popUp: 'phonePopUp',
@@ -123,4 +141,93 @@ var phoneService = {
     }
 }
 
+var attachService = {
+    pos : 0,
+    popUp: 'attachPopUp',
+    mode: 0,
+
+    saveAttach: function () {
+        var form= document.getElementById("attachment");
+
+        openbox(this.popUp);
+
+        var table = document.getElementById("attachTable");
+
+        if (this.mode == 0) {
+            var i = table.rows.length;
+            var row = table.insertRow(i);
+            var cell1 = row.insertCell(0);
+            var cell2 = row.insertCell(1);
+            var cell3 = row.insertCell(2);
+            var cell4 = row.insertCell(3);
+            var cell5 = row.insertCell(4);
+        }  else {
+            var i = this.pos;
+            var row = table.rows[i];
+            var cell1 = row.cells[0];
+            var cell2 = row.cells[1];
+            var cell3 = row.cells[2];
+            var cell4 = row.cells[3];
+            var cell5 = row.cells[4];
+        }
+
+        cell1.innerHTML = "<input type='checkbox'  name='attaches'/>";
+
+        var fileName = form.attach.value.split(/(\\|\/)/g).pop();
+
+        cell2.innerHTML ="<input type='text' form='form' value='"+ fileName +"' readonly/>";
+
+        cell3.innerHTML ="<input type='date' form='form' name='attachDate"+i+"' value='"+ getDate() +"' readonly/>";
+        cell4.innerHTML ="<input type='text'form='form' name='comment"+i+"' value='"+form.comment.value+"' readonly/>";
+
+        var file = form.attach.files[0];
+        alert(file.size);
+
+        cell5.innerHTML ="<input type='file'form='form' name='attach"+i+"' value='"+file+"'  style='display: none'/>";
+        form.reset();
+    },
+
+    deleteAttach: function () {
+        var table = document.getElementById("attachTable");
+        var checkboxes = document.getElementsByName('attaches');
+
+        for (var i=checkboxes.length - 1; i>=0; i--) {
+
+            if (checkboxes[i].checked) {
+                table.deleteRow(i);
+            }
+        }
+    },
+
+    editAttach: function () {
+        var form= document.getElementById("attachment");
+        var table = document.getElementById("attachTable");
+        var checkboxes = document.getElementsByName('attaches');
+
+        for (var i=0; i<checkboxes.length; i++) {
+            if (checkboxes[i].checked) {
+                var row = table.rows[i];
+                var file = row.cells[4].firstElementChild.files[0];
+                alert(file.size);
+                form.attach.files[0] = row.cells[4].firstElementChild.files[0];
+                form.comment.value = row.cells[3].firstElementChild.value;
+                this.pos = i;
+                this.mode = 1;
+                openbox(this.popUp);
+                break;
+            }
+        }
+
+    },
+
+    addAttach: function () {
+        this.mode = 0;
+        openbox(this.popUp);
+    },
+
+    cancelAttach: function () {
+        document.getElementById("attachment").reset();
+        openbox(this.popUp);
+    }
+}
 

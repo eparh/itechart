@@ -23,60 +23,22 @@ import java.util.regex.Pattern;
 public class SaveCommand implements ActionCommand {
     private ContactService contactService = ServiceFactory.getContactService();
     private HttpServletRequest request;
+    private long idContact;
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
         this.request = request;
         Contact contact = makeContact();
-        long idContact = contactService.setContact(contact);
-        savePhones(idContact);
+        idContact = contactService.setContact(contact);
+        savePhones();
 
+        String path =  getAvatar();
+        if(path != null) {
+            //Проверим была ли ава у контакта и если была, то удаляем ее
+            checkAvaExist();
+        }
+        contactService.setPhoto(idContact,path);
         return "/controller?command=show";
-    }
-
-    private String getSavePath(long idContact) {
-        Properties properties = new Properties();
-        try {
-            properties.load(AvatarCommand.class.getResourceAsStream("/avatars.properties"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        String path = properties.getProperty("SAVE_AVATARS_PATH");
-        while(idContact != 0) {
-            path += File.separator + idContact % 10;
-            idContact /= 10;
-        }
-        return  path;
-    }
-
-    private String getAvatar(long idContact) {
-        String savePath = getSavePath(idContact);
-        File fileSaveDir = new File(savePath);
-        if (!fileSaveDir.exists()) {
-            fileSaveDir.mkdirs();
-        }
-        try {
-            Part filePart = request.getPart("avatar");
-            if(filePart.getSize()>0){
-                savePath += File.separator + idContact + extractFileExtension(filePart);
-                filePart.write(savePath);
-            }
-        } catch (IOException | ServletException e ) {
-            e.printStackTrace();
-        }
-        return savePath;
-    }
-
-    private String extractFileExtension(Part part) {
-        String contentDisp = part.getHeader("content-disposition");
-        String[] items = contentDisp.split(";");
-        for (String s : items) {
-            if (s.trim().startsWith("filename")) {
-                String fileName = s.substring(s.indexOf("=") + 2, s.length()-1);
-                return fileName.substring(fileName.indexOf("."));
-            }
-        }
-        return "";
     }
 
     private Contact makeContact() {
@@ -98,9 +60,62 @@ public class SaveCommand implements ActionCommand {
         contact.setCompany(request.getParameter("company"));
         contact.setAddress(getAdds());
 
-        contact.setPhoto(getAvatar(contact.getId()));
-
         return contact;
+    }
+
+    private void savePhones() {
+        List<Phone> phones = getPhones();
+        contactService.savePhones(idContact, phones);
+    }
+
+    private void checkAvaExist() {
+        String path = contactService.getPhoto(idContact);
+        contactService.deleteOnPath(path);
+    }
+
+    private String getAvatar() {
+        String savePath = getSavePath(idContact);
+        File fileSaveDir = new File(savePath);
+        if (!fileSaveDir.exists()) {
+            fileSaveDir.mkdirs();
+        }
+        try {
+            Part filePart = request.getPart("avatar");
+            if(filePart.getSize()>0){
+                savePath += File.separator + idContact + extractFileExtension(filePart);
+                filePart.write(savePath);
+            }
+        } catch (IOException | ServletException e ) {
+            e.printStackTrace();
+        }
+        return savePath;
+    }
+
+    private String getSavePath(long idContact) {
+        Properties properties = new Properties();
+        try {
+            properties.load(AvatarCommand.class.getResourceAsStream("/avatars.properties"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        String path = properties.getProperty("SAVE_AVATARS_PATH");
+        while(idContact != 0) {
+            path += File.separator + idContact % 10;
+            idContact /= 10;
+        }
+        return  path;
+    }
+
+    private String extractFileExtension(Part part) {
+        String contentDisp = part.getHeader("content-disposition");
+        String[] items = contentDisp.split(";");
+        for (String s : items) {
+            if (s.trim().startsWith("filename")) {
+                String fileName = s.substring(s.indexOf("=") + 2, s.length()-1);
+                return fileName.substring(fileName.indexOf("."));
+            }
+        }
+        return "";
     }
 
     private Adds getAdds() {
@@ -118,7 +133,7 @@ public class SaveCommand implements ActionCommand {
         return adds;
     }
 
-    private List<Phone> getPhones(long idContact) {
+    private List<Phone> getPhones() {
         List<Phone> phones = new ArrayList<>();
         Enumeration<String> paramNames = request.getParameterNames();
         Pattern pattern = Pattern.compile("phone\\d+");
@@ -141,8 +156,5 @@ public class SaveCommand implements ActionCommand {
         return phones;
     }
 
-    private void savePhones(long idContact) {
-        List<Phone> phones = getPhones(idContact);
-        contactService.savePhones(idContact, phones);
-    }
+
 }

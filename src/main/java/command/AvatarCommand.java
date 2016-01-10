@@ -15,13 +15,16 @@ public class AvatarCommand implements ActionCommand {
     public String execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
         //Определение ID контакта
         String temp = request.getParameter("idContact");
+
         Long idContact =(long) - 1;
         if(! "".equals(temp)) idContact = Long.parseLong(temp);
         else {
             String[] chosen = request.getParameterValues("marked");
-            for (String item : chosen) {
-                idContact = Long.parseLong(item);
-                break;
+            if (chosen != null) {
+                for (String item : chosen) {
+                    idContact = Long.parseLong(item);
+                    break;
+                }
             }
         }
 

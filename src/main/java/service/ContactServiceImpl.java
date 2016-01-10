@@ -7,6 +7,7 @@ import persistence.model.Phone;
 import persistence.model.SearchCriteria;
 import persistence.model.ViewSettings;
 
+import java.io.File;
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -76,5 +77,13 @@ public class ContactServiceImpl implements ContactService {
             }
         }
         return date;
+    }
+
+    @Override
+    public void deleteOnPath(String path) {
+        File file = new File(path);
+        if(file.exists()){
+            file.delete();
+        }
     }
 }

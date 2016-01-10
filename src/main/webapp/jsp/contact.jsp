@@ -6,9 +6,12 @@
     <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
     <script type="text/javascript" src="/js/contact.js"></script>
-    <link rel="stylesheet" href="/style/1.css">
+    <link rel="stylesheet" href="/style/contact.css">
 </head>
 <body  onload="selectAvatar()">
+
+<!--Navigation bar -->
+
 <nav class="navbar navbar-inverse">
     <div class="container-fluid">
         <div class="navbar-header">
@@ -23,8 +26,6 @@
 </nav>
 
 
-${contact.photo}
-
 <div class="container">
     <a href="javascript:{}" onclick="document.getElementById('avatar').click()">
         <img id="image" src="/controller?command=avatar&idContact=${contact.id}">
@@ -38,6 +39,8 @@ ${contact.photo}
     </c:if>
 
     <h1> ${title}</h1>
+
+    <!--Основная форма с input - полями -->
 
     <form id="form" action="/controller" class="form-horizontal" method="post" accept-charset="utf-8" enctype="multipart/form-data" role="form">
         <input type="hidden" name="mode" value="${mode}">
@@ -152,6 +155,8 @@ ${contact.photo}
         </div>
     </form>
 
+    <!--Pop-up для телефонов -->
+
     <div id="phonePopUp" style="display:none">
         <div class='tt'>
             <div class="container">
@@ -205,6 +210,40 @@ ${contact.photo}
         </div>
     </div>
 
+    <!--Pop-up для attachments -->
+
+    <div id="attachPopUp" style="display:none">
+        <div id="attachTT">
+            <div class="container">
+                <form id="attachment" class="form-horizontal" accept-charset="utf-8" role="form">
+                    <div style="margin: auto auto 2% auto">
+                        <div class="close" onclick="attachService.cancelAttach()">x</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" for="attachment">Choose file:</label>
+                        <div class="col-sm-5">
+                            <input  type="file"  class="form-control" id="attach" name="attach" >
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" for="attachComment">Comment:</label>
+                        <div class="col-sm-5">
+                            <textarea  class="form-control" rows="5" name="comment" id="attachComment" placeholder="Type your comment..."></textarea>
+                        </div>
+                    </div>
+                </form>
+
+                <button  onclick="attachService.saveAttach()" class="btn-default">Save</button>
+                <button onclick="attachService.cancelAttach()" class="btn-default">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+
+    <!--Таблица с телефонами и кнопками -->
+
     <div style="float: right;">
         <button onclick="phoneService.addPhone()" class="btn-default">Add phone</button>
         <button onclick="phoneService.deletePhone()" class="btn-default">Delete phone</button>
@@ -237,6 +276,41 @@ ${contact.photo}
             </tbody>
         </table>
     </div>
+
+
+    <!--Таблица с attachments и кнопками -->
+
+    <div style="float: right;">
+        <button onclick="attachService.addAttach()" class="btn-default">Add attachment</button>
+        <button onclick="attachService.deleteAttach()" class="btn-default">Delete attachment</button>
+        <button onclick="attachService.editAttach()" class="btn-default">Edit attachment</button>
+    </div>
+    <div>
+        <table class="table" >
+            <thead>
+            <tr>
+                <th></th>
+                <th>Name</th>
+                <th>Date of load</th>
+                <th>Commment</th>
+            </tr>
+            </thead>
+            <tbody id="attachTable">
+            <c:forEach items="${attaches}" var="attach" varStatus="num">
+                <tr>
+                    <td>
+                        <input type='checkbox'  name='attaches'/>
+                    </td>
+                    <td><input type='text' form='form' value="${ attach.getFullPhone()}" readonly/></td>
+                    <td><input type='date' form='form' name="kind${ num.count - 1 }" value="${ attach.date}" readonly/></td>
+                    <td><input type='text' form='form' name="comment${ num.count - 1 }" value="${ attach.comment}" readonly/></td>
+                    <td><input type='hidden' form='form' name="attach${ num.count - 1}" value="${ phone.countryCode}"/></td>
+                </tr>
+            </c:forEach>
+            </tbody>
+        </table>
+    </div>
+
     <button form="form" type="submit" class="btn-default">Save</button>
 </div>
 

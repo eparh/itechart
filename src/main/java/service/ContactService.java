@@ -28,4 +28,6 @@ public interface ContactService {
     String getPhoto(long idContact);
 
     Date stringToDate(String stringDate);
+
+    void deleteOnPath(String path);
 }

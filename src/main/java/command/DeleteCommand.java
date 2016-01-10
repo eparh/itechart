@@ -18,7 +18,10 @@ public class DeleteCommand implements ActionCommand {
     public String execute(HttpServletRequest request, HttpServletResponse response) {
         String [] chosen = request.getParameterValues("marked");
         for(String item: chosen){
-            contactService.deleteContact(Long.parseLong(item));
+            long idContact = Long.parseLong(item);
+            String avatarPath = contactService.getPhoto(idContact);
+            contactService.deleteOnPath(avatarPath);
+            contactService.deleteContact(idContact);
         }
         return "/controller?command=show";
     }

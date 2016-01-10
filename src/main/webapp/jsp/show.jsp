@@ -4,7 +4,7 @@
 <head>
     <title>My contacts</title>
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/style/main.css">
+    <link rel="stylesheet" href="/style/show.css">
     <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
     <script type="text/javascript" src="/js/show.js"></script>
 </head>
@@ -21,7 +21,7 @@
                 <li><a href="javascript:{}" onclick="getContact(); return false;"><span class="glyphicon glyphicon-pencil"></span>Edit contact</a></li>
                 <li><a href="javascript:{}" onclick="deleteContact(); return false;"><span class="glyphicon glyphicon-trash"></span> Delete contacts</a></li>
                 <li><a href="/jsp/search.jsp"><span class="glyphicon glyphicon-search"></span> Search contacts</a></li>
-                <li><a href="/jsp/email.jsp"><span class="glyphicon glyphicon-send"></span> Send Email </a></li>
+                <li><a href="javascript:{}" onclick="openbox('emailPopUp'); return false;"><span class="glyphicon glyphicon-send"></span> Send Email </a></li>
             </ul>
         </div>
     </div>
@@ -47,6 +47,54 @@
         </select>
     </div>
 </div>
+
+<div id="emailPopUp" style="display:none">
+    <div class="tt">
+        <div class="container">
+            <form id="attachment" class="form-horizontal" accept-charset="utf-8" role="form">
+                <div style="margin: auto auto 3% auto">
+                    <div class="close" onclick="openbox('emailPopUp')">x</div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-sm-1" for="addresses">Address:</label>
+                    <div class="col-sm-7">
+                        <textarea  class="form-control" rows="3" name="address" id="addresses"></textarea>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-sm-1" for="attachment">Theme:</label>
+                    <div class="col-sm-7">
+                        <input  type="text"  id="theme"  class="form-control" name="theme">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="template" class="control-label col-sm-1">Template:</label>
+                    <div class="col-sm-7">
+                        <select name="template" class="form-control" id="template">
+                            <option>Template1</option>
+                            <option>Template2</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-sm-1" for="text">Text:</label>
+                    <div class="col-sm-7">
+                        <textarea  class="form-control" rows="9" name="text" id="text" placeholder="Type message..."></textarea>
+                    </div>
+                </div>
+            </form>
+
+            <button  onclick="" class="btn-default">Send</button>
+            <button onclick="openbox('emailPopUp')" class="btn-default">Cancel</button>
+        </div>
+    </div>
+</div>
+
+
 
 <table id="results" class="table table-striped .table-bordered .table-hover">
     <thead>
