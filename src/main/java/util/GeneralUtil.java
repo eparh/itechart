@@ -5,6 +5,7 @@ import org.apache.commons.io.FilenameUtils;
 
 import javax.servlet.http.Part;
 import java.io.File;
+import java.io.IOException;
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -47,13 +48,12 @@ public class GeneralUtil {
         return fileName.substring(fileName.indexOf("."));
     }
 
-    public static  void renameFile(long idContact, File file) {
+    public static  File renameFile(long idContact, File file) throws IOException {
         String ext = FilenameUtils.getExtension(file.getName());
-        System.out.println("ext:"+ext);
-        String path =FilenameUtils.getPath(file.getName());
-        System.out.println("path:"+path);
-        String new_name = path + idContact + ext;
+        String path =FilenameUtils.getPath(file.getPath());
+        String new_name = path + idContact + "." + ext;
         File new_file = new File(new_name);
-        file.renameTo(new_file);
+        FileUtils.moveFile(file, new_file);
+        return new_file;
     }
 }

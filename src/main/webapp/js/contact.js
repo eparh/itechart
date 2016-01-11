@@ -101,7 +101,6 @@ var phoneService = {
         var checkboxes = document.getElementsByName('phones');
 
         for (var i=checkboxes.length - 1; i>=0; i--) {
-
             if (checkboxes[i].checked) {
                 table.deleteRow(i);
             }
@@ -148,45 +147,53 @@ var attachService = {
 
     saveAttach: function () {
         var form= document.getElementById("form");
-
         openbox(this.popUp);
 
         var fileName = form.attach.value.split(/(\\|\/)/g).pop();
         var date = getDate();
 
         var file = form.attach.files[0];
-        alert(file.size);
-
-
-        form.reset();
+        if(file.size > 1024* 1024 * 10){
+            alert("Too much size of file!Maximum size of file is 10 MB");
+            return false;
+        }
+        form.command.value = 'setattach';
+        form.submit();
     },
 
     deleteAttach: function () {
-        var table = document.getElementById("attachTable");
+        var form= document.getElementById("form");
         var checkboxes = document.getElementsByName('attaches');
-
+        var flag = false;
         for (var i=checkboxes.length - 1; i>=0; i--) {
-
             if (checkboxes[i].checked) {
-                table.deleteRow(i);
+                flag = true;
+                break;
             }
         }
+        if (flag == false) {
+            return false;
+        }
+
+        form.submit();
     },
 
     editAttach: function () {
-        var form= document.getElementById("attachment");
+        var comment= document.getElementById("attachComment");
         var table = document.getElementById("attachTable");
         var checkboxes = document.getElementsByName('attaches');
+
+        var input_file = document.getElementById("b_attach");
+        var file_name = document.getElementById("b_file_name");
+        input_file.style.display = "none";
+        file_name.style.display = "initial";
 
         for (var i=0; i<checkboxes.length; i++) {
             if (checkboxes[i].checked) {
                 var row = table.rows[i];
-                var file = row.cells[4].firstElementChild.files[0];
-                alert(file.size);
-                form.attach.files[0] = row.cells[4].firstElementChild.files[0];
-                form.comment.value = row.cells[3].firstElementChild.value;
-                this.pos = i;
-                this.mode = 1;
+                alert(row.cells[1].firstElementChild.value);
+                document.getElementById("file_name").value = row.cells[1].firstElementChild.value;
+                comment.value = row.cells[3].firstElementChild.value;
                 openbox(this.popUp);
                 break;
             }
@@ -195,11 +202,17 @@ var attachService = {
     },
 
     addAttach: function () {
+        var input_file = document.getElementById("b_attach");
+        var file_name = document.getElementById("b_file_name");
+        input_file.style.display = "initial";
+        file_name.style.display = "none";
         this.mode = 0;
         openbox(this.popUp);
     },
 
     cancelAttach: function () {
+        var comment= document.getElementById("attachComment");
+        comment.value = '';
         openbox(this.popUp);
     }
 }

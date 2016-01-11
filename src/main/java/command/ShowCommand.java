@@ -58,6 +58,7 @@ public class ShowCommand implements ActionCommand {
                 settings = sessSettings;
                 settings.countPages(total);
                 long pages = settings.getPages();
+                System.out.println(mode);
                 switch (mode) {
                     case "edit":
                         settings.setPageNumber(sessSettings.getPageNumber());

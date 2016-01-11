@@ -5,7 +5,7 @@
     <title>Create contact</title>
     <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-    <script type="text/javascript" src="/js/1.js"></script>
+    <script type="text/javascript" src="/js/contact.js"></script>
     <link rel="stylesheet" href="/style/contact.css">
 </head>
 <body  onload="selectAvatar()">
@@ -31,8 +31,8 @@
     </a>
     <input id="avatar" type="file" name="avatar" form="form" class="file" accept="image/*" style="display: none">
 
-    <c:set var="mode"  value="edit"/>
-    <c:if test="${title == null}">
+    <c:set var="title"  value="Edit contact"/>
+    <c:if test="${mode == add}">
         <c:set var="title"  value="Create contact"/>
         <c:set var="mode" value="add"/>
     </c:if>
@@ -221,17 +221,28 @@
                     <div class="close" onclick="attachService.cancelAttach()">x</div>
                 </div>
 
-                <div class="form-group">
-                    <label class="control-label col-sm-2" for="attach">Choose file:</label>
-                    <div class="col-sm-5">
-                        <input  type="file"  form="form" class="form-control" id="attach" name="attach" >
+                <div id="b_file_name">
+                    <div class="form-group" >
+                        <label class="control-label col-sm-2" for="file_name">File:</label>
+                        <div class="col-sm-5">
+                            <input  type="text"  class="form-control" id="file_name" readonly>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="b_attach">
+                    <div class="form-group" >
+                        <label class="control-label col-sm-2" for="attach">Choose file:</label>
+                        <div class="col-sm-5">
+                            <input  type="file"  form="form" class="form-control" id="attach" name="attach" >
+                        </div>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label class="control-label col-sm-2" for="attachComment">Comment:</label>
                     <div class="col-sm-5">
-                        <textarea  class="form-control" form="form" rows="5" name="comment" id="attachComment" placeholder="Type your comment..."></textarea>
+                        <textarea  class="form-control" form="form" rows="5" name="attach_comment" id="attachComment" placeholder="Type your comment..."></textarea>
                     </div>
                 </div>
 

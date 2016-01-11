@@ -31,7 +31,7 @@ public class GetCommand implements ActionCommand {
         List<Phone> phones = contactService.getPhones(idContact);
         //System.out.println(contact.getPhoto());
         request.setAttribute("contact",contact);
-        request.setAttribute("title","Edit contact");
+        request.setAttribute("mode","edit");
         request.setAttribute("phones",phones);
 
         return "/jsp/contact.jsp";

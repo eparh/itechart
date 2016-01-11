@@ -44,7 +44,7 @@ public class SetAttachCommand implements ActionCommand{
         request.setAttribute("contact",contact);
         // System.out.println(contact.getId());
 
-        List<Phone> phones = ContactUtil.getPhones(request, contact.getId());
+        List<Phone> phones = ContactUtil.getPhones(request, null);
         request.setAttribute("phones", phones);
 
         Attach attach = makeAttach();
@@ -73,7 +73,7 @@ public class SetAttachCommand implements ActionCommand{
         java.sql.Date date = new java.sql.Date(new Date().getTime());
         attach.setDate(date);
 
-        attach.setComment(request.getParameter("comment"));
+        attach.setComment(request.getParameter("attach_comment"));
 
 
         if (filePart.getSize()>0) {

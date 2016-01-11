@@ -17,7 +17,7 @@
         </div>
         <div>
             <ul class="nav navbar-nav">
-                <li><a href="/jsp/contact.jsp"><span class="glyphicon glyphicon-plus"></span>Add contact</a></li>
+                <li><a href="/jsp/contact.jsp?mode=add"><span class="glyphicon glyphicon-plus"></span>Add contact</a></li>
                 <li><a href="javascript:{}" onclick="getContact(); return false;"><span class="glyphicon glyphicon-pencil"></span>Edit contact</a></li>
                 <li><a href="javascript:{}" onclick="deleteContact(); return false;"><span class="glyphicon glyphicon-trash"></span> Delete contacts</a></li>
                 <li><a href="/jsp/search.jsp"><span class="glyphicon glyphicon-search"></span> Search contacts</a></li>
