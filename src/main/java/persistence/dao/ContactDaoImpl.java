@@ -1,7 +1,6 @@
 package persistence.dao;
 
-
-import persistence.DbUtil;
+import util.DbUtil;
 import persistence.model.*;
 
 import javax.sql.DataSource;
@@ -200,7 +199,7 @@ public class ContactDaoImpl implements ContactDao {
                     attach.setComment(set.getString("comment"));
                     attach.setName(set.getString("name"));
                     attach.setDate(set.getDate("date"));
-                    attach.setDirectory(set.getString("directory"));
+                    attach.setPath(set.getString("directory"));
                     attach.setIdAttach(set.getLong("idAttach"));
                     list.add(attach);
                 }

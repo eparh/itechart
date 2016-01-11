@@ -5,6 +5,7 @@ import persistence.model.Phone;
 import persistence.model.SearchCriteria;
 import persistence.model.ViewSettings;
 
+import javax.servlet.http.HttpServletRequest;
 import java.sql.Date;
 import java.util.List;
 
@@ -26,8 +27,4 @@ public interface ContactService {
     void setPhoto(long idContact, String path);
 
     String getPhoto(long idContact);
-
-    Date stringToDate(String stringDate);
-
-    void deleteOnPath(String path);
 }

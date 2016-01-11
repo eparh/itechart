@@ -5,7 +5,7 @@
     <title>Create contact</title>
     <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-    <script type="text/javascript" src="/js/contact.js"></script>
+    <script type="text/javascript" src="/js/1.js"></script>
     <link rel="stylesheet" href="/style/contact.css">
 </head>
 <body  onload="selectAvatar()">
@@ -25,7 +25,6 @@
     </div>
 </nav>
 
-
 <div class="container">
     <a href="javascript:{}" onclick="document.getElementById('avatar').click()">
         <img id="image" src="/controller?command=avatar&idContact=${contact.id}">
@@ -43,6 +42,9 @@
     <!--Основная форма с input - полями -->
 
     <form id="form" action="/controller" class="form-horizontal" method="post" accept-charset="utf-8" enctype="multipart/form-data" role="form">
+        <input type="hidden" name="title" value="${title}">
+
+        <!--Для paging-а-->
         <input type="hidden" name="mode" value="${mode}">
 
         <input type="hidden" name="command"  value="save">
@@ -80,9 +82,9 @@
         <div class="form-group">
             <label for="gender" class="control-label col-sm-2">Gender:</label>
             <div class="col-sm-5">
-                <select name="gender" value="${contact.gender}" class="form-control" id="gender">
-                    <option>Male</option>
-                    <option>Female</option>
+                <select name="gender" class="form-control" id="gender">
+                    <option ${contact.gender == 'Male' ? 'selected' : ''}>Male</option>
+                    <option ${contact.gender == 'Female' ? 'selected' : ''}>Female</option>
                 </select>
             </div>
         </div>
@@ -214,26 +216,25 @@
 
     <div id="attachPopUp" style="display:none">
         <div id="attachTT">
-            <div class="container">
-                <form id="attachment" class="form-horizontal" accept-charset="utf-8" role="form">
-                    <div style="margin: auto auto 2% auto">
-                        <div class="close" onclick="attachService.cancelAttach()">x</div>
-                    </div>
+            <div class="container form-horizontal">
+                <div style="margin: auto auto 2% auto">
+                    <div class="close" onclick="attachService.cancelAttach()">x</div>
+                </div>
 
-                    <div class="form-group">
-                        <label class="control-label col-sm-2" for="attachment">Choose file:</label>
-                        <div class="col-sm-5">
-                            <input  type="file"  class="form-control" id="attach" name="attach" >
-                        </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-2" for="attach">Choose file:</label>
+                    <div class="col-sm-5">
+                        <input  type="file"  form="form" class="form-control" id="attach" name="attach" >
                     </div>
+                </div>
 
-                    <div class="form-group">
-                        <label class="control-label col-sm-2" for="attachComment">Comment:</label>
-                        <div class="col-sm-5">
-                            <textarea  class="form-control" rows="5" name="comment" id="attachComment" placeholder="Type your comment..."></textarea>
-                        </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-2" for="attachComment">Comment:</label>
+                    <div class="col-sm-5">
+                        <textarea  class="form-control" form="form" rows="5" name="comment" id="attachComment" placeholder="Type your comment..."></textarea>
                     </div>
-                </form>
+                </div>
+
 
                 <button  onclick="attachService.saveAttach()" class="btn-default">Save</button>
                 <button onclick="attachService.cancelAttach()" class="btn-default">Cancel</button>
@@ -299,12 +300,11 @@
             <c:forEach items="${attaches}" var="attach" varStatus="num">
                 <tr>
                     <td>
-                        <input type='checkbox'  name='attaches'/>
+                        <input type='checkbox' form="form" name='attaches'/>
                     </td>
-                    <td><input type='text' form='form' value="${ attach.getFullPhone()}" readonly/></td>
-                    <td><input type='date' form='form' name="kind${ num.count - 1 }" value="${ attach.date}" readonly/></td>
-                    <td><input type='text' form='form' name="comment${ num.count - 1 }" value="${ attach.comment}" readonly/></td>
-                    <td><input type='hidden' form='form' name="attach${ num.count - 1}" value="${ phone.countryCode}"/></td>
+                    <td><input type='text'  value="${attach.name}" readonly/></td>
+                    <td><input type='date'  value="${ attach.date}" readonly/></td>
+                    <td><input type='text'  value="${ attach.comment}" readonly/></td>
                 </tr>
             </c:forEach>
             </tbody>

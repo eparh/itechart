@@ -3,8 +3,10 @@ package command;
 import service.ContactService;
 import service.ServiceFactory;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.*;
 import java.util.Properties;
 
@@ -12,7 +14,7 @@ public class AvatarCommand implements ActionCommand {
     private ContactService contactService = ServiceFactory.getContactService();
 
     @Override
-    public String execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public String execute(HttpServletRequest request, HttpServletResponse response)  throws IOException {
         //Определение ID контакта
         String temp = request.getParameter("idContact");
 
@@ -29,13 +31,16 @@ public class AvatarCommand implements ActionCommand {
         }
 
         Properties properties = new Properties();
-        try {
-            properties.load(AvatarCommand.class.getResourceAsStream("/avatars.properties"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        properties.load(AvatarCommand.class.getResourceAsStream("/avatars.properties"));
 
-        String path = contactService.getPhoto(idContact);
+        String path;
+        HttpSession session = request.getSession();
+        String temp_avatar = (String) session.getAttribute("temp_path_avatar");
+        if (temp_avatar != null && !"".equals(temp_avatar)) {
+            path = temp_avatar;
+        } else {
+            path = contactService.getPhoto(idContact);
+        }
 
         if (path == null) {
             String appPath = request.getServletContext().getRealPath("");

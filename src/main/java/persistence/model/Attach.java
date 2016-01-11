@@ -4,7 +4,7 @@ import java.sql.Date;
 
 public class Attach {
     private Long idAttach;
-    private String directory;
+    private String path;
     private String name;
     private Date  date;
     private String comment;
@@ -18,12 +18,12 @@ public class Attach {
         this.idAttach = itAttach;
     }
 
-    public String getDirectory() {
-        return directory;
+    public String getPath() {
+        return path;
     }
 
-    public void setDirectory(String directory) {
-        this.directory = directory;
+    public void setPath(String path) {
+        this.path = path;
     }
 
     public String getName() {

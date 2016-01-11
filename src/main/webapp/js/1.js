@@ -101,7 +101,6 @@ var phoneService = {
         var checkboxes = document.getElementsByName('phones');
 
         for (var i=checkboxes.length - 1; i>=0; i--) {
-
             if (checkboxes[i].checked) {
                 table.deleteRow(i);
             }
@@ -148,29 +147,35 @@ var attachService = {
 
     saveAttach: function () {
         var form= document.getElementById("form");
-
         openbox(this.popUp);
 
         var fileName = form.attach.value.split(/(\\|\/)/g).pop();
         var date = getDate();
 
         var file = form.attach.files[0];
-        alert(file.size);
-
-
-        form.reset();
+        if(file.size > 1024* 1024 * 10){
+            alert("Too much size of file!Maximum size of file is 10 MB");
+            return false;
+        }
+        form.command.value = 'setattach';
+        form.submit();
     },
 
     deleteAttach: function () {
-        var table = document.getElementById("attachTable");
+        var form= document.getElementById("form");
         var checkboxes = document.getElementsByName('attaches');
-
+        var flag = false;
         for (var i=checkboxes.length - 1; i>=0; i--) {
-
             if (checkboxes[i].checked) {
-                table.deleteRow(i);
+                flag = true;
+                break;
             }
         }
+        if (flag == false) {
+            return false;
+        }
+
+        form.submit();
     },
 
     editAttach: function () {
@@ -200,6 +205,8 @@ var attachService = {
     },
 
     cancelAttach: function () {
+        var form= document.getElementById("form");
+        form.comment.value = '';
         openbox(this.popUp);
     }
 }

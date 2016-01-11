@@ -1,17 +1,16 @@
 package service;
 
+import util.GeneralUtil;
 import persistence.dao.ContactDao;
 import persistence.dao.DaoFactory;
-import persistence.model.Contact;
-import persistence.model.Phone;
-import persistence.model.SearchCriteria;
-import persistence.model.ViewSettings;
+import persistence.model.*;
 
-import java.io.File;
-import java.sql.Date;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ContactServiceImpl implements ContactService {
     private ContactDao contactDao;
@@ -62,28 +61,5 @@ public class ContactServiceImpl implements ContactService {
     @Override
     public String getPhoto(long idContact) {
        return contactDao.getPhoto(idContact);
-    }
-
-    @Override
-    public Date stringToDate(String stringDate) {
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        Date date = null;
-        if(stringDate != null && !stringDate.equals("")) {
-            try {
-                java.util.Date utilDate = formatter.parse(stringDate);
-                date = new Date(utilDate.getTime());
-            } catch (ParseException e) {
-                throw new RuntimeException();
-            }
-        }
-        return date;
-    }
-
-    @Override
-    public void deleteOnPath(String path) {
-        File file = new File(path);
-        if(file.exists()){
-            file.delete();
-        }
     }
 }

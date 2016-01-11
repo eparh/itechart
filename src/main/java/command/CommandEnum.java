@@ -25,6 +25,12 @@ public enum CommandEnum {
         }
     },
 
+    SETATTACH{
+        {
+            this.command = new SetAttachCommand();
+        }
+    },
+
     GET{
         {
             this.command = new GetCommand();

@@ -42,8 +42,8 @@
     <label for="countRecords" class="control-label col-sm-3">Show by records per page:</label>
     <div class="col-sm-1">
         <select onchange="chgRecordsPerPage()" name="countRecords"  form="paging" class="form-control" id="countRecords">
-            <option value="10" ${settings.getCount() == '10' ? 'selected' : ''}>10</option>
-            <option value="20" ${settings.getCount() == '20' ? 'selected' : ''}>20</option>
+            <option  ${settings.getCount() == '10' ? 'selected' : ''}>10</option>
+            <option  ${settings.getCount() == '20' ? 'selected' : ''}>20</option>
         </select>
     </div>
 </div>

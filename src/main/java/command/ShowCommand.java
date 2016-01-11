@@ -2,8 +2,7 @@ package command;
 
 
 
-import com.sun.tools.doclets.formats.html.SourceToHTMLConverter;
-import com.sun.tools.javac.file.SymbolArchive;
+import util.GeneralUtil;
 import persistence.model.Contact;
 import persistence.model.SearchCriteria;
 import persistence.model.ViewSettings;
@@ -98,8 +97,8 @@ public class ShowCommand implements ActionCommand {
             criteria.setMidName(request.getParameter("s_middname"));
             criteria.setGender(request.getParameter("s_gender"));
             criteria.setNationality(request.getParameter("s_national"));
-            criteria.setBirthday_from(contactService.stringToDate(request.getParameter("s_birthdayFrom")));
-            criteria.setBirthday_to(contactService.stringToDate(request.getParameter("s_birthdayTO")));
+            criteria.setBirthday_from(GeneralUtil.stringToDate(request.getParameter("s_birthdayFrom")));
+            criteria.setBirthday_to(GeneralUtil.stringToDate(request.getParameter("s_birthdayTO")));
             criteria.setMaritStatus(request.getParameter("s_maritStatus"));
             criteria.setCountry(request.getParameter("s_country"));
             criteria.setCity(request.getParameter("s_city"));
