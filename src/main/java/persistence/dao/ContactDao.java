@@ -2,6 +2,8 @@ package persistence.dao;
 
 import persistence.model.*;
 
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 
 public interface ContactDao {
@@ -25,5 +27,9 @@ public interface ContactDao {
 
     List<Phone> getPhones(Long idContact);
 
-    List<Attach> getAttach(Long idContact);
+    HashMap<String,Attach> getAttaches(Long idContact);
+
+    void insertAttach(Attach attach);
+
+    void setAttaches(long idContact,Collection<Attach> attaches);
 }

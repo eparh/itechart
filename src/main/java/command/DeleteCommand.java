@@ -13,18 +13,13 @@ import java.util.Properties;
 public class DeleteCommand implements ActionCommand {
     private ContactService contactService = ServiceFactory.getContactService();
     @Override
-    public String execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        Properties properties = new Properties();
-        properties.load(DeleteCommand.class.getResourceAsStream("/temp.properties"));
-        String appPath = request.getServletContext().getRealPath("");
-        //Путь, где лежит дефолтный аватар, чтобы не удалить его случайно.
-        String defaultPath = appPath + properties.getProperty("DEFAULT_AVATAR");
+    public String execute(HttpServletRequest request, HttpServletResponse response) {
 
         String [] chosen = request.getParameterValues("marked");
-        for(String item: chosen){
+        for(String item: chosen) {
             long idContact = Long.parseLong(item);
             String avatarPath = contactService.getPhoto(idContact);
-            if(avatarPath != null && avatarPath.equals(defaultPath)) {
+            if(avatarPath != null) {
                 GeneralUtil.deleteOnPath(avatarPath);
             }
             contactService.deleteContact(idContact);

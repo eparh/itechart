@@ -6,6 +6,8 @@ import persistence.model.*;
 import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 
 public class ContactDaoImpl implements ContactDao {
@@ -186,8 +188,8 @@ public class ContactDaoImpl implements ContactDao {
     }
 
     @Override
-    public List<Attach> getAttach(Long idContact) {
-        List<Attach> list = new ArrayList<Attach>();
+    public HashMap<String,Attach> getAttaches(Long idContact) {
+        HashMap<String,Attach> map = new HashMap<>();
         try (Connection connection = source.getConnection();
              PreparedStatement statement = connection.prepareStatement("SELECT * FROM Attachment " +
                      "WHERE idContact = ?")) {
@@ -199,15 +201,38 @@ public class ContactDaoImpl implements ContactDao {
                     attach.setComment(set.getString("comment"));
                     attach.setName(set.getString("name"));
                     attach.setDate(set.getDate("date"));
-                    attach.setPath(set.getString("directory"));
+                    attach.setPath(set.getString("path"));
                     attach.setIdAttach(set.getLong("idAttach"));
-                    list.add(attach);
+                    map.put(attach.getName(),attach);
                 }
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return list;
+        return map;
+    }
+
+    @Override
+    public void insertAttach(Attach attach) {
+        try (Connection connection = source.getConnection()){
+            try (PreparedStatement statement = connection.prepareStatement("INSERT INTO Attachment(path,`name`,`date`,comment," +
+                    "idContact ) VALUES (?,?,?,?,?)")) {
+                statement.setString(1, attach.getPath());
+                statement.setString(2, attach.getName());
+                statement.setDate(3, attach.getDate());
+                statement.setString(4, attach.getComment());
+                statement.setLong(5,attach.getIdContact());
+                statement.executeUpdate();
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void setAttaches(long idContact, Collection<Attach> attaches) {
+        deleteAttaches(idContact);
+        attaches.forEach(this::insertAttach);
     }
 
     @Override
@@ -297,8 +322,12 @@ public class ContactDaoImpl implements ContactDao {
         }
     }
 
-    private void deletePhones(long idContact){
+    private void deletePhones(long idContact) {
         deleteOnStatement("Delete from Telephone where idContact = ?", idContact);
+    }
+
+    private void deleteAttaches(long idContact) {
+        deleteOnStatement("Delete from Attachment where idContact = ?", idContact);
     }
 
     private long insertContact(Contact contact) {

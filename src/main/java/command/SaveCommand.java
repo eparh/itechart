@@ -1,6 +1,7 @@
 package command;
 
 import org.apache.commons.io.FileUtils;
+import persistence.model.Attach;
 import util.ContactUtil;
 import util.GeneralUtil;
 import persistence.model.Contact;
@@ -16,8 +17,7 @@ import javax.servlet.http.Part;
 import java.io.File;
 import java.io.IOException;
 
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 
 
 public class SaveCommand implements ActionCommand {
@@ -33,12 +33,10 @@ public class SaveCommand implements ActionCommand {
         Contact contact = ContactUtil.makeContact(request);
         idContact = contactService.setContact(contact);
         savePhones();
+        saveAttaches();
 
         String path =  getAvatar();
-        if(path != null) {
-            //Проверим была ли ава у контакта и если была, то удаляем ее
-           // checkAvaExist();
-        }
+
         contactService.setPhoto(idContact,path);
         return "/controller?command=show";
     }
@@ -48,11 +46,11 @@ public class SaveCommand implements ActionCommand {
         contactService.savePhones(idContact, phones);
     }
 
-    private void checkAvaExist() {
-        String path = contactService.getPhoto(idContact);
-        if ( path != null ) {
-            GeneralUtil.deleteOnPath(path);
-        }
+    private void saveAttaches() throws IOException {
+        HashMap<String, Attach> attaches = (HashMap<String, Attach>) session.getAttribute("attaches");
+        session.removeAttribute("attaches");
+        contactService.saveAttaches(idContact, attaches);
+
     }
 
     private String getAvatar() throws IOException, ServletException {
@@ -78,10 +76,6 @@ public class SaveCommand implements ActionCommand {
             } else {
                 return null;
             }
-
-            /** List<File> files = (List<File>) FileUtils.listFiles(dir, TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE);
-             System.out.println("2:"+ FileUtils.getUserDirectoryPath());
-             **/
         }
         return savePath;
 

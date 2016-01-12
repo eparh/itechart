@@ -1,12 +1,12 @@
 package service;
 
-import persistence.model.Contact;
-import persistence.model.Phone;
-import persistence.model.SearchCriteria;
-import persistence.model.ViewSettings;
+import persistence.model.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.sql.Date;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 
 public interface ContactService {
@@ -27,4 +27,8 @@ public interface ContactService {
     void setPhoto(long idContact, String path);
 
     String getPhoto(long idContact);
+
+    HashMap<String,Attach> getAttaches(long idContact);
+
+    void saveAttaches(long idContact, HashMap<String,Attach> map_attaches) throws IOException;
 }

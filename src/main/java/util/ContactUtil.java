@@ -72,4 +72,18 @@ public class ContactUtil {
         }
         return phones;
     }
+
+    public static Long findOutIdContact(String temp , String [] chosen) {
+        Long idContact =(long) - 1;
+        if(! "".equals(temp)) idContact = Long.parseLong(temp);
+        else {
+            if (chosen != null) {
+                for (String item : chosen) {
+                    idContact = Long.parseLong(item);
+                    break;
+                }
+            }
+        }
+        return  idContact;
+    }
 }

@@ -12,6 +12,7 @@ import service.ServiceFactory;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.util.List;
 
 public class ShowCommand implements ActionCommand {
@@ -21,9 +22,14 @@ public class ShowCommand implements ActionCommand {
     private SearchCriteria criteria = new SearchCriteria();
 
     @Override
-    public String execute(HttpServletRequest request, HttpServletResponse response) {
+    public String execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
         this.request = request;
         HttpSession session = request.getSession();
+
+        //Удаляем из сессии attachment-ы
+       // session.removeAttribute("attaches");
+
+        //Для paging-a
         String mode = request.getParameter("mode");
 
         long total = contactService.countContacts(criteria);
@@ -58,7 +64,6 @@ public class ShowCommand implements ActionCommand {
                 settings = sessSettings;
                 settings.countPages(total);
                 long pages = settings.getPages();
-                System.out.println(mode);
                 switch (mode) {
                     case "edit":
                         settings.setPageNumber(sessSettings.getPageNumber());

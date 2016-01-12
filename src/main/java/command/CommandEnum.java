@@ -31,6 +31,18 @@ public enum CommandEnum {
         }
     },
 
+    SEARCH{
+        {
+            this.command = new SearchCommand();
+        }
+    },
+
+    ATTACH{
+        {
+            this.command = new AttachCommand();
+        }
+    },
+
     GET{
         {
             this.command = new GetCommand();

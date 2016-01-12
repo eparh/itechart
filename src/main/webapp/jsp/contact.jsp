@@ -5,8 +5,8 @@
     <title>Create contact</title>
     <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-    <script type="text/javascript" src="/js/contact.js"></script>
-    <link rel="stylesheet" href="/style/contact.css">
+    <script type="text/javascript" src="/js/1.js"></script>
+    <link rel="stylesheet" href="/style/1.css">
 </head>
 <body  onload="selectAvatar()">
 
@@ -15,11 +15,11 @@
 <nav class="navbar navbar-inverse">
     <div class="container-fluid">
         <div class="navbar-header">
-            <a class="navbar-brand" href="/controller?command=show" ><span class="glyphicon glyphicon-user"></span>My Contacts</a>
+            <a class="navbar-brand" href="/controller?command=show" ><span class="glyphicon glyphicon-user"></span> My contacts</a>
         </div>
         <div>
             <ul class="nav navbar-nav">
-                <li><a href="/jsp/search.jsp"><span class="glyphicon glyphicon-search"></span> Search contacts</a></li>
+                <li><a href="/controller?command=search"><span class="glyphicon glyphicon-search"></span> Search contacts</a></li>
             </ul>
         </div>
     </div>
@@ -225,7 +225,7 @@
                     <div class="form-group" >
                         <label class="control-label col-sm-2" for="file_name">File:</label>
                         <div class="col-sm-5">
-                            <input  type="text"  class="form-control" id="file_name" readonly>
+                            <input  type="text" form="form" name="file_name" class="form-control" id="file_name" readonly>
                         </div>
                     </div>
                 </div>
@@ -246,7 +246,7 @@
                     </div>
                 </div>
 
-
+                <input form="form" type="hidden" name="attach_mode">
                 <button  onclick="attachService.saveAttach()" class="btn-default">Save</button>
                 <button onclick="attachService.cancelAttach()" class="btn-default">Cancel</button>
             </div>
@@ -309,13 +309,19 @@
             </thead>
             <tbody id="attachTable">
             <c:forEach items="${attaches}" var="attach" varStatus="num">
+                <c:set var="link"  value= 'href= "/controller?command=attach&idContact=${contact.id}&name=${attach.key}" class="active"'/>
                 <tr>
                     <td>
-                        <input type='checkbox' form="form" name='attaches'/>
+                        <input type='checkbox' form="form" name='attaches' value="${attach.key}"/>
                     </td>
-                    <td><input type='text'  value="${attach.name}" readonly/></td>
-                    <td><input type='date'  value="${ attach.date}" readonly/></td>
-                    <td><input type='text'  value="${ attach.comment}" readonly/></td>
+                    <td>
+
+                        <a ${attach.value.idAttach == null ? 'href="javascript: void(0)" class="noactive"' : link} >
+                             ${attach.key}
+                        </a>
+                    </td>
+                    <td><input type='date'  value="${ attach.value.date}" readonly/></td>
+                    <td><input type='text'  value="${ attach.value.comment}" readonly/></td>
                 </tr>
             </c:forEach>
             </tbody>

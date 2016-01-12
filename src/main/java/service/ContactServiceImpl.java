@@ -1,16 +1,13 @@
 package service;
 
-import util.GeneralUtil;
+import org.apache.commons.io.FileUtils;
 import persistence.dao.ContactDao;
 import persistence.dao.DaoFactory;
 import persistence.model.*;
 
-import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
 
 public class ContactServiceImpl implements ContactService {
     private ContactDao contactDao;
@@ -60,6 +57,72 @@ public class ContactServiceImpl implements ContactService {
 
     @Override
     public String getPhoto(long idContact) {
-       return contactDao.getPhoto(idContact);
+        return contactDao.getPhoto(idContact);
+    }
+
+    @Override
+    public HashMap<String,Attach> getAttaches(long idContact) {
+        return contactDao.getAttaches(idContact);
+    }
+
+    @Override
+    public void saveAttaches(long idContact, HashMap<String,Attach> map_attaches) throws IOException {
+        Properties properties = new Properties();
+        properties.load(ContactServiceImpl.class.getResourceAsStream("/attach.properties"));
+
+        if(map_attaches == null) {
+          return;
+        }
+
+        Collection<Attach> attaches = map_attaches.values();
+
+
+        String savePath = properties.getProperty("SAVE_ATTACH_PATH") + File.separator + idContact;
+        File saveDir = new File(savePath);
+
+        if(! saveDir.exists()) {
+            saveDir.mkdirs();
+        }
+
+
+        List<String> fileNames = new ArrayList<>();
+        for(Attach attach: attaches) {
+            System.out.println("names:"+attach.getName());
+            fileNames.add(attach.getName());
+        }
+
+        //Удаляем файлы из директории attachment-ов контакта, не находящиеся в списке имен файлов, которые хочет сохранить пользователь
+        String[] files = saveDir.list();
+        for (int i=0; i<files.length; i++) {
+            File file = new File(saveDir, files[i]);
+            if(! fileNames.contains(file.getName()))  file.delete();
+        }
+
+        properties.load(ContactServiceImpl.class.getResourceAsStream("/temp.properties"));
+
+        String tempPath = properties.getProperty("TEMP_PATH");
+        File tempDir = new File(tempPath);
+        if( tempDir != null) {
+            String[] temp_files = tempDir.list();
+            for (int i=0; i<temp_files.length; i++) {
+                File file = new File(tempDir, temp_files[i]);
+                System.out.println(file.getName());
+                //Проверяем, имена файлов, чтобы случайно не перенести из темповой папки служебные файлы, мусор етц
+                if(fileNames.contains(file.getName())) {
+                    FileUtils.moveFileToDirectory(file,saveDir, true);
+                }
+            }
+        }
+
+        //Дозаполняем поля, для новых attachment-ов
+        for(Attach attach: attaches) {
+            if (attach.getIdAttach() == null) {
+                attach.setPath(savePath + File.separator + attach.getName());
+                attach.setIdContact(idContact);
+                map_attaches.put(attach.getName(),attach);
+            }
+        }
+
+        contactDao.setAttaches(idContact,map_attaches.values());
     }
 }

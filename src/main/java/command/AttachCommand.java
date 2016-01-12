@@ -1,53 +1,46 @@
 package command;
 
-import service.ContactService;
-import service.ServiceFactory;
+
 import util.ContactUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Properties;
 
-public class AvatarCommand implements ActionCommand {
-    private ContactService contactService = ServiceFactory.getContactService();
-
+public class AttachCommand implements ActionCommand {
     @Override
-    public String execute(HttpServletRequest request, HttpServletResponse response)  throws IOException {
+    public String execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        Properties properties = new Properties();
+        properties.load(AvatarCommand.class.getResourceAsStream("/attach.properties"));
         //Определение ID контакта
         String temp = request.getParameter("idContact");
         String[] chosen = request.getParameterValues("marked");
-
         Long idContact = ContactUtil.findOutIdContact(temp,chosen);
 
-        Properties properties = new Properties();
-        properties.load(AvatarCommand.class.getResourceAsStream("/avatars.properties"));
-
-        String path;
-        HttpSession session = request.getSession();
-        String temp_avatar = (String) session.getAttribute("temp_path_avatar");
-        if (temp_avatar != null && !"".equals(temp_avatar)) {
-            path = temp_avatar;
-        } else {
-            path = contactService.getPhoto(idContact);
+        String fileName = request.getParameter("name");
+        if(idContact == null || fileName == null) {
+            return null;
         }
 
-        if (path == null) {
-            String appPath = request.getServletContext().getRealPath("");
-            path = appPath + properties.getProperty("DEFAULT_AVATAR");
+        String savePath = properties.getProperty("SAVE_ATTACH_PATH");
+        savePath += File.separator + idContact + File.separator + fileName;
+        File file = new File(savePath);
+        if(! file.exists()) {
+            return null;
         }
-
-        File file = new File(path);
-
+        System.out.println(file.length());
         int buffSize = Integer.parseInt(properties.getProperty("BUFFER_SIZE"));
 
         response.reset();
         response.setBufferSize(buffSize);
         response.setContentType(properties.getProperty("CONTENT_TYPE"));
         response.setHeader("Content-Length", String.valueOf(file.length()));
-        response.setHeader("Content-Disposition", "avatar; filename=\"" + file.getName() + "\"");
+        response.setHeader("Content-Disposition", "attachment; filename=\"" + file.getName() + "\"");
 
         OutputStream out = response.getOutputStream();
         FileInputStream in = new FileInputStream(file);
@@ -61,5 +54,4 @@ public class AvatarCommand implements ActionCommand {
 
         return null;
     }
-
 }
