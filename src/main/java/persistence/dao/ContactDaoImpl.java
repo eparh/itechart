@@ -13,9 +13,6 @@ import java.util.List;
 public class ContactDaoImpl implements ContactDao {
     public static final ContactDao INSTANCE = new ContactDaoImpl();
     private DataSource source = DbUtil.getMySQLDataSource();
-    private String query;
-    private List<String> paramStrList;
-    private List<Date> paramDateList;
 
     private ContactDaoImpl() {
 
@@ -44,13 +41,13 @@ public class ContactDaoImpl implements ContactDao {
                     contact.setPhoto(set.getString("photo"));
 
                     //Получаем адрес
-                    Adds adds = new Adds();
-                    adds.setIdAddress(set.getLong("idAddress"));
-                    adds.setCountry(set.getString("country"));
-                    adds.setCity(set.getString("city"));
-                    adds.setAddress(set.getString("address"));
-                    adds.setIndex(set.getString("index"));
-                    contact.setAddress(adds);
+                    Address address = new Address();
+                    address.setIdAddress(set.getLong("idAddress"));
+                    address.setCountry(set.getString("country"));
+                    address.setCity(set.getString("city"));
+                    address.setAddress(set.getString("address"));
+                    address.setIndex(set.getString("index"));
+                    contact.setAddress(address);
                 }
             }
         } catch (SQLException e) {
@@ -161,10 +158,10 @@ public class ContactDaoImpl implements ContactDao {
     @Override
     public long countContacts(SearchCriteria criteria) {
         long total = 0;
-        paramStrList = new ArrayList<>();
-        paramDateList = new ArrayList<>();
-        query = "SELECT COUNT(*) AS total from Contact AS c LEFT JOIN Address AS a ON c.idAddress = a.idAddress";
-        query = makeSelectQuery(query,criteria);
+        List<String> paramStrList = new ArrayList<>();
+        List<Date> paramDateList = new ArrayList<>();
+        String query = "SELECT COUNT(*) AS total from Contact AS c LEFT JOIN Address AS a ON c.idAddress = a.idAddress";
+        query = makeSelectQuery(query,criteria, paramStrList, paramDateList);
         try (Connection connection = source.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             int index = 1;
@@ -250,12 +247,12 @@ public class ContactDaoImpl implements ContactDao {
                     contact.setEmail(set.getString("email"));
                     contact.setCompany(set.getString("company"));
 
-                    Adds adds = new Adds();
-                    adds.setCountry(set.getString("country"));
-                    adds.setCity(set.getString("city"));
-                    adds.setAddress(set.getString("address"));
-                    adds.setIndex(set.getString("index"));
-                    contact.setAddress(adds);
+                    Address address = new Address();
+                    address.setCountry(set.getString("country"));
+                    address.setCity(set.getString("city"));
+                    address.setAddress(set.getString("address"));
+                    address.setIndex(set.getString("index"));
+                    contact.setAddress(address);
 
                     list.add(contact);
                 }
@@ -268,12 +265,12 @@ public class ContactDaoImpl implements ContactDao {
 
     @Override
     public List<Contact> getShowContacts(SearchCriteria criteria, ViewSettings settings) {
-        paramStrList = new ArrayList<>();
-        paramDateList = new ArrayList<>();
+        List<String> paramStrList = new ArrayList<>();
+        List<Date> paramDateList = new ArrayList<>();
         List<Contact> list = new ArrayList<>();
-        query = "SELECT idContact, `name`, surname, middName, birthday, company, country, city, address, email," +
+        String query = "SELECT idContact, `name`, surname, middName, birthday, company, country, city, address, email," +
                 " `index` from Contact AS c LEFT JOIN Address AS a ON c.idAddress = a.idAddress";
-        query = makeSelectQuery(query,criteria);
+        query = makeSelectQuery(query,criteria, paramStrList, paramDateList);
         query +=" LIMIT ? , ?";
         try (Connection connection = source.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
@@ -287,7 +284,7 @@ public class ContactDaoImpl implements ContactDao {
                 index ++;
             }
             statement.setLong(index,settings.getStart());
-            statement.setLong(++index,settings.getCount());
+            statement.setLong(index + 1,settings.getCount());
             try (ResultSet set = statement.executeQuery()) {
                 while (set.next()) {
                     Contact contact = new Contact();
@@ -299,12 +296,12 @@ public class ContactDaoImpl implements ContactDao {
                     contact.setBirthday(set.getDate("birthday"));
                     contact.setEmail(set.getString("email"));
 
-                    Adds adds = new Adds();
-                    adds.setCountry(set.getString("country"));
-                    adds.setCity(set.getString("city"));
-                    adds.setAddress(set.getString("address"));
-                    adds.setIndex(set.getString("index"));
-                    contact.setAddress(adds);
+                    Address address = new Address();
+                    address.setCountry(set.getString("country"));
+                    address.setCity(set.getString("city"));
+                    address.setAddress(set.getString("address"));
+                    address.setIndex(set.getString("index"));
+                    contact.setAddress(address);
 
                     list.add(contact);
                 }
@@ -316,16 +313,17 @@ public class ContactDaoImpl implements ContactDao {
     }
 
     private long setAdds(Contact contact) {
-        Adds adds = contact.getAddress();
-        Long idAddress = adds.getIdAddress();
+        Address address = contact.getAddress();
+        Long idAddress = address.getIdAddress();
         if(idAddress == null) {
             try (Connection connection = source.getConnection();
-                 PreparedStatement statement = connection.prepareStatement("INSERT INTO Address (country, city, address, `index`) VALUES (?, ?, ?, ?)",
+                 PreparedStatement statement = connection.prepareStatement("INSERT INTO Address " +
+                         "(country, city, address, `index`) VALUES (?, ?, ?, ?)",
                          Statement.RETURN_GENERATED_KEYS)) {
-                statement.setString(1, adds.getCountry());
-                statement.setString(2, adds.getCity());
-                statement.setString(3, adds.getAddress());
-                statement.setString(4, adds.getIndex());
+                statement.setString(1, address.getCountry());
+                statement.setString(2, address.getCity());
+                statement.setString(3, address.getAddress());
+                statement.setString(4, address.getIndex());
 
                 statement.executeUpdate();
 
@@ -337,12 +335,13 @@ public class ContactDaoImpl implements ContactDao {
             }
         } else {
             try (Connection connection = source.getConnection();
-                 PreparedStatement statement = connection.prepareStatement("UPDATE Address SET country = ? , city = ?, address = ?, `index` = ?" +
+                 PreparedStatement statement = connection.prepareStatement("UPDATE Address " +
+                         "SET country = ? , city = ?, address = ?, `index` = ?" +
                          " WHERE idAddress = ?")) {
-                statement.setString(1, adds.getCountry());
-                statement.setString(2, adds.getCity());
-                statement.setString(3, adds.getAddress());
-                statement.setString(4, adds.getIndex());
+                statement.setString(1, address.getCountry());
+                statement.setString(2, address.getCity());
+                statement.setString(3, address.getAddress());
+                statement.setString(4, address.getIndex());
                 statement.setLong(5, idAddress);
 
                 statement.executeUpdate();
@@ -364,8 +363,10 @@ public class ContactDaoImpl implements ContactDao {
 
     private long insertContact(Contact contact) {
         try (Connection connection = source.getConnection()) {
-            try (PreparedStatement statement = connection.prepareStatement("INSERT INTO Contact(`name`,surname,middName,birthday,email," +
-                    " gender,maritStatus,`national`, website, company, idAddress ) VALUES (?,?,?,?,?,?,?,?,?,?,? )", Statement.RETURN_GENERATED_KEYS)) {
+            try (PreparedStatement statement = connection.prepareStatement("INSERT INTO Contact(`name`,surname,middName," +
+                    "birthday,email," +
+                    " gender,maritStatus,`national`, website, company, idAddress ) VALUES (?,?,?,?,?,?,?,?,?,?,? )",
+                    Statement.RETURN_GENERATED_KEYS)) {
                 statement.setString(1, contact.getName());
                 statement.setString(2, contact.getSurname());
                 statement.setString(3, contact.getMidName());
@@ -394,7 +395,8 @@ public class ContactDaoImpl implements ContactDao {
     private void updateContact(Contact contact) {
         try (Connection connection = source.getConnection()) {
 
-            try (PreparedStatement statement = connection.prepareStatement("UPDATE Contact  SET surname = ?, `name`= ?, middName = ?," +
+            try (PreparedStatement statement = connection.prepareStatement("UPDATE Contact  SET surname = ?, " +
+                    "`name`= ?, middName = ?," +
                     " birthday = ?,  email = ?, gender = ? , maritStatus = ?, `national`= ?, " +
                     "website = ?, company = ?, idAddress = ? WHERE idContact = ?")) {
                 statement.setString(1,contact.getSurname());
@@ -408,8 +410,8 @@ public class ContactDaoImpl implements ContactDao {
                 statement.setString(9,contact.getSite());
                 statement.setString(10,contact.getCompany());
 
-                long id = setAdds(contact);
-                statement.setLong(11, id);
+                long addressId = setAdds(contact);
+                statement.setLong(11, addressId);
 
                 statement.setLong(12, contact.getId());
 
@@ -430,7 +432,8 @@ public class ContactDaoImpl implements ContactDao {
         }
     }
 
-    private String makeSelectQuery(String query,SearchCriteria criteria) {
+    private String makeSelectQuery(String query,SearchCriteria criteria,
+                                   List<String> paramStrList, List<Date> paramDateList) {
         String word = " WHERE ";
         if (criteria.getName() != null && ! "".equals(criteria.getName())) {
             query += word +"`name` = ?";
@@ -482,18 +485,18 @@ public class ContactDaoImpl implements ContactDao {
             paramStrList.add(criteria.getIndex());
             word = " AND ";
         }
-        if (criteria.getBirthday_from() != null && criteria.getBirthday_to() != null) {
+        if (criteria.getBirthdayFrom() != null && criteria.getBirthdayTo() != null) {
             query += word + "birthday BETWEEN ? AND ?";
-            paramDateList.add(criteria.getBirthday_from());
-            paramDateList.add(criteria.getBirthday_to());
+            paramDateList.add(criteria.getBirthdayFrom());
+            paramDateList.add(criteria.getBirthdayTo());
         } else {
-            if (criteria.getBirthday_from() != null) {
+            if (criteria.getBirthdayFrom() != null) {
                 query += word + "birthday >= ?";
-                paramDateList.add(criteria.getBirthday_from());
+                paramDateList.add(criteria.getBirthdayFrom());
             }
-            if (criteria.getBirthday_to() != null) {
+            if (criteria.getBirthdayTo() != null) {
                 query += word + "birthday <= ?";
-                paramDateList.add(criteria.getBirthday_to());
+                paramDateList.add(criteria.getBirthdayTo());
             }
         }
         return query;

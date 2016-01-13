@@ -2,9 +2,6 @@ package persistence.model;
 
 
 import java.sql.Date;
-import java.util.ArrayList;
-import java.util.List;
-import javax.servlet.http.Part;
 
 public class Contact {
     private Long id;
@@ -19,7 +16,7 @@ public class Contact {
     private String email;
     private String company;
     private String maritStatus;
-    private Adds address;
+    private Address address;
 
     private String photo;
 
@@ -88,11 +85,11 @@ public class Contact {
         this.maritStatus = maritStatus;
     }
 
-    public Adds getAddress() {
+    public Address getAddress() {
         return address;
     }
 
-    public void setAddress(Adds address) {
+    public void setAddress(Address address) {
         this.address = address;
     }
 

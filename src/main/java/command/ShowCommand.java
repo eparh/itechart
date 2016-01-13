@@ -72,7 +72,7 @@ public class ShowCommand implements ActionCommand {
                         settings.setPageNumber(pages);
                         break;
                     case  "search":
-                        settings.setStandartView();
+                        settings.setStandardView();
                         break;
                     case "delete":
                         long currPage = settings.getPageNumber();
@@ -103,8 +103,8 @@ public class ShowCommand implements ActionCommand {
             criteria.setMidName(request.getParameter("s_middname"));
             criteria.setGender(request.getParameter("s_gender"));
             criteria.setNationality(request.getParameter("s_national"));
-            criteria.setBirthday_from(GeneralUtil.stringToDate(request.getParameter("s_birthdayFrom")));
-            criteria.setBirthday_to(GeneralUtil.stringToDate(request.getParameter("s_birthdayTO")));
+            criteria.setBirthdayFrom(GeneralUtil.stringToDate(request.getParameter("s_birthdayFrom")));
+            criteria.setBirthdayTo(GeneralUtil.stringToDate(request.getParameter("s_birthdayTO")));
             criteria.setMaritStatus(request.getParameter("s_maritStatus"));
             criteria.setCountry(request.getParameter("s_country"));
             criteria.setCity(request.getParameter("s_city"));

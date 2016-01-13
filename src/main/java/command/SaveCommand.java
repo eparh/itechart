@@ -2,7 +2,7 @@ package command;
 
 import org.apache.commons.io.FileUtils;
 import persistence.model.Attach;
-import util.ContactUtil;
+import command.util.ContactUtil;
 import util.GeneralUtil;
 import persistence.model.Contact;
 import persistence.model.Phone;
@@ -50,7 +50,6 @@ public class SaveCommand implements ActionCommand {
         HashMap<String, Attach> attaches = (HashMap<String, Attach>) session.getAttribute("attaches");
         session.removeAttribute("attaches");
         contactService.saveAttaches(idContact, attaches);
-
     }
 
     private String getAvatar() throws IOException, ServletException {

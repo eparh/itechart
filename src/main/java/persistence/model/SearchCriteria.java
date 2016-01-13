@@ -6,8 +6,8 @@ public class SearchCriteria {
     private String surname;
     private String name;
     private String midName;
-    private Date birthday_from;
-    private Date birthday_to;
+    private Date birthdayFrom;
+    private Date birthdayTo;
     private String gender;
     private String nationality;
     private String maritStatus;
@@ -73,20 +73,20 @@ public class SearchCriteria {
         this.gender = gender;
     }
 
-    public Date getBirthday_from() {
-        return birthday_from;
+    public Date getBirthdayFrom() {
+        return birthdayFrom;
     }
 
-    public Date getBirthday_to() {
-        return birthday_to;
+    public Date getBirthdayTo() {
+        return birthdayTo;
     }
 
-    public void setBirthday_to(Date birthday_to) {
-        this.birthday_to = birthday_to;
+    public void setBirthdayTo(Date birthdayTo) {
+        this.birthdayTo = birthdayTo;
     }
 
-    public void setBirthday_from(Date birthday) {
-        this.birthday_from = birthday;
+    public void setBirthdayFrom(Date birthday) {
+        this.birthdayFrom = birthday;
     }
 
     public String getNationality() {

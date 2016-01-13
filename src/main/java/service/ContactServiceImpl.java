@@ -61,20 +61,19 @@ public class ContactServiceImpl implements ContactService {
     }
 
     @Override
-    public HashMap<String,Attach> getAttaches(long idContact) {
+    public Map<String,Attach> getAttaches(long idContact) {
         return contactDao.getAttaches(idContact);
     }
 
     @Override
-    public void saveAttaches(long idContact, HashMap<String,Attach> map_attaches) throws IOException {
+    public void saveAttaches(long idContact, Map<String,Attach> mapAttaches) throws IOException {
+        if(mapAttaches == null) {
+          return;
+        }
         Properties properties = new Properties();
         properties.load(ContactServiceImpl.class.getResourceAsStream("/attach.properties"));
 
-        if(map_attaches == null) {
-          return;
-        }
-
-        Collection<Attach> attaches = map_attaches.values();
+        Collection<Attach> attaches = mapAttaches.values();
 
         String savePath = properties.getProperty("SAVE_ATTACH_PATH") + File.separator + idContact;
         File saveDir = new File(savePath);
@@ -103,23 +102,27 @@ public class ContactServiceImpl implements ContactService {
             String[] temp_files = tempDir.list();
             for (int i=0; i<temp_files.length; i++) {
                 File file = new File(tempDir, temp_files[i]);
-                //Проверяем, имена файлов, чтобы случайно не перенести из темповой папки служебные файлы, мусор етц
+                //Проверяем, имена файлов, чтобы случайно не перенести из темповой папки служебные файлы, мусор и т.д.
                 if(fileNames.contains(file.getName())) {
                     FileUtils.moveFileToDirectory(file,saveDir, true);
                 }
             }
         }
 
+        Map<String,Attach> toSaveAttaches = new HashMap<>();
         //Дозаполняем поля, для новых attachment-ов
+
         for(Attach attach: attaches) {
             if (attach.getIdAttach() == null) {
                 attach.setPath(savePath + File.separator + attach.getName());
                 attach.setIdContact(idContact);
-                map_attaches.put(attach.getName(),attach);
+                toSaveAttaches.put(attach.getName(),attach);
+            } else {
+                toSaveAttaches.put(attach.getName(),attach);
             }
         }
 
-        contactDao.setAttaches(idContact,map_attaches.values());
+        contactDao.setAttaches(idContact,toSaveAttaches.values());
     }
 
     @Override

@@ -1,8 +1,9 @@
-package util;
+package command.util;
 
-import persistence.model.Adds;
+import persistence.model.Address;
 import persistence.model.Contact;
 import persistence.model.Phone;
+import util.GeneralUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -34,19 +35,19 @@ public class ContactUtil {
         return contact;
     }
 
-    private static Adds getAdds(HttpServletRequest request) {
-        Adds adds = new Adds();
+    private static Address getAdds(HttpServletRequest request) {
+        Address address = new Address();
         String strID = request.getParameter("idAddress");
 
         if(!"".equals(strID)) {
-            adds.setIdAddress(Long.parseLong(strID));
+            address.setIdAddress(Long.parseLong(strID));
         }
 
-        adds.setCountry(request.getParameter("country"));
-        adds.setAddress(request.getParameter("address"));
-        adds.setCity(request.getParameter("city"));
-        adds.setIndex(request.getParameter("index"));
-        return adds;
+        address.setCountry(request.getParameter("country"));
+        address.setAddress(request.getParameter("address"));
+        address.setCity(request.getParameter("city"));
+        address.setIndex(request.getParameter("index"));
+        return address;
     }
 
     public static List<Phone> getPhones(HttpServletRequest request, Long idContact) {

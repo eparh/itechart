@@ -1,6 +1,6 @@
 package persistence.model;
 
-public class Adds {
+public class Address {
     private String country;
     private String city;
     private String address;

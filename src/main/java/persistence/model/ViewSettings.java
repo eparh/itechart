@@ -5,7 +5,7 @@ public class ViewSettings {
     private long pageNumber = 1;
     private long pages;
 
-    public void setStandartView(){
+    public void setStandardView(){
         count = 10;
         pageNumber = 1;
     }

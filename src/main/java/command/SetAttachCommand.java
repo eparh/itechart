@@ -6,7 +6,7 @@ import persistence.model.Contact;
 import persistence.model.Phone;
 import service.ContactService;
 import service.ServiceFactory;
-import util.ContactUtil;
+import command.util.ContactUtil;
 import util.GeneralUtil;
 
 import javax.servlet.ServletException;

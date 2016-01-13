@@ -8,12 +8,18 @@ import java.sql.Date;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public interface ContactService {
     List<Contact> getShowContacts(SearchCriteria criteria, ViewSettings settings);
 
     void deleteContact(Long id);
 
+    /**
+     *
+     * @param contact
+     * @return
+     */
     long setContact(Contact contact);
 
     void savePhones(long idContact, List<Phone> phones);
@@ -28,9 +34,22 @@ public interface ContactService {
 
     String getPhoto(long idContact);
 
-    HashMap<String,Attach> getAttaches(long idContact);
+    /**
+     *
+     * @param idContact
+     * @return
+     */
 
-    void saveAttaches(long idContact, HashMap<String,Attach> map_attaches) throws IOException;
+    Map<String,Attach> getAttaches(long idContact);
+
+    /**
+     *
+     * @param idContact
+     * @param mapAttaches
+     * @return
+     * @throws IOException
+     */
+    void saveAttaches(long idContact, Map<String,Attach> mapAttaches) throws IOException;
 
     List<Contact> getBirthdayContacts();
 }

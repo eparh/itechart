@@ -9,8 +9,18 @@ import java.util.List;
 public interface ContactDao {
     Contact getById(Long idContact);
 
+    /**
+     *
+     * @param contact
+     * @return contact's id
+     */
     long setContact(Contact contact);
 
+    /**
+     *
+     * @param idContact
+     * @return
+     */
     String getPhoto(long idContact);
 
     void setPhoto(long idContact, String path);
@@ -27,6 +37,11 @@ public interface ContactDao {
 
     List<Phone> getPhones(Long idContact);
 
+    /**
+     *
+     * @param idContact
+     * @return
+     */
     HashMap<String,Attach> getAttaches(Long idContact);
 
     void insertAttach(Attach attach);

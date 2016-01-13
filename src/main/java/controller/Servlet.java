@@ -33,18 +33,16 @@ public class Servlet extends HttpServlet {
 
     private void processRequest(HttpServletRequest request,HttpServletResponse response) throws ServletException, IOException {
         try {
-            String page;
             request.setCharacterEncoding("UTF-8");
             // определение команды, пришедшей из JSP
             ActionFactory client = new ActionFactory();
             ActionCommand command = client.defineCommand(request);
-            page = command.execute(request,response);
+            String page = command.execute(request,response);
             if (page != null) {
                 RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(page);
                 dispatcher.forward(request, response);
             } else {
-                //Файловая команда
-
+                // Do nothing, command returns response manually
             }
          } catch (Exception e) {
             //TODO

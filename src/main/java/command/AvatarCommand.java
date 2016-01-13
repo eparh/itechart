@@ -2,9 +2,8 @@ package command;
 
 import service.ContactService;
 import service.ServiceFactory;
-import util.ContactUtil;
+import command.util.ContactUtil;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -27,9 +26,9 @@ public class AvatarCommand implements ActionCommand {
 
         String path;
         HttpSession session = request.getSession();
-        String temp_avatar = (String) session.getAttribute("temp_path_avatar");
-        if (temp_avatar != null && !"".equals(temp_avatar)) {
-            path = temp_avatar;
+        String tempAvatar = (String) session.getAttribute("temp_path_avatar");
+        if (tempAvatar != null && !"".equals(tempAvatar)) {
+            path = tempAvatar;
         } else {
             path = contactService.getPhoto(idContact);
         }

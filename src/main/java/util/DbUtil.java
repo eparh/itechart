@@ -6,7 +6,15 @@ import java.io.IOException;
 import java.util.Properties;
 
 public class DbUtil {
+
+    //TODO
+    private static final DataSource dataSource = initDataSource();
+
     public static DataSource getMySQLDataSource() {
+        return dataSource;
+    }
+
+    private static DataSource initDataSource() {
         Properties properties = new Properties();
         try {
             properties.load(DbUtil.class.getResourceAsStream("/db.properties"));

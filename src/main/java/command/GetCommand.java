@@ -5,8 +5,7 @@ import persistence.model.Contact;
 import persistence.model.Phone;
 import service.ContactService;
 import service.ServiceFactory;
-import util.ContactUtil;
-import util.GeneralUtil;
+import command.util.ContactUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -14,6 +13,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class GetCommand implements ActionCommand {
     private ContactService contactService = ServiceFactory.getContactService();
@@ -32,7 +32,7 @@ public class GetCommand implements ActionCommand {
         Contact contact = contactService.getContact(idContact);
 
         List<Phone> phones = contactService.getPhones(idContact);
-        HashMap<String,Attach> attaches = contactService.getAttaches(idContact);
+        Map<String,Attach> attaches = contactService.getAttaches(idContact);
         request.setAttribute("attaches",attaches);
         request.setAttribute("contact",contact);
         request.setAttribute("mode","edit");

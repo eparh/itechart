@@ -1,7 +1,7 @@
 package command;
 
 
-import util.ContactUtil;
+import command.util.ContactUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
