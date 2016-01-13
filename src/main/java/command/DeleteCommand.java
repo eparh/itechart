@@ -19,7 +19,8 @@ public class DeleteCommand implements ActionCommand {
         for(String item: chosen) {
             long idContact = Long.parseLong(item);
             String avatarPath = contactService.getPhoto(idContact);
-            if(avatarPath != null) {
+            //add deleting of attachments
+            if (avatarPath != null) {
                 GeneralUtil.deleteOnPath(avatarPath);
             }
             contactService.deleteContact(idContact);

@@ -95,3 +95,7 @@ function email() {
     }
 
 }
+function informUser() {
+    var message = document.getElementById("afterEmailing").value;
+    if(message != "")  alert(message);
+}

@@ -58,16 +58,16 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="control-label col-sm-1" for="address">Address:</label>
+                    <label class="control-label col-sm-1" for="address">To:</label>
                     <div class="col-sm-7">
-                        <textarea  class="form-control" rows="1" name="address" id="address"></textarea>
+                        <textarea  class="form-control" rows="1" name="address" id="address" readonly></textarea>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label class="control-label col-sm-1" for="theme">Theme:</label>
+                    <label class="control-label col-sm-1" for="subject">Subject:</label>
                     <div class="col-sm-7">
-                        <input  type="text"  id="theme"  class="form-control" name="theme">
+                        <input  type="text"  id="subject"  class="form-control" name="subject" required>
                     </div>
                 </div>
 
@@ -84,7 +84,7 @@
                 <div class="form-group">
                     <label class="control-label col-sm-1" for="text">Text:</label>
                     <div class="col-sm-7">
-                        <textarea  class="form-control" rows="9" name="text" id="text" placeholder="Type message..."></textarea>
+                        <textarea  class="form-control" rows="9" name="text" id="text" placeholder="Type message..." required></textarea>
                     </div>
                 </div>
             </form>
@@ -96,7 +96,7 @@
 </div>
 
 
-
+<input type="hidden" id="afterEmailing"  value="${message}">
 <table id="results" class="table table-striped .table-bordered .table-hover">
     <thead>
     <tr>
@@ -138,4 +138,11 @@
     </ul>
 </div>
 </body>
+<script>
+    // self executing function here
+    (function() {
+       informUser();
+
+    })();
+</script>
 </html>
