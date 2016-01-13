@@ -19,6 +19,10 @@ import javax.servlet.http.HttpServletResponse;
                  maxFileSize=1024*1024*10,      // 10MB
                  maxRequestSize=1024*1024*50)   // 50MB
 public class Servlet extends HttpServlet {
+    public void init() throws ServletException{
+
+    }
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         processRequest(request,response);
     }

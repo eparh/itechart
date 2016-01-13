@@ -236,6 +236,37 @@ public class ContactDaoImpl implements ContactDao {
     }
 
     @Override
+    public List<Contact> birthdayContacts() {
+        List<Contact> list = new ArrayList<>();
+        try (Connection connection = source.getConnection();
+             PreparedStatement statement = connection.prepareStatement("SELECT `name`, surname, middName, birthday, email FROM Contact")) {
+            try (ResultSet set = statement.executeQuery()) {
+                while (set.next()) {
+                    Contact contact = new Contact();
+                    contact.setSurname(set.getString("surname"));
+                    contact.setName(set.getString("name"));
+                    contact.setMidName(set.getString("middName"));
+                    contact.setBirthday(set.getDate("birthday"));
+                    contact.setEmail(set.getString("email"));
+                    contact.setCompany(set.getString("company"));
+
+                    Adds adds = new Adds();
+                    adds.setCountry(set.getString("country"));
+                    adds.setCity(set.getString("city"));
+                    adds.setAddress(set.getString("address"));
+                    adds.setIndex(set.getString("index"));
+                    contact.setAddress(adds);
+
+                    list.add(contact);
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return list;
+    }
+
+    @Override
     public List<Contact> getShowContacts(SearchCriteria criteria, ViewSettings settings) {
         paramStrList = new ArrayList<>();
         paramDateList = new ArrayList<>();

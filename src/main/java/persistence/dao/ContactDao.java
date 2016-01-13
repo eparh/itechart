@@ -32,4 +32,6 @@ public interface ContactDao {
     void insertAttach(Attach attach);
 
     void setAttaches(long idContact,Collection<Attach> attaches);
+
+    List<Contact> birthdayContacts();
 }

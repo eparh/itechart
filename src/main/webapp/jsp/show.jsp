@@ -84,7 +84,7 @@
                 <div class="form-group">
                     <label class="control-label col-sm-1" for="text">Text:</label>
                     <div class="col-sm-7">
-                        <textarea  class="form-control" rows="9" name="text" id="text" placeholder="Type message..." required></textarea>
+                        <textarea  class="form-control" rows="9" name="text" id="text" placeholder="Type message..." required ></textarea>
                     </div>
                 </div>
             </form>

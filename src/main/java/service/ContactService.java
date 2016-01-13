@@ -31,4 +31,6 @@ public interface ContactService {
     HashMap<String,Attach> getAttaches(long idContact);
 
     void saveAttaches(long idContact, HashMap<String,Attach> map_attaches) throws IOException;
+
+    List<Contact> getBirthdayContacts();
 }

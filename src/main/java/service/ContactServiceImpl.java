@@ -76,14 +76,12 @@ public class ContactServiceImpl implements ContactService {
 
         Collection<Attach> attaches = map_attaches.values();
 
-
         String savePath = properties.getProperty("SAVE_ATTACH_PATH") + File.separator + idContact;
         File saveDir = new File(savePath);
 
         if(! saveDir.exists()) {
             saveDir.mkdirs();
         }
-
 
         List<String> fileNames = new ArrayList<>();
         for(Attach attach: attaches) {
@@ -122,5 +120,10 @@ public class ContactServiceImpl implements ContactService {
         }
 
         contactDao.setAttaches(idContact,map_attaches.values());
+    }
+
+    @Override
+    public List<Contact> getBirthdayContacts() {
+        return contactDao.birthdayContacts();
     }
 }
