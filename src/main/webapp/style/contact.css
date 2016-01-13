@@ -58,6 +58,11 @@ h1 {
     margin: 2% auto 14% 45%;
 }
 
+a.active {
+    border-style: solid;
+    border-color: cornflowerblue;
+}
+
 a:link {
     text-decoration: none;
 }
@@ -75,7 +80,10 @@ a:active {
 }
 
 a.noactive {
+    border: solid aliceblue;
+    color: darkgrey;
     background-color: aliceblue;
+    text-decoration: none;
 }
 
 

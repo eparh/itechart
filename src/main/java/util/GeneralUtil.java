@@ -58,6 +58,15 @@ public class GeneralUtil {
         return new_file;
     }
 
+    public static  File renameFile(String fileName, File file) throws IOException {
+        String ext = FilenameUtils.getExtension(file.getName());
+        String path =FilenameUtils.getPath(file.getPath());
+        String new_name = path + fileName;
+        File new_file = new File(new_name);
+        FileUtils.moveFile(file, new_file);
+        return new_file;
+    }
+
     public static void clearTemp() throws IOException {
         Properties properties = new Properties();
         properties.load(GeneralUtil.class.getResourceAsStream("/temp.properties"));

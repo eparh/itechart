@@ -33,7 +33,6 @@ public class AttachCommand implements ActionCommand {
         if(! file.exists()) {
             return null;
         }
-        System.out.println(file.length());
         int buffSize = Integer.parseInt(properties.getProperty("BUFFER_SIZE"));
 
         response.reset();

@@ -63,3 +63,35 @@ function countCheked() {
         if (checkboxes[i].checked)  count++;
     return count;
 }
+function email() {
+    var checkboxes = document.getElementsByName('marked');
+    var table = document.getElementById("table");
+    var address= document.getElementById("address");
+    var countAddress = 0;
+    var addressesOnRow = 3;
+    address.value = "";
+    for (var i=0; i<checkboxes.length; i++) {
+        if (checkboxes[i].checked) {
+            var row = table.rows[i];
+            var email = row.cells[5].childNodes[0].value;
+            if (email != null && email != "") {
+                var separator = ",";
+                if(countAddress % addressesOnRow == 0) separator  += "\n";
+                if(countAddress != 0) address.value += separator;
+                address.value += email;
+                countAddress++;
+            }
+        }
+    }
+    if(countAddress !=0) {
+        var addressRows = countAddress / addressesOnRow| 0;
+        if (addressRows == 0 || countAddress % addressesOnRow != 0) addressRows++;
+        if(addressRows > 4) addressRows = 4;
+        address.rows = addressRows;
+        openbox('emailPopUp');
+    } else {
+        alert("Choose contacts with email, please");
+        return false;
+    }
+
+}

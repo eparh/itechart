@@ -27,7 +27,7 @@ public class ShowCommand implements ActionCommand {
         HttpSession session = request.getSession();
 
         //Удаляем из сессии attachment-ы
-       // session.removeAttribute("attaches");
+        session.removeAttribute("attaches");
 
         //Для paging-a
         String mode = request.getParameter("mode");

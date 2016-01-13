@@ -39,9 +39,10 @@ public class Servlet extends HttpServlet {
                 RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(page);
                 dispatcher.forward(request, response);
             } else {
+                //Файловая команда
 
             }
-        } catch (Exception e) {
+         } catch (Exception e) {
             //TODO
             System.err.println("Error, but I still work");
         }

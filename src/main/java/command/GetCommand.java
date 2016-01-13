@@ -21,7 +21,7 @@ public class GetCommand implements ActionCommand {
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
         HttpSession session = request.getSession();
-        //Удаляем из сессии attachment-ы , если они были и чистим темповые папки
+        //Удаляем из сессии attachment-ы , если они были
         session.removeAttribute("attaches");
 
         //Достаем idContact

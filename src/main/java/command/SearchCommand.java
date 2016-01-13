@@ -10,7 +10,7 @@ import java.io.IOException;
 
 public class SearchCommand implements ActionCommand {
     @Override
-    public String execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public String execute(HttpServletRequest request, HttpServletResponse response) {
         HttpSession session = request.getSession();
         //Удаляем из сессии attachment-ы
         session.removeAttribute("attaches");

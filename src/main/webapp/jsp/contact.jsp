@@ -5,8 +5,8 @@
     <title>Create contact</title>
     <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-    <script type="text/javascript" src="/js/1.js"></script>
-    <link rel="stylesheet" href="/style/1.css">
+    <script type="text/javascript" src="/js/contact.js"></script>
+    <link rel="stylesheet" href="/style/contact.css">
 </head>
 <body  onload="selectAvatar()">
 
@@ -289,7 +289,7 @@
         </table>
     </div>
 
-
+    <hr>
     <!--Таблица с attachments и кнопками -->
 
     <div style="float: right;">

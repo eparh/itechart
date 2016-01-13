@@ -240,7 +240,7 @@ public class ContactDaoImpl implements ContactDao {
         paramStrList = new ArrayList<>();
         paramDateList = new ArrayList<>();
         List<Contact> list = new ArrayList<>();
-        query = "SELECT idContact, `name`, surname, middName, birthday, company, country, city, address," +
+        query = "SELECT idContact, `name`, surname, middName, birthday, company, country, city, address, email," +
                 " `index` from Contact AS c LEFT JOIN Address AS a ON c.idAddress = a.idAddress";
         query = makeSelectQuery(query,criteria);
         query +=" LIMIT ? , ?";
@@ -266,6 +266,7 @@ public class ContactDaoImpl implements ContactDao {
                     contact.setMidName(set.getString("middName"));
                     contact.setCompany(set.getString("company"));
                     contact.setBirthday(set.getDate("birthday"));
+                    contact.setEmail(set.getString("email"));
 
                     Adds adds = new Adds();
                     adds.setCountry(set.getString("country"));

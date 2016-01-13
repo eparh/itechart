@@ -87,7 +87,6 @@ public class ContactServiceImpl implements ContactService {
 
         List<String> fileNames = new ArrayList<>();
         for(Attach attach: attaches) {
-            System.out.println("names:"+attach.getName());
             fileNames.add(attach.getName());
         }
 
@@ -106,7 +105,6 @@ public class ContactServiceImpl implements ContactService {
             String[] temp_files = tempDir.list();
             for (int i=0; i<temp_files.length; i++) {
                 File file = new File(tempDir, temp_files[i]);
-                System.out.println(file.getName());
                 //Проверяем, имена файлов, чтобы случайно не перенести из темповой папки служебные файлы, мусор етц
                 if(fileNames.contains(file.getName())) {
                     FileUtils.moveFileToDirectory(file,saveDir, true);

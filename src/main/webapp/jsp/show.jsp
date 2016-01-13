@@ -21,7 +21,7 @@
                 <li><a href="javascript:{}" onclick="getContact(); return false;"><span class="glyphicon glyphicon-pencil"></span> Edit contact</a></li>
                 <li><a href="javascript:{}" onclick="deleteContact(); return false;"><span class="glyphicon glyphicon-trash"></span> Delete contacts</a></li>
                 <li><a href="/jsp/search.jsp"><span class="glyphicon glyphicon-search"></span> Search contacts</a></li>
-                <li><a href="javascript:{}" onclick="openbox('emailPopUp'); return false;"><span class="glyphicon glyphicon-send"></span> Send Email </a></li>
+                <li><a href="javascript:{}" onclick="email(); return false;"><span class="glyphicon glyphicon-send"></span> Send Email </a></li>
             </ul>
         </div>
     </div>
@@ -51,20 +51,21 @@
 <div id="emailPopUp" style="display:none">
     <div class="tt">
         <div class="container">
-            <form id="attachment" class="form-horizontal" accept-charset="utf-8" role="form">
+            <form action="/controller" id="email" class="form-horizontal" accept-charset="utf-8" role="form">
+                <input type="hidden" name="command" value="email">
                 <div style="margin: auto auto 3% auto">
                     <div class="close" onclick="openbox('emailPopUp')">x</div>
                 </div>
 
                 <div class="form-group">
-                    <label class="control-label col-sm-1" for="addresses">Address:</label>
+                    <label class="control-label col-sm-1" for="address">Address:</label>
                     <div class="col-sm-7">
-                        <textarea  class="form-control" rows="3" name="address" id="addresses"></textarea>
+                        <textarea  class="form-control" rows="1" name="address" id="address"></textarea>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label class="control-label col-sm-1" for="attachment">Theme:</label>
+                    <label class="control-label col-sm-1" for="theme">Theme:</label>
                     <div class="col-sm-7">
                         <input  type="text"  id="theme"  class="form-control" name="theme">
                     </div>
@@ -88,7 +89,7 @@
                 </div>
             </form>
 
-            <button  onclick="" class="btn-default">Send</button>
+            <button  type="submit" form="email" class="btn-default">Send</button>
             <button onclick="openbox('emailPopUp')" class="btn-default">Cancel</button>
         </div>
     </div>
@@ -116,6 +117,7 @@
             <td>${ contact.birthday}</td>
             <td>${ contact.address }</td>
             <td>${ contact.company }</td>
+            <td><input type="hidden" name="email"  value="${contact.email}"> </td>
         </tr>
     </c:forEach>
     </tbody>

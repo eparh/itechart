@@ -141,19 +141,23 @@ var phoneService = {
 }
 
 var attachService = {
-    pos : 0,
     popUp: 'attachPopUp',
-    mode: 0,
 
     saveAttach: function () {
+        var input_file = document.getElementById("b_attach");
         var form= document.getElementById("form");
-        openbox(this.popUp);
+
 
         var file = form.attach.files[0];
-        if(file.size > 1024* 1024 * 10){
+        if(file != undefined && file.size > 1024* 1024 * 10) {
             alert("Too much size of file!Maximum size of file is 10 MB");
             return false;
         }
+        if(input_file.style.display == "initial" && form.attach.value == "") {
+            alert("Choose file, please");
+            return false;
+        }
+        openbox(this.popUp);
         form.command.value = 'setattach';
         form.submit();
     },
@@ -181,6 +185,8 @@ var attachService = {
         var table = document.getElementById("attachTable");
         var checkboxes = document.getElementsByName('attaches');
 
+        document.getElementById("form").attach_mode.value = "edit";
+
         var input_file = document.getElementById("b_attach");
         var file_name = document.getElementById("b_file_name");
         input_file.style.display = "none";
@@ -189,7 +195,6 @@ var attachService = {
         for (var i=0; i<checkboxes.length; i++) {
             if (checkboxes[i].checked) {
                 var row = table.rows[i];
-                alert(row.cells[1].firstElementChild.value);
                 document.getElementById("file_name").value = row.cells[1].firstElementChild.value;
                 comment.value = row.cells[3].firstElementChild.value;
                 openbox(this.popUp);
@@ -205,7 +210,6 @@ var attachService = {
         input_file.style.display = "initial";
         file_name.style.display = "none";
         document.getElementById("form").attach_mode.value = "add";
-        alert(document.getElementById("form").attach_mode.value);
         openbox(this.popUp);
     },
 
