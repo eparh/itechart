@@ -2,6 +2,7 @@ package controller;
 
 import command.ActionCommand;
 import command.ActionFactory;
+import util.CheckBirthdayUtil;
 
 
 import java.io.IOException;
@@ -20,7 +21,21 @@ import javax.servlet.http.HttpServletResponse;
                  maxRequestSize=1024*1024*50)   // 50MB
 public class Servlet extends HttpServlet {
     public void init() throws ServletException{
+        try {
+            CheckBirthdayUtil.getInstance().startService();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
+    }
+
+    @Override
+    public void destroy() {
+        try {
+            CheckBirthdayUtil.getInstance().stopService();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

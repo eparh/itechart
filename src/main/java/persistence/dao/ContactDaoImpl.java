@@ -236,7 +236,8 @@ public class ContactDaoImpl implements ContactDao {
     public List<Contact> birthdayContacts() {
         List<Contact> list = new ArrayList<>();
         try (Connection connection = source.getConnection();
-             PreparedStatement statement = connection.prepareStatement("SELECT `name`, surname, middName, birthday, email FROM Contact")) {
+             PreparedStatement statement = connection.prepareStatement("SELECT `name`, surname, middName, birthday," +
+                     " email, company FROM Contact")) {
             try (ResultSet set = statement.executeQuery()) {
                 while (set.next()) {
                     Contact contact = new Contact();
@@ -247,12 +248,6 @@ public class ContactDaoImpl implements ContactDao {
                     contact.setEmail(set.getString("email"));
                     contact.setCompany(set.getString("company"));
 
-                    Address address = new Address();
-                    address.setCountry(set.getString("country"));
-                    address.setCity(set.getString("city"));
-                    address.setAddress(set.getString("address"));
-                    address.setIndex(set.getString("index"));
-                    contact.setAddress(address);
 
                     list.add(contact);
                 }
