@@ -35,13 +35,25 @@ public class SetAttachCommand implements ActionCommand{
         Contact contact = ContactUtil.makeContact(request);
         request.setAttribute("contact",contact);
 
-        HashMap<String,Attach> attaches = (HashMap<String,Attach>) session.getAttribute("attaches");
-        if( attaches == null ) {
-            attaches = new HashMap<>();
+        List<Attach> attachList = (List<Attach>) session.getAttribute("attaches");
+        Map<String,Attach> attachMap = new HashMap<>();
+        if (attachList == null) {
+            attachList = new ArrayList<>();
             Long idContact = contact.getId();
-            if(idContact != null) attaches.putAll(contactService.getAttaches(idContact));
+            if(idContact != null) {
+                System.out.println("start delete");
+                System.out.println(contactService.getAttaches(idContact));
+                for (Attach attach : contactService.getAttaches(idContact)) {
+                    attachMap.put(attach.getName(), attach);
+
+                }
+            }
         }
 
+        for (Attach attach: attachList) {
+            attachMap.put(attach.getName(), attach);
+        }
+        System.out.println(attachMap);
         //Обрабока кнопок
         String attach_mode =  request.getParameter("attach_mode");
         switch(attach_mode) {
@@ -49,19 +61,20 @@ public class SetAttachCommand implements ActionCommand{
                 String [] chosen_attaches =  request.getParameterValues("attaches");
                 if(chosen_attaches != null) {
                     for (String item : chosen_attaches) {
-                        attaches.remove(item);
+                        System.out.println(item);
+                        attachMap.remove(item);
                     }
                 }
                 break;
 
             case "add":
                 Attach attach = makeAttach();
-                attaches.put(attach.getName(),attach);
+                attachMap.put(attach.getName(),attach);
                 break;
 
             case "edit":
                 Attach edit_attach = prepareForEdit();
-                attaches.put(edit_attach.getName(), edit_attach);
+                attachMap.put(edit_attach.getName(), edit_attach);
                 break;
 
             default:
@@ -74,8 +87,11 @@ public class SetAttachCommand implements ActionCommand{
         List<Phone> phones = ContactUtil.getPhones(request, null);
         request.setAttribute("phones", phones);
 
+        List<Attach> finalAttaches = new ArrayList<>();
 
-        session.setAttribute("attaches",attaches);
+        finalAttaches.addAll(attachMap.values());
+        System.out.println(finalAttaches);
+        session.setAttribute("attaches",finalAttaches);
 
         return "/jsp/contact.jsp";
     }

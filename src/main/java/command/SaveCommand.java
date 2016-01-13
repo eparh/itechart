@@ -47,7 +47,7 @@ public class SaveCommand implements ActionCommand {
     }
 
     private void saveAttaches() throws IOException {
-        HashMap<String, Attach> attaches = (HashMap<String, Attach>) session.getAttribute("attaches");
+        List<Attach> attaches = (List<Attach>) session.getAttribute("attaches");
         session.removeAttribute("attaches");
         contactService.saveAttaches(idContact, attaches);
     }

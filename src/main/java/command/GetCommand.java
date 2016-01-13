@@ -32,7 +32,7 @@ public class GetCommand implements ActionCommand {
         Contact contact = contactService.getContact(idContact);
 
         List<Phone> phones = contactService.getPhones(idContact);
-        Map<String,Attach> attaches = contactService.getAttaches(idContact);
+        List<Attach> attaches = contactService.getAttaches(idContact);
         request.setAttribute("attaches",attaches);
         request.setAttribute("contact",contact);
         request.setAttribute("mode","edit");

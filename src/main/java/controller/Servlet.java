@@ -47,6 +47,7 @@ public class Servlet extends HttpServlet {
          } catch (Exception e) {
             //TODO
             System.err.println("Error, but I still work");
+            e.printStackTrace();
         }
 
     }

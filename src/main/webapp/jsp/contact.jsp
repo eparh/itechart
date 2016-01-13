@@ -309,19 +309,20 @@
             </thead>
             <tbody id="attachTable">
             <c:forEach items="${attaches}" var="attach" varStatus="num">
-                <c:set var="link"  value= 'href= "/controller?command=attach&idContact=${contact.id}&name=${attach.key}" class="active"'/>
+                <c:set var="link"  value= 'href= "/controller?command=attach&idContact=${contact.id}&name=${attach.name}" class="active"'/>
                 <tr>
                     <td>
-                        <input type='checkbox' form="form" name='attaches' value="${attach.key}"/>
+                        <input type='checkbox' form="form" name='attaches' value="${attach.name}"/>
                     </td>
                     <td>
 
-                        <a ${attach.value.idAttach == null ? 'href="javascript: void(0)" class="noactive"' : link} >
-                             ${attach.key}
+                        <a  ${attach.idAttach == null ? 'href="javascript: void(0)" class="noactive"' : link} >
+                             ${attach.name}
                         </a>
                     </td>
-                    <td><input type='date'  value="${ attach.value.date}" readonly/></td>
-                    <td><input type='text'  value="${ attach.value.comment}" readonly/></td>
+                    <td><input type='date'  value="${ attach.date}" readonly/></td>
+                    <td><input type='text'  value="${ attach.comment}" readonly/></td>
+                    <td><input type="hidden" value="${attach.name}"></td>
                 </tr>
             </c:forEach>
             </tbody>

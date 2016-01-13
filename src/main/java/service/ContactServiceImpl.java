@@ -61,19 +61,17 @@ public class ContactServiceImpl implements ContactService {
     }
 
     @Override
-    public Map<String,Attach> getAttaches(long idContact) {
+    public List<Attach> getAttaches(long idContact) {
         return contactDao.getAttaches(idContact);
     }
 
     @Override
-    public void saveAttaches(long idContact, Map<String,Attach> mapAttaches) throws IOException {
-        if(mapAttaches == null) {
+    public void saveAttaches(long idContact, List<Attach> attachList) throws IOException {
+        if(attachList == null) {
           return;
         }
         Properties properties = new Properties();
         properties.load(ContactServiceImpl.class.getResourceAsStream("/attach.properties"));
-
-        Collection<Attach> attaches = mapAttaches.values();
 
         String savePath = properties.getProperty("SAVE_ATTACH_PATH") + File.separator + idContact;
         File saveDir = new File(savePath);
@@ -83,7 +81,7 @@ public class ContactServiceImpl implements ContactService {
         }
 
         List<String> fileNames = new ArrayList<>();
-        for(Attach attach: attaches) {
+        for(Attach attach: attachList) {
             fileNames.add(attach.getName());
         }
 
@@ -112,7 +110,7 @@ public class ContactServiceImpl implements ContactService {
         Map<String,Attach> toSaveAttaches = new HashMap<>();
         //Дозаполняем поля, для новых attachment-ов
 
-        for(Attach attach: attaches) {
+        for(Attach attach: attachList) {
             if (attach.getIdAttach() == null) {
                 attach.setPath(savePath + File.separator + attach.getName());
                 attach.setIdContact(idContact);

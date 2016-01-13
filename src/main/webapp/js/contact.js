@@ -195,7 +195,8 @@ var attachService = {
         for (var i=0; i<checkboxes.length; i++) {
             if (checkboxes[i].checked) {
                 var row = table.rows[i];
-                document.getElementById("file_name").value = row.cells[1].firstElementChild.value;
+                alert(row.cells[4].firstElementChild.value);
+                document.getElementById("file_name").value = row.cells[4].firstElementChild.value;
                 comment.value = row.cells[3].firstElementChild.value;
                 openbox(this.popUp);
                 break;
@@ -219,4 +220,3 @@ var attachService = {
         openbox(this.popUp);
     }
 }
-

@@ -42,7 +42,7 @@ public interface ContactDao {
      * @param idContact
      * @return
      */
-    HashMap<String,Attach> getAttaches(Long idContact);
+    List<Attach> getAttaches(Long idContact);
 
     void insertAttach(Attach attach);
 

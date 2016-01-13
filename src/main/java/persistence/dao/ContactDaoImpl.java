@@ -185,8 +185,8 @@ public class ContactDaoImpl implements ContactDao {
     }
 
     @Override
-    public HashMap<String,Attach> getAttaches(Long idContact) {
-        HashMap<String,Attach> map = new HashMap<>();
+    public List<Attach> getAttaches(Long idContact) {
+        List<Attach> attaches = new ArrayList<>();
         try (Connection connection = source.getConnection();
              PreparedStatement statement = connection.prepareStatement("SELECT * FROM Attachment " +
                      "WHERE idContact = ?")) {
@@ -200,13 +200,13 @@ public class ContactDaoImpl implements ContactDao {
                     attach.setDate(set.getDate("date"));
                     attach.setPath(set.getString("path"));
                     attach.setIdAttach(set.getLong("idAttach"));
-                    map.put(attach.getName(),attach);
+                    attaches.add(attach);
                 }
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return map;
+        return attaches;
     }
 
     @Override

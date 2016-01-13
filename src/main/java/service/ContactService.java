@@ -40,16 +40,15 @@ public interface ContactService {
      * @return
      */
 
-    Map<String,Attach> getAttaches(long idContact);
+    List<Attach> getAttaches(long idContact);
 
     /**
      *
      * @param idContact
-     * @param mapAttaches
      * @return
      * @throws IOException
      */
-    void saveAttaches(long idContact, Map<String,Attach> mapAttaches) throws IOException;
+    void saveAttaches(long idContact, List<Attach> attachesList) throws IOException;
 
     List<Contact> getBirthdayContacts();
 }
