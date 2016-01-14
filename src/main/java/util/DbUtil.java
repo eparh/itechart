@@ -7,7 +7,6 @@ import java.util.Properties;
 
 public class DbUtil {
 
-    //TODO
     private static final DataSource dataSource = initDataSource();
 
     public static DataSource getMySQLDataSource() {
@@ -15,6 +14,7 @@ public class DbUtil {
     }
 
     private static DataSource initDataSource() {
+
         Properties properties = new Properties();
         try {
             properties.load(DbUtil.class.getResourceAsStream("/db.properties"));

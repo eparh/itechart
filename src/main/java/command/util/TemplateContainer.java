@@ -18,6 +18,7 @@ public enum TemplateContainer {
         try {
             init();
         } catch (Exception e) {
+            //TODO logger
             e.printStackTrace();
         }
     }

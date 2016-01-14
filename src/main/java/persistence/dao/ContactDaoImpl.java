@@ -1,5 +1,6 @@
 package persistence.dao;
 
+import persistence.dao.exception.DaoException;
 import util.DbUtil;
 import persistence.model.*;
 
@@ -252,7 +253,7 @@ public class ContactDaoImpl implements ContactDao {
                 }
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DaoException("Error while getting birthday contacts", e);
         }
         return list;
     }

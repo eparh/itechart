@@ -66,7 +66,14 @@ public class Servlet extends HttpServlet {
             }
          } catch (Exception e) {
             logger.error("Error while process request", e);
+            /*
+            RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/jsp/blalba/error.jsp");
+            dispatcher.forward(request, response);
+            */
+            response.sendRedirect(request.getContextPath() + "/seja/izpisknjig.jsp");
         }
 
     }
+
+
 }
