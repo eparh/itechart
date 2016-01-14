@@ -7,6 +7,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.Properties;
 
 public class EmailCommand implements ActionCommand{
@@ -27,6 +28,12 @@ public class EmailCommand implements ActionCommand{
                     }
                 });
 
+        sendEmail(address, subject, text, properties, sender, session);
+        request.setAttribute("message","Message is successfully sent");
+        return "/controller?command=show";
+    }
+
+    private void sendEmail(String address, String subject, String text, Properties properties, String sender, Session session) throws UnsupportedEncodingException {
         try {
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress(sender, properties.getProperty("ADMIN-NAME")));
@@ -40,7 +47,5 @@ public class EmailCommand implements ActionCommand{
         } catch (MessagingException e) {
             throw new RuntimeException(e);
         }
-        request.setAttribute("message","Message is successfully sent");
-        return "/controller?command=show";
     }
 }

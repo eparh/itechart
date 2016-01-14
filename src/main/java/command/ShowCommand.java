@@ -2,6 +2,7 @@ package command;
 
 
 
+import command.util.TemplateContainer;
 import util.GeneralUtil;
 import persistence.model.Contact;
 import persistence.model.SearchCriteria;
@@ -47,8 +48,12 @@ public class ShowCommand implements ActionCommand {
         session.setAttribute("criteria",criteria);
         session.setAttribute("settings",settings);
         request.setAttribute("contacts", contacts);
-
+        addEmailTemplates(session);
         return "/jsp/show.jsp";
+    }
+
+    private void addEmailTemplates(HttpSession session) {
+        session.setAttribute("templates", TemplateContainer.getInstance().getTemplates());
     }
 
     private ViewSettings getViewSettings(String mode,long total) {

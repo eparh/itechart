@@ -2,6 +2,8 @@ package controller;
 
 import command.ActionCommand;
 import command.ActionFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import util.CheckBirthdayUtil;
 
 
@@ -20,11 +22,14 @@ import javax.servlet.http.HttpServletResponse;
                  maxFileSize=1024*1024*10,      // 10MB
                  maxRequestSize=1024*1024*50)   // 50MB
 public class Servlet extends HttpServlet {
+
+    private Logger logger = LogManager.getLogger(Servlet.class);
     public void init() throws ServletException{
         try {
+            logger.info("Init servlet");
             CheckBirthdayUtil.getInstance().startService();
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Error while init", e);
         }
 
     }
@@ -34,7 +39,7 @@ public class Servlet extends HttpServlet {
         try {
             CheckBirthdayUtil.getInstance().stopService();
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Error while destroy servlet", e);
         }
     }
 
@@ -60,9 +65,7 @@ public class Servlet extends HttpServlet {
                 // Do nothing, command returns response manually
             }
          } catch (Exception e) {
-            //TODO
-            System.err.println("Error, but I still work");
-            e.printStackTrace();
+            logger.error("Error while process request", e);
         }
 
     }

@@ -28,7 +28,6 @@ public enum CheckBirthdayUtil {
         scheduler.scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {
-                System.out.println("start chechkkkf2");
                 try {
                     sendEmailToAdmin();
                 } catch (Exception e) {
@@ -45,7 +44,6 @@ public enum CheckBirthdayUtil {
     private void sendEmailToAdmin() {
         String address = "egenpark@gmail.com";
         String subject = "Birthday boys";
-        System.out.println("Send mail method:");
         String text = makeMessage();
 
         Properties properties = new Properties();
@@ -84,9 +82,7 @@ public enum CheckBirthdayUtil {
     }
 
     private List<Contact> whoHave() {
-        System.out.println("Who Have:");
         List<Contact> contacts = contactService.getBirthdayContacts();
-        System.out.println("Contacts:" + contacts);
         List<Contact> birtdayContacts = new ArrayList<>();
         for(Contact contact: contacts) {
             if ( contact.getBirthday() != null && isBirthday(contact)) {
@@ -110,7 +106,6 @@ public enum CheckBirthdayUtil {
     }
 
     private String makeMessage() {
-        System.out.println("Make message method:");
         List<Contact> contacts = whoHave();
         String message = "";
         int count = 0;
@@ -119,7 +114,6 @@ public enum CheckBirthdayUtil {
             message  += count + ". " + contact.getFullName() +", address:"+ contact.getAddress() + ", company" + contact.getCompany() +
                     ", email:" + contact.getEmail() + "\n";
         }
-        System.out.println("Sending message:" + message);
         return  message;
     }
 }

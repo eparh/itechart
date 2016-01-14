@@ -1,6 +1,8 @@
 package command;
 
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import persistence.model.Attach;
 import persistence.model.Contact;
 import persistence.model.Phone;
@@ -25,6 +27,8 @@ public class SetAttachCommand implements ActionCommand{
     private HttpServletRequest request;
     private ContactService contactService = ServiceFactory.getContactService();
     private  Properties properties = new Properties();
+
+    private Logger logger = LogManager.getLogger(SetAttachCommand.class);
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -92,7 +96,7 @@ public class SetAttachCommand implements ActionCommand{
         finalAttaches.addAll(attachMap.values());
         System.out.println(finalAttaches);
         session.setAttribute("attaches",finalAttaches);
-
+        logger.info("File was attached");
         return "/jsp/contact.jsp";
     }
 

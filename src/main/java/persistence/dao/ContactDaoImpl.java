@@ -248,7 +248,6 @@ public class ContactDaoImpl implements ContactDao {
                     contact.setEmail(set.getString("email"));
                     contact.setCompany(set.getString("company"));
 
-
                     list.add(contact);
                 }
             }
