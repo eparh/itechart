@@ -3,6 +3,8 @@ package command;
 
 import command.exception.CommandException;
 import command.util.ContactUtil;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -14,6 +16,7 @@ import java.io.OutputStream;
 import java.util.Properties;
 
 public class AttachCommand implements ActionCommand {
+    private Logger logger = LogManager.getLogger(AttachCommand.class);
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
         Properties properties = new Properties();
@@ -58,6 +61,7 @@ public class AttachCommand implements ActionCommand {
             throw  new CommandException("Error while getting attachment",e);
         }
 
+        logger.info("Downloading attachment");
         return null;
     }
 }

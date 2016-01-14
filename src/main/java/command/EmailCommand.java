@@ -1,6 +1,10 @@
 package command;
 
 import command.exception.CommandException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import service.ContactService;
+import service.ServiceFactory;
 
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
@@ -13,6 +17,8 @@ import java.io.UnsupportedEncodingException;
 import java.util.Properties;
 
 public class EmailCommand implements ActionCommand{
+    private Logger logger = LogManager.getLogger(EmailCommand.class);
+
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
         String address = request.getParameter("address");
@@ -36,6 +42,7 @@ public class EmailCommand implements ActionCommand{
             throw new CommandException("Error while sending email", e);
         }
         request.setAttribute("message","Message is successfully sent");
+        logger.info("Sending email");
         return "/controller?command=show";
     }
 

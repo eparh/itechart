@@ -1,6 +1,8 @@
 package command;
 
 import command.exception.CommandException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import service.ContactService;
 import service.ServiceFactory;
 import command.util.ContactUtil;
@@ -13,10 +15,10 @@ import java.util.Properties;
 
 public class AvatarCommand implements ActionCommand {
     private ContactService contactService = ServiceFactory.getContactService();
-
+    private Logger logger = LogManager.getLogger(AvatarCommand.class);
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response)   {
-        //Определение ID контакта
+        //Getting ID of contact
         String temp = request.getParameter("idContact");
         String[] chosen = request.getParameterValues("marked");
         Long idContact = ContactUtil.findOutIdContact(temp,chosen);
@@ -63,6 +65,7 @@ public class AvatarCommand implements ActionCommand {
             throw new CommandException("Error while rendering avatar", e);
         }
 
+        logger.info("Rendoring avatar");
         return null;
     }
 

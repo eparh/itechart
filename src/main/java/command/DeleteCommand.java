@@ -1,6 +1,8 @@
 package command;
 
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import persistence.model.Attach;
 import util.GeneralUtil;
 import service.ContactService;
@@ -14,6 +16,8 @@ import java.util.Properties;
 
 public class DeleteCommand implements ActionCommand {
     private ContactService contactService = ServiceFactory.getContactService();
+    private Logger logger = LogManager.getLogger(DeleteCommand.class);
+
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
 
@@ -24,6 +28,7 @@ public class DeleteCommand implements ActionCommand {
             deleteAttaches(idContact);
             contactService.deleteContact(idContact);
         }
+        logger.info("Deleting contact");
         return "/controller?command=show";
     }
 

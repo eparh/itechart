@@ -2,6 +2,8 @@ package command;
 
 import command.exception.CommandException;
 import org.apache.commons.io.FileUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import persistence.model.Attach;
 import command.util.ContactUtil;
 import util.GeneralUtil;
@@ -27,6 +29,7 @@ public class SaveCommand implements ActionCommand {
     private long idContact;
     private HttpSession session;
 
+    private Logger logger = LogManager.getLogger(SaveCommand.class);
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response)  {
         this.request = request;
@@ -44,6 +47,7 @@ public class SaveCommand implements ActionCommand {
         }
 
         contactService.setPhoto(idContact,path);
+        logger.info("Saving contact");
         return "/controller?command=show";
     }
 

@@ -1,5 +1,7 @@
 package command;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import persistence.model.Attach;
 import persistence.model.Contact;
 import persistence.model.Phone;
@@ -10,13 +12,12 @@ import command.util.ContactUtil;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class GetCommand implements ActionCommand {
     private ContactService contactService = ServiceFactory.getContactService();
+
+    private Logger logger = LogManager.getLogger(GetCommand.class);
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
@@ -37,7 +38,7 @@ public class GetCommand implements ActionCommand {
         request.setAttribute("contact",contact);
         request.setAttribute("mode","edit");
         request.setAttribute("phones",phones);
-
+        logger.info("Getting of contact");
         return "/jsp/contact.jsp";
     }
 }

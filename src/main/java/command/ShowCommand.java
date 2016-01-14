@@ -2,6 +2,8 @@ package command;
 
 import command.exception.CommandException;
 import command.util.TemplateContainer;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import util.GeneralUtil;
 import persistence.model.Contact;
 import persistence.model.SearchCriteria;
@@ -12,7 +14,6 @@ import service.ServiceFactory;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
 import java.util.List;
 
 public class ShowCommand implements ActionCommand {
@@ -20,6 +21,8 @@ public class ShowCommand implements ActionCommand {
     private HttpServletRequest request;
     private ViewSettings settings;
     private SearchCriteria criteria;
+
+    private Logger logger = LogManager.getLogger(ShowCommand.class);
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
@@ -47,6 +50,7 @@ public class ShowCommand implements ActionCommand {
         session.setAttribute("settings",settings);
         request.setAttribute("contacts", contacts);
         addEmailTemplates(session);
+        logger.info("Contacts was shown");
         return "/jsp/show.jsp";
     }
 
