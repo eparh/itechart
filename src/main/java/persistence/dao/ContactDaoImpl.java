@@ -164,7 +164,6 @@ public class ContactDaoImpl implements ContactDao {
         List<Date> paramDateList = new ArrayList<>();
         String query = "SELECT COUNT(*) AS total from Contact AS c LEFT JOIN Address AS a ON c.idAddress = a.idAddress";
         query = makeSelectQuery(query,criteria, paramStrList, paramDateList);
-        System.out.println("totalQuery:"+query);
         try (Connection connection = source.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             int index = 1;

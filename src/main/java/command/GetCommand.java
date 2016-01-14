@@ -21,10 +21,10 @@ public class GetCommand implements ActionCommand {
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
         HttpSession session = request.getSession();
-        //Удаляем из сессии attachment-ы , если они были
+        //Deleting attachments from session if it existed.
         session.removeAttribute("attaches");
 
-        //Достаем idContact
+        //Getting idContact
         String temp = request.getParameter("idContact");
         String[] chosen = request.getParameterValues("marked");
         Long idContact = ContactUtil.findOutIdContact(temp,chosen);
