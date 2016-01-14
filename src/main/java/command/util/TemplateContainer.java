@@ -7,10 +7,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
-/**
- * Created by zhenya on 14.01.16.
- */
 public enum TemplateContainer {
     INSTANCE;
     public static TemplateContainer getInstance() {
@@ -33,11 +31,16 @@ public enum TemplateContainer {
         templates = new HashMap<>();
         templates.put("Template1", createTemplate("template1.st"));
         templates.put("Template2", createTemplate("template2.st"));
+        System.out.println(templates);
     }
 
     private String createTemplate(String resourceFileName) throws IOException {
         String templateString = readFromFile(resourceFileName);
         ST template = new ST(templateString);
+        Properties properties = new Properties();
+        properties.load(TemplateContainer.class.getResourceAsStream("/email.properties"));
+        String admin = properties.getProperty("ADMIN-NAME");
+        template.add("admin", admin);
         return template.render();
     }
 

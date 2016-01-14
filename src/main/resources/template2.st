@@ -1,1 +1,1 @@
-Hello from Template2
+Hello from Template2 from <admin>
