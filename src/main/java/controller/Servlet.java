@@ -25,7 +25,7 @@ public class Servlet extends HttpServlet {
     public void init() throws ServletException{
         try {
             logger.info("Init servlet");
-            CheckBirthdayUtil.getInstance().startService();
+            //CheckBirthdayUtil.getInstance().startService();
         } catch (Exception e) {
             logger.error("Error while init", e);
         }
@@ -35,7 +35,7 @@ public class Servlet extends HttpServlet {
     @Override
     public void destroy() {
         try {
-            CheckBirthdayUtil.getInstance().stopService();
+           // CheckBirthdayUtil.getInstance().stopService();
         } catch (Exception e) {
             logger.error("Error while destroy servlet", e);
         }

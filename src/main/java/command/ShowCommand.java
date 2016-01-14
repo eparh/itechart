@@ -33,16 +33,15 @@ public class ShowCommand implements ActionCommand {
         //For paging
         String mode = request.getParameter("mode");
         long total = contactService.countContacts(criteria);
-
         if(mode != null) {
             criteria =  getSearchCriteria(mode);
+            total = contactService.countContacts(criteria);
             settings =  getViewSettings(mode,total);
         } else {
             criteria = new SearchCriteria();
             settings = new ViewSettings();
             settings.countPages(total);
         }
-
         List<Contact> contacts= contactService.getShowContacts(criteria,settings);
         session.setAttribute("criteria",criteria);
         session.setAttribute("settings",settings);
