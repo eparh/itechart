@@ -12,7 +12,7 @@ public class SearchCommand implements ActionCommand {
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
         HttpSession session = request.getSession();
-        //Удаляем из сессии attachment-ы
+        //Deleting attachments from session
         session.removeAttribute("attaches");
 
         return "/jsp/search.jsp";

@@ -1,5 +1,6 @@
 package command;
 
+import command.exception.CommandException;
 import service.ContactService;
 import service.ServiceFactory;
 import command.util.ContactUtil;
@@ -14,15 +15,18 @@ public class AvatarCommand implements ActionCommand {
     private ContactService contactService = ServiceFactory.getContactService();
 
     @Override
-    public String execute(HttpServletRequest request, HttpServletResponse response)  throws IOException {
+    public String execute(HttpServletRequest request, HttpServletResponse response)   {
         //Определение ID контакта
         String temp = request.getParameter("idContact");
         String[] chosen = request.getParameterValues("marked");
-
         Long idContact = ContactUtil.findOutIdContact(temp,chosen);
 
         Properties properties = new Properties();
-        properties.load(AvatarCommand.class.getResourceAsStream("/avatars.properties"));
+        try {
+            properties.load(AvatarCommand.class.getResourceAsStream("/avatars.properties"));
+        } catch (IOException e) {
+            throw new CommandException("Error while rendering avatar", e);
+        }
 
         String path;
         HttpSession session = request.getSession();
@@ -48,15 +52,16 @@ public class AvatarCommand implements ActionCommand {
         response.setHeader("Content-Length", String.valueOf(file.length()));
         response.setHeader("Content-Disposition", "avatar; filename=\"" + file.getName() + "\"");
 
-        OutputStream out = response.getOutputStream();
-        FileInputStream in = new FileInputStream(file);
-        byte[] buffer = new byte[buffSize];
-        int length;
-        while ((length = in.read(buffer)) > 0) {
-            out.write(buffer, 0, length);
+        try(OutputStream out = response.getOutputStream();
+            FileInputStream in = new FileInputStream(file)) {
+            byte[] buffer = new byte[buffSize];
+            int length;
+            while ((length = in.read(buffer)) > 0) {
+                out.write(buffer, 0, length);
+            }
+        } catch (IOException e) {
+            throw new CommandException("Error while rendering avatar", e);
         }
-        in.close();
-        out.flush();
 
         return null;
     }

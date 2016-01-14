@@ -1,6 +1,7 @@
 package command;
 
 
+import command.exception.CommandException;
 import command.util.ContactUtil;
 
 import javax.servlet.ServletException;
@@ -14,10 +15,15 @@ import java.util.Properties;
 
 public class AttachCommand implements ActionCommand {
     @Override
-    public String execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public String execute(HttpServletRequest request, HttpServletResponse response) {
         Properties properties = new Properties();
-        properties.load(AvatarCommand.class.getResourceAsStream("/attach.properties"));
-        //Определение ID контакта
+        try {
+            properties.load(AvatarCommand.class.getResourceAsStream("/attach.properties"));
+        } catch (IOException e) {
+            throw  new CommandException("Error while getting attachment",e);
+        }
+
+        //Getting ID of contact
         String temp = request.getParameter("idContact");
         String[] chosen = request.getParameterValues("marked");
         Long idContact = ContactUtil.findOutIdContact(temp,chosen);
@@ -41,15 +47,16 @@ public class AttachCommand implements ActionCommand {
         response.setHeader("Content-Length", String.valueOf(file.length()));
         response.setHeader("Content-Disposition", "attachment; filename=\"" + file.getName() + "\"");
 
-        OutputStream out = response.getOutputStream();
-        FileInputStream in = new FileInputStream(file);
-        byte[] buffer = new byte[buffSize];
-        int length;
-        while ((length = in.read(buffer)) > 0) {
-            out.write(buffer, 0, length);
+        try (OutputStream out = response.getOutputStream();
+             FileInputStream in = new FileInputStream(file)) {
+            byte[] buffer = new byte[buffSize];
+            int length;
+            while ((length = in.read(buffer)) > 0) {
+                out.write(buffer, 0, length);
+            }
+        } catch (IOException e) {
+            throw  new CommandException("Error while getting attachment",e);
         }
-        in.close();
-        out.flush();
 
         return null;
     }

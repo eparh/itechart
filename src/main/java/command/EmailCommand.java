@@ -1,5 +1,7 @@
 package command;
 
+import command.exception.CommandException;
+
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
@@ -12,23 +14,27 @@ import java.util.Properties;
 
 public class EmailCommand implements ActionCommand{
     @Override
-    public String execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public String execute(HttpServletRequest request, HttpServletResponse response) {
         String address = request.getParameter("address");
         String subject = request.getParameter("subject");
         String text = request.getParameter("text");
 
         Properties properties = new Properties();
-        properties.load(EmailCommand.class.getResourceAsStream("/email.properties"));
-        String sender = properties.getProperty("mail.user.name");
+        try {
+            properties.load(EmailCommand.class.getResourceAsStream("/email.properties"));
+            String sender = properties.getProperty("mail.user.name");
 
-        Session session = Session.getDefaultInstance(properties,
-                new javax.mail.Authenticator() {
-                    protected PasswordAuthentication getPasswordAuthentication() {
-                        return new PasswordAuthentication(sender, properties.getProperty("mail.user.password"));
-                    }
-                });
+            Session session = Session.getDefaultInstance(properties,
+                    new javax.mail.Authenticator() {
+                        protected PasswordAuthentication getPasswordAuthentication() {
+                            return new PasswordAuthentication(sender, properties.getProperty("mail.user.password"));
+                        }
+                    });
 
-        sendEmail(address, subject, text, properties, sender, session);
+            sendEmail(address, subject, text, properties, sender, session);
+        } catch (IOException e) {
+            throw new CommandException("Error while sending email", e);
+        }
         request.setAttribute("message","Message is successfully sent");
         return "/controller?command=show";
     }

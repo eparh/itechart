@@ -1,7 +1,6 @@
 package command;
 
-
-
+import command.exception.CommandException;
 import command.util.TemplateContainer;
 import util.GeneralUtil;
 import persistence.model.Contact;
@@ -20,10 +19,10 @@ public class ShowCommand implements ActionCommand {
     private ContactService contactService = ServiceFactory.getContactService();
     private HttpServletRequest request;
     private ViewSettings settings;
-    private SearchCriteria criteria = new SearchCriteria();
+    private SearchCriteria criteria;
 
     @Override
-    public String execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public String execute(HttpServletRequest request, HttpServletResponse response) {
         this.request = request;
         HttpSession session = request.getSession();
 
@@ -32,13 +31,14 @@ public class ShowCommand implements ActionCommand {
 
         //For paging
         String mode = request.getParameter("mode");
-        long total = contactService.countContacts(criteria);
+        long total;
         if(mode != null) {
             criteria =  getSearchCriteria(mode);
             total = contactService.countContacts(criteria);
             settings =  getViewSettings(mode,total);
         } else {
             criteria = new SearchCriteria();
+            total = contactService.countContacts(criteria);
             settings = new ViewSettings();
             settings.countPages(total);
         }
@@ -86,7 +86,7 @@ public class ShowCommand implements ActionCommand {
                         }
                         break;
                     default:
-                        throw new IllegalArgumentException("Invalid mode: " + mode);
+                        throw new CommandException("Invalid contact's mode: " + mode);
                 }
             }
         } else {

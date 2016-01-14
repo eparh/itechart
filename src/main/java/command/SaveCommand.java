@@ -1,5 +1,6 @@
 package command;
 
+import command.exception.CommandException;
 import org.apache.commons.io.FileUtils;
 import persistence.model.Attach;
 import command.util.ContactUtil;
@@ -27,15 +28,20 @@ public class SaveCommand implements ActionCommand {
     private HttpSession session;
 
     @Override
-    public String execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+    public String execute(HttpServletRequest request, HttpServletResponse response)  {
         this.request = request;
         session = request.getSession();
         Contact contact = ContactUtil.makeContact(request);
         idContact = contactService.setContact(contact);
         savePhones();
-        saveAttaches();
+        String path;
 
-        String path =  getAvatar();
+        try {
+            saveAttaches();
+            path = getAvatar();
+        } catch (IOException | ServletException e) {
+            throw new CommandException("Error while saving contact", e);
+        }
 
         contactService.setPhoto(idContact,path);
         return "/controller?command=show";

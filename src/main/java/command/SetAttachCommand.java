@@ -1,6 +1,7 @@
 package command;
 
 
+import command.exception.CommandException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import persistence.model.Attach;
@@ -31,9 +32,13 @@ public class SetAttachCommand implements ActionCommand{
     private Logger logger = LogManager.getLogger(SetAttachCommand.class);
 
     @Override
-    public String execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public String execute(HttpServletRequest request, HttpServletResponse response)  {
         this.request = request;
-        properties.load(AvatarCommand.class.getResourceAsStream("/temp.properties"));
+        try {
+            properties.load(AvatarCommand.class.getResourceAsStream("/temp.properties"));
+        } catch (IOException e) {
+            throw new CommandException("Error is occurred with temporary attachment",e);
+        }
         HttpSession session = request.getSession();
 
         Contact contact = ContactUtil.makeContact(request);
@@ -58,7 +63,7 @@ public class SetAttachCommand implements ActionCommand{
             attachMap.put(attach.getName(), attach);
         }
         System.out.println(attachMap);
-        //Обрабока кнопок
+        //Processing of buttons
         String attach_mode =  request.getParameter("attach_mode");
         switch(attach_mode) {
             case "delete":
@@ -73,6 +78,7 @@ public class SetAttachCommand implements ActionCommand{
 
             case "add":
                 Attach attach = makeAttach();
+                //TODO
                 attachMap.put(attach.getName(),attach);
                 break;
 
@@ -82,10 +88,10 @@ public class SetAttachCommand implements ActionCommand{
                 break;
 
             default:
-                throw new IllegalArgumentException("Invalid mode: " + attach_mode);
+                throw new CommandException("Invalid attachment's mode : " + attach_mode);
         }
 
-        //Сохранение параметров формы
+        //Saving form's parameters
         saveTempAvatar();
 
         List<Phone> phones = ContactUtil.getPhones(request, null);
@@ -100,9 +106,7 @@ public class SetAttachCommand implements ActionCommand{
         return "/jsp/contact.jsp";
     }
 
-    private Attach makeAttach() throws IOException, ServletException {
-        Part filePart = request.getPart("attach");
-
+    private Attach makeAttach()  {
         Attach attach = new Attach();
 
         String savePath = properties.getProperty("TEMP_PATH");
@@ -116,16 +120,18 @@ public class SetAttachCommand implements ActionCommand{
         attach.setDate(date);
 
         attach.setComment(request.getParameter("attach_comment"));
-
-
-        if (filePart.getSize()>0) {
-            String fileName = GeneralUtil.extractFileName(filePart);
-            //savePath += File.separator + fileName;
-            Path saved = Files.createTempFile(Paths.get(savePath),"",fileName);
-            filePart.write(saved.toAbsolutePath().toString());
-            attach.setName(saved.getFileName().toString());
+        try {
+            Part filePart = request.getPart("attach");
+            if (filePart.getSize() > 0) {
+                String fileName = GeneralUtil.extractFileName(filePart);
+                //savePath += File.separator + fileName;
+                Path saved = Files.createTempFile(Paths.get(savePath), "", fileName);
+                filePart.write(saved.toAbsolutePath().toString());
+                attach.setName(saved.getFileName().toString());
+            }
+        } catch (IOException | ServletException e) {
+            throw new CommandException("Error is occurred with temporary attachment",e);
         }
-
         return attach;
     }
 
@@ -139,20 +145,23 @@ public class SetAttachCommand implements ActionCommand{
         return attach;
     }
 
-    private void saveTempAvatar() throws IOException, ServletException{
-        Part avaPart = request.getPart("avatar");
+    private void saveTempAvatar() {
         String savePath = properties.getProperty("TEMP_AVA");
         File fileSaveDir = new File(savePath);
         if (!fileSaveDir.exists()) {
             fileSaveDir.mkdir();
         }
-
-        if (avaPart.getSize()>0) {
-            String fileName = GeneralUtil.extractFileName(avaPart);
-            savePath += File.separator + fileName;
-            HttpSession session = request.getSession();
-            session.setAttribute("temp_path_avatar", savePath);
-            avaPart.write(savePath);
-        }
+       try {
+           Part avaPart = request.getPart("avatar");
+           if (avaPart.getSize() > 0) {
+               String fileName = GeneralUtil.extractFileName(avaPart);
+               savePath += File.separator + fileName;
+               HttpSession session = request.getSession();
+               session.setAttribute("temp_path_avatar", savePath);
+               avaPart.write(savePath);
+           }
+       } catch ( IOException | ServletException e) {
+           throw new CommandException("Error is occurred with temporary attachment",e);
+       }
     }
 }

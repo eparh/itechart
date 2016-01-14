@@ -19,7 +19,7 @@ public class GetCommand implements ActionCommand {
     private ContactService contactService = ServiceFactory.getContactService();
 
     @Override
-    public String execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public String execute(HttpServletRequest request, HttpServletResponse response) {
         HttpSession session = request.getSession();
         //Deleting attachments from session if it existed.
         session.removeAttribute("attaches");

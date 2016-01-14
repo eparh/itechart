@@ -1,5 +1,7 @@
 package command;
 
+import command.exception.CommandException;
+
 import javax.servlet.http.HttpServletRequest;
 
 public class ActionFactory {
@@ -13,7 +15,7 @@ public class ActionFactory {
             CommandEnum currentEnum = CommandEnum.valueOf(action.toUpperCase());
             current = currentEnum.getCurrentCommand();
         } catch (IllegalArgumentException e) {
-            throw new  IllegalArgumentException(e);
+            throw new CommandException("Error in ActionFactory",e);
         }
         return current;
     }
