@@ -246,7 +246,7 @@
                     </div>
                 </div>
 
-                <input form="form" type="hidden" name="attach_mode">
+                <input form="form" type="hidden" name="attachMode">
                 <button  onclick="attachService.saveAttach()" class="btn-default">Save</button>
                 <button onclick="attachService.cancelAttach()" class="btn-default">Cancel</button>
             </div>

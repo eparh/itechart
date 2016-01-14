@@ -85,7 +85,7 @@ public class ContactServiceImpl implements ContactService {
             fileNames.add(attach.getName());
         }
 
-        //Удаляем файлы из директории attachment-ов контакта, не находящиеся в списке имен файлов, которые хочет сохранить пользователь
+        //Deleting files which don't included in save list from save folder
         String[] files = saveDir.list();
         for (int i=0; i<files.length; i++) {
             File file = new File(saveDir, files[i]);
@@ -100,27 +100,28 @@ public class ContactServiceImpl implements ContactService {
             String[] temp_files = tempDir.list();
             for (int i=0; i<temp_files.length; i++) {
                 File file = new File(tempDir, temp_files[i]);
-                //Проверяем, имена файлов, чтобы случайно не перенести из темповой папки служебные файлы, мусор и т.д.
+                //Check names of files in temp for accurately moving to save folder
+                // without some service files(in Mac OS exists) trashes etc
                 if(fileNames.contains(file.getName())) {
                     FileUtils.moveFileToDirectory(file,saveDir, true);
                 }
             }
         }
 
-        Map<String,Attach> toSaveAttaches = new HashMap<>();
-        //Дозаполняем поля, для новых attachment-ов
+        List<Attach> toSaveAttaches = new ArrayList<>();
+        //Fill fields for new attachments поля
 
         for(Attach attach: attachList) {
             if (attach.getIdAttach() == null) {
                 attach.setPath(savePath + File.separator + attach.getName());
                 attach.setIdContact(idContact);
-                toSaveAttaches.put(attach.getName(),attach);
+                toSaveAttaches.add(attach);
             } else {
-                toSaveAttaches.put(attach.getName(),attach);
+                toSaveAttaches.add(attach);
             }
         }
 
-        contactDao.setAttaches(idContact,toSaveAttaches.values());
+        contactDao.setAttaches(idContact,toSaveAttaches);
     }
 
     @Override

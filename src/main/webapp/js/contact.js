@@ -176,7 +176,7 @@ var attachService = {
             return false;
         }
         form.command.value = 'setattach';
-        form.attach_mode.value = 'delete';
+        form.attachMode.value = 'delete';
         form.submit();
     },
 
@@ -185,7 +185,7 @@ var attachService = {
         var table = document.getElementById("attachTable");
         var checkboxes = document.getElementsByName('attaches');
 
-        document.getElementById("form").attach_mode.value = "edit";
+        document.getElementById("form").attachMode.value = "edit";
 
         var input_file = document.getElementById("b_attach");
         var file_name = document.getElementById("b_file_name");
@@ -195,7 +195,6 @@ var attachService = {
         for (var i=0; i<checkboxes.length; i++) {
             if (checkboxes[i].checked) {
                 var row = table.rows[i];
-                alert(row.cells[4].firstElementChild.value);
                 document.getElementById("file_name").value = row.cells[4].firstElementChild.value;
                 comment.value = row.cells[3].firstElementChild.value;
                 openbox(this.popUp);
@@ -210,7 +209,7 @@ var attachService = {
         var file_name = document.getElementById("b_file_name");
         input_file.style.display = "initial";
         file_name.style.display = "none";
-        document.getElementById("form").attach_mode.value = "add";
+        document.getElementById("form").attachMode.value = "add";
         openbox(this.popUp);
     },
 

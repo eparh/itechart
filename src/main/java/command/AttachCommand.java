@@ -62,6 +62,7 @@ public class AttachCommand implements ActionCommand {
         }
 
         logger.info("Downloading attachment");
+        //The response is already made. It includes attachment. Therefore we returned null
         return null;
     }
 }

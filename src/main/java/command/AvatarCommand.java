@@ -66,6 +66,7 @@ public class AvatarCommand implements ActionCommand {
         }
 
         logger.info("Rendoring avatar");
+        //The response is already made. It includes avatar. Therefore we returned null
         return null;
     }
 

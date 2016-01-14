@@ -7,10 +7,12 @@ import persistence.model.Attach;
 import util.GeneralUtil;
 import service.ContactService;
 import service.ServiceFactory;
+import util.MyFileUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 
@@ -28,21 +30,21 @@ public class DeleteCommand implements ActionCommand {
             deleteAttaches(idContact);
             contactService.deleteContact(idContact);
         }
-        logger.info("Deleting contact");
+        logger.info("Deleting contact with id="+ Arrays.toString(chosen));
         return "/controller?command=show";
     }
 
     private void deletePhoto(long idContact) {
         String avatarPath = contactService.getPhoto(idContact);
         if (avatarPath != null) {
-            GeneralUtil.deleteOnPath(avatarPath);
+            MyFileUtil.deleteOnPath(avatarPath);
         }
     }
 
     private void deleteAttaches(long idContact) {
         List<Attach> attaches = contactService.getAttaches(idContact);
         for(Attach attach:attaches) {
-            GeneralUtil.deleteOnPath(attach.getPath());
+            MyFileUtil.deleteOnPath(attach.getPath());
         }
     }
 }

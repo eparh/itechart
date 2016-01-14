@@ -11,6 +11,7 @@ import persistence.model.Contact;
 import persistence.model.Phone;
 import service.ContactService;
 import service.ServiceFactory;
+import util.MyFileUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -47,7 +48,7 @@ public class SaveCommand implements ActionCommand {
         }
 
         contactService.setPhoto(idContact,path);
-        logger.info("Saving contact");
+        logger.info("Saving contact with full name:"+contact.getFullName());
         return "/controller?command=show";
     }
 
@@ -72,16 +73,16 @@ public class SaveCommand implements ActionCommand {
 
         Part filePart = request.getPart("avatar");
         if(filePart.getSize()>0) {
-            savePath += File.separator + idContact + GeneralUtil.extractFileExtension(filePart);
+            savePath += File.separator + idContact + MyFileUtil.extractFileExtension(filePart);
             filePart.write(savePath);
         } else {
-            String temp_path = (String)session.getAttribute("temp_path_avatar");
-            if( temp_path != null) {
+            String tempPath = (String)session.getAttribute("temp_path_avatar");
+            if( tempPath != null) {
                 session.removeAttribute("temp_path_avatar");
-                File temp_avatar = new File(temp_path);
-                temp_avatar = GeneralUtil.renameFile(idContact,temp_avatar);
-                FileUtils.moveFileToDirectory(temp_avatar,fileSaveDir,true);
-                savePath += File.separator + temp_avatar.getName();
+                File tempAvatar = new File(tempPath);
+                tempAvatar = MyFileUtil.renameFile(idContact,tempAvatar);
+                FileUtils.moveFileToDirectory(tempAvatar,fileSaveDir,true);
+                savePath += File.separator + tempAvatar.getName();
             } else {
                 return null;
             }

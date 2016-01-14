@@ -10,7 +10,7 @@ import persistence.model.Phone;
 import service.ContactService;
 import service.ServiceFactory;
 import command.util.ContactUtil;
-import util.GeneralUtil;
+import util.MyFileUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -64,8 +64,8 @@ public class SetAttachCommand implements ActionCommand{
         }
         System.out.println(attachMap);
         //Processing of buttons
-        String attach_mode =  request.getParameter("attach_mode");
-        switch(attach_mode) {
+        String attachMode =  request.getParameter("attachMode");
+        switch(attachMode) {
             case "delete":
                 String [] chosen_attaches =  request.getParameterValues("attaches");
                 if(chosen_attaches != null) {
@@ -78,17 +78,16 @@ public class SetAttachCommand implements ActionCommand{
 
             case "add":
                 Attach attach = makeAttach();
-                //TODO
                 attachMap.put(attach.getName(),attach);
                 break;
 
             case "edit":
-                Attach edit_attach = prepareForEdit();
-                attachMap.put(edit_attach.getName(), edit_attach);
+                Attach editAttach = prepareForEdit();
+                attachMap.put(editAttach.getName(), editAttach);
                 break;
 
             default:
-                throw new CommandException("Invalid attachment's mode : " + attach_mode);
+                throw new CommandException("Invalid attachment's mode : " + attachMode);
         }
 
         //Saving form's parameters
@@ -123,8 +122,7 @@ public class SetAttachCommand implements ActionCommand{
         try {
             Part filePart = request.getPart("attach");
             if (filePart.getSize() > 0) {
-                String fileName = GeneralUtil.extractFileName(filePart);
-                //savePath += File.separator + fileName;
+                String fileName = MyFileUtil.extractFileName(filePart);
                 Path saved = Files.createTempFile(Paths.get(savePath), "", fileName);
                 filePart.write(saved.toAbsolutePath().toString());
                 attach.setName(saved.getFileName().toString());
@@ -154,7 +152,7 @@ public class SetAttachCommand implements ActionCommand{
        try {
            Part avaPart = request.getPart("avatar");
            if (avaPart.getSize() > 0) {
-               String fileName = GeneralUtil.extractFileName(avaPart);
+               String fileName = MyFileUtil.extractFileName(avaPart);
                savePath += File.separator + fileName;
                HttpSession session = request.getSession();
                session.setAttribute("temp_path_avatar", savePath);

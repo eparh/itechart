@@ -16,10 +16,14 @@ import java.util.concurrent.TimeUnit;
 
 public enum CheckBirthdayUtil {
     INSTANCE;
+
     public static CheckBirthdayUtil getInstance() {
         return  INSTANCE;
     }
     private ContactService contactService = ServiceFactory.getContactService();
+    private final String ADDRESS = "egenpark@gmail.com";
+    private final String SUBJECT = "Birthday boys";
+
     private final ScheduledExecutorService scheduler =
             Executors.newScheduledThreadPool(1);
 
@@ -42,8 +46,6 @@ public enum CheckBirthdayUtil {
     }
 
     private void sendEmailToAdmin() {
-        String address = "egenpark@gmail.com";
-        String subject = "Birthday boys";
         String text = makeMessage();
 
         Properties properties = new Properties();
@@ -62,24 +64,14 @@ public enum CheckBirthdayUtil {
                 });
 
         try {
-            sendEmail(address, subject, text, properties, sender, session);
-
-        } catch (MessagingException | UnsupportedEncodingException e) {
-            throw new RuntimeException(e);
+            EmailUtil.sendEmail(ADDRESS, SUBJECT, text, properties, sender, session);
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException("Error while sending email about birthday",e);
         }
 
     }
 
-    private void sendEmail(String address, String subject, String text, Properties properties, String sender, Session session) throws MessagingException, UnsupportedEncodingException {
-        Message message = new MimeMessage(session);
-        message.setFrom(new InternetAddress(sender, properties.getProperty("ADMIN-NAME")));
-        message.addRecipients(Message.RecipientType.BCC,
-                InternetAddress.parse(address));
-        message.setSubject(subject);
-        message.setText(text);
 
-        Transport.send(message);
-    }
 
     private List<Contact> whoHave() {
         List<Contact> contacts = contactService.getBirthdayContacts();
@@ -94,8 +86,6 @@ public enum CheckBirthdayUtil {
 
     private boolean isBirthday(Contact contact) {
         Date birthday = new Date(contact.getBirthday().getTime());
-        //Date now = new Date();
-        // your date
         Calendar cal = Calendar.getInstance();
         int nowMonth = cal.get(Calendar.MONTH);
         int nowDayOfMonth = cal.get(Calendar.DAY_OF_MONTH);

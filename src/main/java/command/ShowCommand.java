@@ -20,7 +20,7 @@ public class ShowCommand implements ActionCommand {
     private ContactService contactService = ServiceFactory.getContactService();
     private HttpServletRequest request;
     private ViewSettings settings;
-    private SearchCriteria criteria;
+    private SearchCriteria criteria = new SearchCriteria();
 
     private Logger logger = LogManager.getLogger(ShowCommand.class);
 
@@ -34,14 +34,13 @@ public class ShowCommand implements ActionCommand {
 
         //For paging
         String mode = request.getParameter("mode");
-        long total;
+        long  total = contactService.countContacts(criteria);
         if(mode != null) {
             criteria =  getSearchCriteria(mode);
             total = contactService.countContacts(criteria);
             settings =  getViewSettings(mode,total);
         } else {
             criteria = new SearchCriteria();
-            total = contactService.countContacts(criteria);
             settings = new ViewSettings();
             settings.countPages(total);
         }

@@ -38,7 +38,7 @@ public class GetCommand implements ActionCommand {
         request.setAttribute("contact",contact);
         request.setAttribute("mode","edit");
         request.setAttribute("phones",phones);
-        logger.info("Getting of contact");
+        logger.info("Getting of contact with id="+idContact);
         return "/jsp/contact.jsp";
     }
 }

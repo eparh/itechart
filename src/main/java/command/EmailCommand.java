@@ -5,6 +5,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import service.ContactService;
 import service.ServiceFactory;
+import util.EmailUtil;
 
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
@@ -37,28 +38,14 @@ public class EmailCommand implements ActionCommand{
                         }
                     });
 
-            sendEmail(address, subject, text, properties, sender, session);
+            EmailUtil.sendEmail(address, subject, text, properties, sender, session);
         } catch (IOException e) {
             throw new CommandException("Error while sending email", e);
         }
         request.setAttribute("message","Message is successfully sent");
-        logger.info("Sending email");
+        logger.info("Sending email:"+address);
         return "/controller?command=show";
     }
 
-    private void sendEmail(String address, String subject, String text, Properties properties, String sender, Session session) throws UnsupportedEncodingException {
-        try {
-            Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(sender, properties.getProperty("ADMIN-NAME")));
-            message.addRecipients(Message.RecipientType.BCC,
-                    InternetAddress.parse(address));
-            message.setSubject(subject);
-            message.setText(text);
 
-            Transport.send(message);
-
-        } catch (MessagingException e) {
-            throw new RuntimeException(e);
-        }
-    }
 }

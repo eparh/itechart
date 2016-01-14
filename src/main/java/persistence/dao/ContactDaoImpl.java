@@ -238,7 +238,7 @@ public class ContactDaoImpl implements ContactDao {
     public List<Contact> forBirthdayContacts() {
         List<Contact> list = new ArrayList<>();
         try (Connection connection = source.getConnection();
-             PreparedStatement statement = connection.prepareStatement("SELECT `name`, surname, middName, birthday," +
+             PreparedStatement statement = connection.prepareStatement("SELECT `name`, surname, middName, birthday" +
                      " FROM Contact")) {
             try (ResultSet set = statement.executeQuery()) {
                 while (set.next()) {
