@@ -99,3 +99,13 @@ function informUser() {
     var message = document.getElementById("afterEmailing").value;
     if(message != "")  alert(message);
 }
+function setTemplate() {
+    var idTemplate = document.getElementById("template").value;
+    var text = document.getElementById("text");
+    if( idTemplate == "Without template") {
+        text.value = "";
+        return false;
+    }
+    var template = document.getElementById(idTemplate).value;
+    text.value = template;
+}

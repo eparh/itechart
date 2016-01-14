@@ -48,6 +48,10 @@
     </div>
 </div>
 
+<c:forEach items="${templates}" var="template" varStatus="num">
+    <input type="hidden" id="${template.key}" value="${template.value}">
+</c:forEach>
+
 <div id="emailPopUp" style="display:none">
     <div class="tt">
         <div class="container">
@@ -74,9 +78,10 @@
                 <div class="form-group">
                     <label for="template" class="control-label col-sm-1">Template:</label>
                     <div class="col-sm-7">
-                        <select name="template" class="form-control" id="template">
-                            <option>Template1</option>
-                            <option>Template2</option>
+                        <select name="template" class="form-control" id="template" onchange="setTemplate()">
+                            <option>Without template</option>
+                            <option>Message to friend</option>
+                            <option>Message to boss</option>
                         </select>
                     </div>
                 </div>
@@ -84,7 +89,7 @@
                 <div class="form-group">
                     <label class="control-label col-sm-1" for="text">Text:</label>
                     <div class="col-sm-7">
-                        <textarea  class="form-control" rows="9" name="text" id="text" placeholder="Type message..." required ></textarea>
+                        <textarea  class="form-control" rows="8" name="text" id="text" placeholder="Type message..." required ></textarea>
                     </div>
                 </div>
             </form>
@@ -139,7 +144,6 @@
 </div>
 </body>
 <script>
-    // self executing function here
     (function() {
        informUser();
 

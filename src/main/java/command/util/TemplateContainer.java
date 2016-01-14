@@ -1,5 +1,7 @@
 package command.util;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.stringtemplate.v4.ST;
 
 import java.io.BufferedReader;
@@ -14,12 +16,12 @@ public enum TemplateContainer {
     public static TemplateContainer getInstance() {
         return INSTANCE;
     }
+    private Logger logger = LogManager.getLogger(TemplateContainer.class);
     TemplateContainer() {
         try {
             init();
         } catch (Exception e) {
-            //TODO logger
-            e.printStackTrace();
+            logger.error("Error while creating template", e);
         }
     }
     private Map<String, String> templates;
@@ -30,9 +32,8 @@ public enum TemplateContainer {
 
     private void init() throws IOException {
         templates = new HashMap<>();
-        templates.put("Template1", createTemplate("template1.st"));
-        templates.put("Template2", createTemplate("template2.st"));
-        System.out.println(templates);
+        templates.put("Message to friend", createTemplate("template1.st"));
+        templates.put("Message to boss", createTemplate("template2.st"));
     }
 
     private String createTemplate(String resourceFileName) throws IOException {

@@ -107,12 +107,14 @@ public enum CheckBirthdayUtil {
 
     private String makeMessage() {
         List<Contact> contacts = whoHave();
-        String message = "";
+        if(contacts.size() == 0) {
+            return "Nobody has birthday today.";
+        }
+        String message = "Birthday boys:\n";
         int count = 0;
         for (Contact contact: contacts) {
             count ++;
-            message  += count + ". " + contact.getFullName() +", address:"+ contact.getAddress() + ", company" + contact.getCompany() +
-                    ", email:" + contact.getEmail() + "\n";
+            message  += count + ". " + contact.getFullName() + "\n";
         }
         return  message;
     }
