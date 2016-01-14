@@ -27,12 +27,11 @@ public class ShowCommand implements ActionCommand {
         this.request = request;
         HttpSession session = request.getSession();
 
-        //Удаляем из сессии attachment-ы
+        //Deleting attachments from session
         session.removeAttribute("attaches");
 
-        //Для paging-a
+        //For paging
         String mode = request.getParameter("mode");
-
         long total = contactService.countContacts(criteria);
 
         if(mode != null) {
@@ -61,10 +60,10 @@ public class ShowCommand implements ActionCommand {
         HttpSession session = request.getSession();
         String requestCount = request.getParameter("countRecords");
 
-        //Смотрим, проводил ли пользователь действия на текущей странице
+        //Check for user's action on page
         if (requestCount == null) {
             ViewSettings sessSettings = (ViewSettings) session.getAttribute("settings");
-            //Если нет, то проверяем не пришел ли пользователь с другой страницы сайта.
+            //If no action, then check for coming from another page of site
             if (sessSettings != null) {
                 settings = sessSettings;
                 settings.countPages(total);

@@ -1,0 +1,37 @@
+body {
+    background-color: gainsboro;
+}
+h1 {
+    font-size: 2000%;
+    margin-top: 10px;
+    margin-bottom: 5px;
+}
+h2 {
+    margin-top: 70px;
+    font-size: 450%;
+}
+button {
+    background-color: black;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 20px;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: black;
+    border: none;
+    color: cornflowerblue;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 22px;
+    margin: 4px 2px;
+    cursor: pointer;
+}

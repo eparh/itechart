@@ -26,7 +26,6 @@
         </div>
     </div>
 </nav>
-
 <form action="/controller" id="checkbox" method="post">
     <input type="hidden" name="command">
     <input type="hidden" name="idContact">
