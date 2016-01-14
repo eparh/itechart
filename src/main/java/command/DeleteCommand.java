@@ -4,17 +4,14 @@ package command;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import persistence.model.Attach;
-import util.GeneralUtil;
 import service.ContactService;
 import service.ServiceFactory;
 import util.MyFileUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Properties;
 
 public class DeleteCommand implements ActionCommand {
     private ContactService contactService = ServiceFactory.getContactService();

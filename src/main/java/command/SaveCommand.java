@@ -80,7 +80,6 @@ public class SaveCommand implements ActionCommand {
             if( tempPath != null) {
                 session.removeAttribute("temp_path_avatar");
                 File tempAvatar = new File(tempPath);
-                tempAvatar = MyFileUtil.renameFile(idContact,tempAvatar);
                 FileUtils.moveFileToDirectory(tempAvatar,fileSaveDir,true);
                 savePath += File.separator + tempAvatar.getName();
             } else {
