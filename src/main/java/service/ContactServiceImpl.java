@@ -17,7 +17,7 @@ public class ContactServiceImpl implements ContactService {
 
     @Override
     public List<Contact> getShowContacts(SearchCriteria criteria,ViewSettings settings) {
-        return contactDao.getShowContacts(criteria,settings);
+        return contactDao.getToShowContacts(criteria,settings);
     }
 
     @Override
@@ -125,6 +125,6 @@ public class ContactServiceImpl implements ContactService {
 
     @Override
     public List<Contact> getBirthdayContacts() {
-        return contactDao.birthdayContacts();
+        return contactDao.forBirthdayContacts();
     }
 }

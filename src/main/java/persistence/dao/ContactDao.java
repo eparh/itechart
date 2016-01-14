@@ -29,7 +29,7 @@ public interface ContactDao {
 
     void deleteContact(Long idContact);
 
-    List<Contact> getShowContacts(SearchCriteria criteria, ViewSettings settings);
+    List<Contact> getToShowContacts(SearchCriteria criteria, ViewSettings settings);
 
     void insertPhone(Phone phone);
 
@@ -48,5 +48,5 @@ public interface ContactDao {
 
     void setAttaches(long idContact,Collection<Attach> attaches);
 
-    List<Contact> birthdayContacts();
+    List<Contact> forBirthdayContacts();
 }

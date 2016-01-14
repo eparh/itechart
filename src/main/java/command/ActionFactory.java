@@ -13,7 +13,7 @@ public class ActionFactory {
             CommandEnum currentEnum = CommandEnum.valueOf(action.toUpperCase());
             current = currentEnum.getCurrentCommand();
         } catch (IllegalArgumentException e) {
-            request.setAttribute("wrongAction", "wrongAction");
+            throw new  IllegalArgumentException(e);
         }
         return current;
     }

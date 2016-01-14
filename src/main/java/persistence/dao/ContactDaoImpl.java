@@ -8,7 +8,6 @@ import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 
 public class ContactDaoImpl implements ContactDao {
@@ -23,8 +22,8 @@ public class ContactDaoImpl implements ContactDao {
     public Contact getById(Long idContact) {
         Contact contact = new Contact();
         try (Connection connection = source.getConnection();
-             PreparedStatement statement = connection.prepareStatement("SELECT * FROM Contact AS c LEFT JOIN Address AS a " +
-                     "ON c.idAddress = a.idAddress WHERE idContact = ?")) {
+             PreparedStatement statement = connection.prepareStatement("SELECT * FROM Contact AS c LEFT JOIN" +
+                     " Address AS a ON c.idAddress = a.idAddress WHERE idContact = ?")) {
             statement.setString(1, Long.toString(idContact));
             try (ResultSet set = statement.executeQuery()) {
                 while (set.next()) {
@@ -41,7 +40,7 @@ public class ContactDaoImpl implements ContactDao {
                     contact.setEmail(set.getString("email"));
                     contact.setPhoto(set.getString("photo"));
 
-                    //Получаем адрес
+                    //Getting address
                     Address address = new Address();
                     address.setIdAddress(set.getLong("idAddress"));
                     address.setCountry(set.getString("country"));
@@ -52,7 +51,7 @@ public class ContactDaoImpl implements ContactDao {
                 }
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DaoException("Error while getting contacts by ID", e);
         }
         return contact;
     }
@@ -83,7 +82,7 @@ public class ContactDaoImpl implements ContactDao {
                 }
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DaoException("Error while getting phones of contact", e);
         }
         return list;
     }
@@ -91,8 +90,8 @@ public class ContactDaoImpl implements ContactDao {
     @Override
     public void insertPhone(Phone phone){
         try (Connection connection = source.getConnection()){
-            try (PreparedStatement statement = connection.prepareStatement("INSERT INTO Telephone(countryCode,operatorCode,`number`,kind,comment," +
-                    "idContact ) VALUES (?,?,?,?,?,?)")) {
+            try (PreparedStatement statement = connection.prepareStatement("INSERT INTO Telephone(countryCode," +
+                    "operatorCode,`number`,kind,comment,idContact ) VALUES (?,?,?,?,?,?)")) {
                 statement.setString(1,phone.getCountryCode());
                 statement.setString(2,phone.getOperatorCode());
                 statement.setString(3,phone.getNumber());
@@ -103,7 +102,7 @@ public class ContactDaoImpl implements ContactDao {
                 statement.executeUpdate();
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DaoException("Error while inserting phone of contact", e);
         }
     }
 
@@ -130,7 +129,8 @@ public class ContactDaoImpl implements ContactDao {
     public String getPhoto(long idContact) {
         String path = null;
         try (Connection connection = source.getConnection();
-             PreparedStatement statement = connection.prepareStatement("SELECT photo FROM Contact WHERE idContact = ?")) {
+             PreparedStatement statement = connection.prepareStatement("SELECT photo FROM Contact" +
+                     " WHERE idContact = ?")) {
             statement.setLong(1, idContact);
             try (ResultSet set = statement.executeQuery()) {
                 if (set.next()) {
@@ -138,7 +138,7 @@ public class ContactDaoImpl implements ContactDao {
                 }
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DaoException("Error while getting photo of contact", e);
         }
         return path;
     }
@@ -146,13 +146,14 @@ public class ContactDaoImpl implements ContactDao {
     @Override
     public void setPhoto(long idContact, String path) {
         try (Connection connection = source.getConnection()) {
-            try (PreparedStatement statement = connection.prepareStatement("UPDATE Contact SET photo = ? WHERE idContact = ?")) {
+            try (PreparedStatement statement = connection.prepareStatement("UPDATE Contact SET photo = ? " +
+                    "WHERE idContact = ?")) {
                 statement.setString(1, path);
                 statement.setLong(2,idContact);
                 statement.executeUpdate();
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DaoException("Error while setting photo of contact", e);
         }
     }
 
@@ -180,7 +181,7 @@ public class ContactDaoImpl implements ContactDao {
                 }
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DaoException("Error while counting contacts", e);
         }
         return total;
     }
@@ -205,7 +206,7 @@ public class ContactDaoImpl implements ContactDao {
                 }
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DaoException("Error while getting attachment of contact", e);
         }
         return attaches;
     }
@@ -213,8 +214,8 @@ public class ContactDaoImpl implements ContactDao {
     @Override
     public void insertAttach(Attach attach) {
         try (Connection connection = source.getConnection()){
-            try (PreparedStatement statement = connection.prepareStatement("INSERT INTO Attachment(path,`name`,`date`,comment," +
-                    "idContact ) VALUES (?,?,?,?,?)")) {
+            try (PreparedStatement statement = connection.prepareStatement("INSERT INTO Attachment(path,`name`," +
+                    "`date`,comment,idContact ) VALUES (?,?,?,?,?)")) {
                 statement.setString(1, attach.getPath());
                 statement.setString(2, attach.getName());
                 statement.setDate(3, attach.getDate());
@@ -223,7 +224,7 @@ public class ContactDaoImpl implements ContactDao {
                 statement.executeUpdate();
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DaoException("Error while inserting contact's attachment", e);
         }
     }
 
@@ -234,11 +235,11 @@ public class ContactDaoImpl implements ContactDao {
     }
 
     @Override
-    public List<Contact> birthdayContacts() {
+    public List<Contact> forBirthdayContacts() {
         List<Contact> list = new ArrayList<>();
         try (Connection connection = source.getConnection();
              PreparedStatement statement = connection.prepareStatement("SELECT `name`, surname, middName, birthday," +
-                     " email, company FROM Contact")) {
+                     " FROM Contact")) {
             try (ResultSet set = statement.executeQuery()) {
                 while (set.next()) {
                     Contact contact = new Contact();
@@ -246,8 +247,6 @@ public class ContactDaoImpl implements ContactDao {
                     contact.setName(set.getString("name"));
                     contact.setMidName(set.getString("middName"));
                     contact.setBirthday(set.getDate("birthday"));
-                    contact.setEmail(set.getString("email"));
-                    contact.setCompany(set.getString("company"));
 
                     list.add(contact);
                 }
@@ -259,12 +258,12 @@ public class ContactDaoImpl implements ContactDao {
     }
 
     @Override
-    public List<Contact> getShowContacts(SearchCriteria criteria, ViewSettings settings) {
+    public List<Contact> getToShowContacts(SearchCriteria criteria, ViewSettings settings) {
         List<String> paramStrList = new ArrayList<>();
         List<Date> paramDateList = new ArrayList<>();
         List<Contact> list = new ArrayList<>();
-        String query = "SELECT idContact, `name`, surname, middName, birthday, company, country, city, address, email," +
-                " `index` from Contact AS c LEFT JOIN Address AS a ON c.idAddress = a.idAddress";
+        String query = "SELECT idContact, `name`, surname, middName, birthday, company, country, city, address," +
+                " email,`index` from Contact AS c LEFT JOIN Address AS a ON c.idAddress = a.idAddress";
         query = makeSelectQuery(query,criteria, paramStrList, paramDateList);
         query +=" LIMIT ? , ?";
         try (Connection connection = source.getConnection();
@@ -302,7 +301,7 @@ public class ContactDaoImpl implements ContactDao {
                 }
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DaoException("Error while getting contacts for showing", e);
         }
         return list;
     }
@@ -326,7 +325,7 @@ public class ContactDaoImpl implements ContactDao {
                 generatedKeys.next();
                 return generatedKeys.getLong(1);
             } catch (SQLException e) {
-                throw new RuntimeException(e);
+                throw new DaoException("Error while inserting address of contact", e);
             }
         } else {
             try (Connection connection = source.getConnection();
@@ -343,7 +342,7 @@ public class ContactDaoImpl implements ContactDao {
 
                 return idAddress;
             } catch (SQLException e) {
-                throw new RuntimeException(e);
+                throw new DaoException("Error while updating address of contact", e);
             }
         }
     }
@@ -358,8 +357,8 @@ public class ContactDaoImpl implements ContactDao {
 
     private long insertContact(Contact contact) {
         try (Connection connection = source.getConnection()) {
-            try (PreparedStatement statement = connection.prepareStatement("INSERT INTO Contact(`name`,surname,middName," +
-                    "birthday,email," +
+            try (PreparedStatement statement = connection.prepareStatement("INSERT INTO Contact(`name`,surname," +
+                    "middName,birthday,email," +
                     " gender,maritStatus,`national`, website, company, idAddress ) VALUES (?,?,?,?,?,?,?,?,?,?,? )",
                     Statement.RETURN_GENERATED_KEYS)) {
                 statement.setString(1, contact.getName());
@@ -383,13 +382,12 @@ public class ContactDaoImpl implements ContactDao {
                 return generatedKeys.getLong(1);
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DaoException("Error while inserting contact", e);
         }
     }
 
     private void updateContact(Contact contact) {
         try (Connection connection = source.getConnection()) {
-
             try (PreparedStatement statement = connection.prepareStatement("UPDATE Contact  SET surname = ?, " +
                     "`name`= ?, middName = ?," +
                     " birthday = ?,  email = ?, gender = ? , maritStatus = ?, `national`= ?, " +
@@ -413,7 +411,7 @@ public class ContactDaoImpl implements ContactDao {
                 statement.executeUpdate();
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DaoException("Error while updating contact", e);
         }
     }
 
@@ -423,7 +421,7 @@ public class ContactDaoImpl implements ContactDao {
             statement.setLong(1, idContact);
             statement.execute();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DaoException("Error while deleting of phones or attaches", e);
         }
     }
 
