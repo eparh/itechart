@@ -11,15 +11,13 @@ public interface ContactDao {
 
     /**
      *
-     * @param contact
      * @return contact's id
      */
     long setContact(Contact contact);
 
     /**
      *
-     * @param idContact
-     * @return
+     * @return path of photo
      */
     String getPhoto(long idContact);
 
@@ -37,11 +35,6 @@ public interface ContactDao {
 
     List<Phone> getPhones(Long idContact);
 
-    /**
-     *
-     * @param idContact
-     * @return
-     */
     List<Attach> getAttaches(Long idContact);
 
     void insertAttach(Attach attach);

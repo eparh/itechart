@@ -39,12 +39,12 @@
 
     <h1> ${title}</h1>
 
-    <!--Основная форма с input - полями -->
+    <!--Main form with input fields -->
 
     <form id="form" action="/controller" class="form-horizontal" method="post" accept-charset="utf-8" enctype="multipart/form-data" role="form">
         <input type="hidden" name="title" value="${title}">
 
-        <!--Для paging-а-->
+        <!--For paging-->
         <input type="hidden" name="mode" value="${mode}">
 
         <input type="hidden" name="command"  value="save">
@@ -54,21 +54,21 @@
         <div class="form-group">
             <label class="control-label col-sm-2" for="name">Name:</label>
             <div class="col-sm-10">
-                <input type="text" value="${contact.name}" class="form-control" id="name" name="name" placeholder="Enter name" required>
+                <input type="text" value="${contact.name}" pattern="([a-z]|[A-Z]|[а-я]|[А-Я])*" class="form-control" id="name" name="name" placeholder="Enter name" required>
             </div>
         </div>
 
         <div class="form-group">
             <label class="control-label col-sm-2" for="surname">Surname:</label>
             <div class="col-sm-10">
-                <input type="text" value="${contact.surname}" class="form-control" id="surname" name="surname" placeholder="Enter surname" required>
+                <input type="text" value="${contact.surname}" pattern="([a-z]|[A-Z]|[а-я]|[А-Я])*" class="form-control" id="surname" name="surname" placeholder="Enter surname" required>
             </div>
         </div>
 
         <div class="form-group">
             <label class="control-label col-sm-2" for="middname">Middle name:</label>
             <div class="col-sm-10">
-                <input type="text" value="${contact.midName}" class="form-control" id="middname" name="middname" placeholder="Enter middle name">
+                <input type="text" value="${contact.midName}" pattern="([a-z]|[A-Z]|[а-я]|[А-Я])*" class="form-control" id="middname" name="middname" placeholder="Enter middle name">
             </div>
         </div>
 
@@ -92,28 +92,28 @@
         <div class="form-group">
             <label class="control-label col-sm-2" for="national">Nationality:</label>
             <div class="col-sm-10">
-                <input type="text" value="${contact.nationality}" class="form-control" id="national" name="national" placeholder="Enter nationality">
+                <input type="text" value="${contact.nationality}" class="form-control" pattern="([a-z]|[A-Z]|[а-я]|[А-Я])*" id="national" name="national" placeholder="Enter nationality">
             </div>
         </div>
 
         <div class="form-group">
             <label class="control-label col-sm-2" for="maritStatus">Marital status:</label>
             <div class="col-sm-10">
-                <input type="text" value="${contact.maritStatus}" class="form-control" id="maritStatus" name="maritStatus" placeholder="Enter marital status">
+                <input type="text" value="${contact.maritStatus}" pattern="([a-z]|[A-Z]|[а-я]|[А-Я])*" class="form-control" id="maritStatus" name="maritStatus" placeholder="Enter marital status">
             </div>
         </div>
 
         <div class="form-group">
             <label class="control-label col-sm-2" for="site">Website:</label>
             <div class="col-sm-10">
-                <input type="url" value="${contact.site}" class="form-control" id="site" name="site" placeholder="Enter website">
+                <input type="text" value="${contact.site}" class="form-control"  pattern="^([a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,6}$" id="site" name="site" placeholder="Enter website">
             </div>
         </div>
 
         <div class="form-group">
             <label class="control-label col-sm-2" for="email">Email:</label>
             <div class="col-sm-10">
-                <input type="email" value="${contact.email}" class="form-control" id="email" name="email" placeholder="Enter email">
+                <input type="email" value="${contact.email}" pattern="^[-\w.]+@([A-z0-9][-A-z0-9]+\.)+[A-z]{2,4}$" class="form-control" id="email" name="email" placeholder="Enter email">
             </div>
         </div>
 
@@ -121,7 +121,7 @@
         <div class="form-group">
             <label class="control-label col-sm-2" for="company">Company:</label>
             <div class="col-sm-10">
-                <input type="text" value="${contact.company}" class="form-control" id="company" name="company" placeholder="Enter company">
+                <input type="text" value="${contact.company}" pattern="([a-z]|[A-Z]|[а-я]|[А-Я])*" class="form-control" id="company" name="company" placeholder="Enter company">
             </div>
         </div>
 
@@ -130,14 +130,14 @@
         <div class="form-group">
             <label class="control-label col-sm-2" for="country">Address:</label>
             <div class="col-sm-10">
-                <input type="text" value="${contact.address.country}" class="form-control" id="country" name="country" placeholder="Enter country">
+                <input type="text" value="${contact.address.country}" pattern="([a-z]|[A-Z]|[а-я]|[А-Я])*" class="form-control" id="country" name="country" placeholder="Enter country">
             </div>
         </div>
 
         <div class="form-group">
             <label class="control-label col-sm-2"></label>
             <div class="col-sm-10">
-                <input type="text" value="${contact.address.city}" class="form-control"  name="city" placeholder="Enter city">
+                <input type="text" value="${contact.address.city}" pattern="([a-z]|[A-Z]|[а-я]|[А-Я])*" class="form-control"  name="city" placeholder="Enter city">
             </div>
         </div>
 
@@ -152,12 +152,12 @@
         <div class="form-group">
             <label class="control-label col-sm-2"></label>
             <div class="col-sm-10">
-                <input type="text" value="${contact.address.index}" class="form-control"  name="index" placeholder="Enter index">
+                <input type="text" value="${contact.address.index}" pattern="\d*" class="form-control"  name="index" placeholder="Enter index">
             </div>
         </div>
     </form>
 
-    <!--Pop-up для телефонов -->
+    <!--Pop-up for phones -->
 
     <div id="phonePopUp" style="display:none">
         <div class='tt'>
@@ -212,7 +212,7 @@
         </div>
     </div>
 
-    <!--Pop-up для attachments -->
+    <!--Pop-up for attachments -->
 
     <div id="attachPopUp" style="display:none">
         <div id="attachTT">
@@ -254,7 +254,7 @@
     </div>
 
 
-    <!--Таблица с телефонами и кнопками -->
+    <!--Table of phones and buttons -->
 
     <div style="float: right;">
         <button onclick="phoneService.addPhone()" class="btn-default">Add phone</button>
@@ -290,7 +290,7 @@
     </div>
 
     <hr>
-    <!--Таблица с attachments и кнопками -->
+    <!--Table of attachments and buttons-->
 
     <div style="float: right;">
         <button onclick="attachService.addAttach()" class="btn-default">Add attachment</button>

@@ -27,21 +27,21 @@
     <div class="form-group">
         <label class="control-label col-sm-2" for="name">Name:</label>
         <div class="col-sm-10">
-            <input type="text" class="form-control" id="name" name="s_name" placeholder="Enter name">
+            <input type="text" class="form-control"  pattern="([a-z]|[A-Z]|[а-я]|[А-Я])*" id="name" name="s_name" placeholder="Enter name">
         </div>
     </div>
 
     <div class="form-group">
         <label class="control-label col-sm-2" for="surname">Surname:</label>
         <div class="col-sm-10">
-            <input type="text" class="form-control" id="surname" name="s_surname" placeholder="Enter surname">
+            <input type="text" class="form-control"  pattern="([a-z]|[A-Z]|[а-я]|[А-Я])*" id="surname" name="s_surname" placeholder="Enter surname">
         </div>
     </div>
 
     <div class="form-group">
         <label class="control-label col-sm-2" for="middname">Middle name:</label>
         <div class="col-sm-10">
-            <input type="text" class="form-control" id="middname" name="s_middname" placeholder="Enter middle name">
+            <input type="text" class="form-control"  pattern="([a-z]|[A-Z]|[а-я]|[А-Я])*" id="middname" name="s_middname" placeholder="Enter middle name">
         </div>
     </div>
 
@@ -67,28 +67,28 @@
     <div class="form-group">
         <label class="control-label col-sm-2" for="national">Nationality:</label>
         <div class="col-sm-10">
-            <input type="text" class="form-control" id="national" name="s_national" placeholder="Enter nationality">
+            <input type="text" class="form-control" pattern="([a-z]|[A-Z]|[а-я]|[А-Я])*" id="national" name="s_national" placeholder="Enter nationality">
         </div>
     </div>
 
     <div class="form-group">
         <label class="control-label col-sm-2" for="maritStatus">Marital status:</label>
         <div class="col-sm-10">
-            <input type="text"  class="form-control" id="maritStatus" name="s_maritStatus" placeholder="Enter marital status">
+            <input type="text"  pattern="([a-z]|[A-Z]|[а-я]|[А-Я])*" class="form-control" id="maritStatus" name="s_maritStatus" placeholder="Enter marital status">
         </div>
     </div>
 
     <div class="form-group">
         <label class="control-label col-sm-2" for="country">Address:</label>
         <div class="col-sm-10">
-            <input type="text"  class="form-control" id="country" name="s_country" placeholder="Enter country">
+            <input type="text"  pattern="([a-z]|[A-Z]|[а-я]|[А-Я])*" class="form-control" id="country" name="s_country" placeholder="Enter country">
         </div>
     </div>
 
     <div class="form-group">
         <label class="control-label col-sm-2"></label>
         <div class="col-sm-10">
-            <input type="text"  class="form-control"  name="s_city" placeholder="Enter city">
+            <input type="text"  class="form-control"   pattern="([a-z]|[A-Z]|[а-я]|[А-Я])*" name="s_city" placeholder="Enter city">
         </div>
     </div>
 

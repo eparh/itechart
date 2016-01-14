@@ -17,8 +17,7 @@ public interface ContactService {
 
     /**
      *
-     * @param contact
-     * @return
+     * @return ID of contact
      */
     long setContact(Contact contact);
 
@@ -34,18 +33,11 @@ public interface ContactService {
 
     String getPhoto(long idContact);
 
-    /**
-     *
-     * @param idContact
-     * @return
-     */
-
     List<Attach> getAttaches(long idContact);
 
     /**
      *
-     * @param idContact
-     * @return
+     * @param idContact - id of contact
      * @throws IOException
      */
     void saveAttaches(long idContact, List<Attach> attachesList) throws IOException;
