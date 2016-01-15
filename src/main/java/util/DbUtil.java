@@ -9,7 +9,7 @@ public class DbUtil {
 
     private static final DataSource dataSource = initDataSource();
 
-    public static DataSource getMySQLDataSource() {
+    public static DataSource getDataSource() {
         return dataSource;
     }
 

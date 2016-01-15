@@ -18,10 +18,12 @@ public class AvatarCommand implements ActionCommand {
     private Logger logger = LogManager.getLogger(AvatarCommand.class);
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response)   {
+
         //Getting ID of contact
         String temp = request.getParameter("idContact");
         String[] chosen = request.getParameterValues("marked");
         Long idContact = ContactUtil.findOutIdContact(temp,chosen);
+
 
         Properties properties = new Properties();
         try {
@@ -29,9 +31,9 @@ public class AvatarCommand implements ActionCommand {
         } catch (IOException e) {
             throw new CommandException("Error while rendering avatar", e);
         }
-
         String path;
         HttpSession session = request.getSession();
+
         String tempAvatar = (String) session.getAttribute("temp_path_avatar");
         if (tempAvatar != null && !"".equals(tempAvatar)) {
             path = tempAvatar;

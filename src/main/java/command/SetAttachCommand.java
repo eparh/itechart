@@ -153,10 +153,14 @@ public class SetAttachCommand implements ActionCommand{
            Part avaPart = request.getPart("avatar");
            if (avaPart.getSize() > 0) {
                String fileName = MyFileUtil.extractFileName(avaPart);
-               savePath += File.separator + fileName;
+              // savePath += File.separator + fileName;
+               Path saved = Files.createTempFile(Paths.get(savePath), "", fileName);
+               String newPath = saved.toAbsolutePath().toString();
+               avaPart.write(saved.toAbsolutePath().toString());
+
+               //Adding path of temporary avatar to session
                HttpSession session = request.getSession();
-               session.setAttribute("temp_path_avatar", savePath);
-               avaPart.write(savePath);
+               session.setAttribute("temp_path_avatar", newPath);
            }
        } catch ( IOException | ServletException e) {
            throw new CommandException("Error is occurred with temporary attachment",e);

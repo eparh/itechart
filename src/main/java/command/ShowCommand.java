@@ -29,8 +29,9 @@ public class ShowCommand implements ActionCommand {
         this.request = request;
         HttpSession session = request.getSession();
 
-        //Deleting attachments from session
+        //Deleting attachments from session and temporary files
         session.removeAttribute("attaches");
+        session.removeAttribute("temp_path_avatar");
 
         //For paging
         String mode = request.getParameter("mode");

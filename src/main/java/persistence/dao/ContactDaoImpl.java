@@ -12,7 +12,7 @@ import java.util.List;
 
 public class ContactDaoImpl implements ContactDao {
     public static final ContactDao INSTANCE = new ContactDaoImpl();
-    private DataSource source = DbUtil.getMySQLDataSource();
+    private DataSource source = DbUtil.getDataSource();
 
     private ContactDaoImpl() {
 

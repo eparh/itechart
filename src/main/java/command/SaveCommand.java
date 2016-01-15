@@ -38,16 +38,14 @@ public class SaveCommand implements ActionCommand {
         Contact contact = ContactUtil.makeContact(request);
         idContact = contactService.setContact(contact);
         savePhones();
-        String path;
 
         try {
             saveAttaches();
-            path = getAvatar();
+            saveAvatar();
         } catch (IOException | ServletException e) {
             throw new CommandException("Error while saving contact", e);
         }
 
-        contactService.setPhoto(idContact,path);
         logger.info("Saving contact with full name:"+contact.getFullName());
         return "/controller?command=show";
     }
@@ -63,7 +61,7 @@ public class SaveCommand implements ActionCommand {
         contactService.saveAttaches(idContact, attaches);
     }
 
-    private String getAvatar() throws IOException, ServletException {
+    private void saveAvatar() throws IOException, ServletException {
         String savePath = getSavePath(idContact);
         File fileSaveDir = new File(savePath);
 
@@ -82,11 +80,15 @@ public class SaveCommand implements ActionCommand {
                 File tempAvatar = new File(tempPath);
                 FileUtils.moveFileToDirectory(tempAvatar,fileSaveDir,true);
                 savePath += File.separator + tempAvatar.getName();
+                System.out.println("In saveCommand avaSavePath:"+savePath);
             } else {
-                return null;
+                //Check if photo exists
+                String path = contactService.getPhoto(idContact);
+                if(path == null) contactService.setPhoto(idContact,null);
+                return;
             }
         }
-        return savePath;
+        contactService.setPhoto(idContact,savePath);
 
     }
 
