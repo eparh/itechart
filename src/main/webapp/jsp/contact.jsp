@@ -31,13 +31,7 @@
     </a>
     <input id="avatar" type="file" name="avatar" form="form" class="file" accept="image/*" style="display: none">
 
-    <c:set var="title"  value="Edit contact"/>
-    <c:if test="${mode == add}">
-        <c:set var="title"  value="Create contact"/>
-        <c:set var="mode" value="add"/>
-    </c:if>
-
-    <h1> ${title}</h1>
+    <h1>My contact</h1>
 
     <!--Main form with input fields -->
 
@@ -52,28 +46,33 @@
         <div class="form-group">
             <label class="control-label col-sm-2" for="name">Name:</label>
             <div class="col-sm-10">
-                <input type="text" value="${contact.name}" pattern="([a-z]|[A-Z]|[а-я]|[А-Я])*" class="form-control" id="name" name="name" placeholder="Enter name" required>
+                <input type="text" value="${contact.name}" pattern="([a-z]|[A-Z]|[а-я]|[А-Я])*" class="form-control"
+                       id="name" name="name" placeholder="Enter name"  maxlength="20" required>
             </div>
         </div>
 
         <div class="form-group">
             <label class="control-label col-sm-2" for="surname">Surname:</label>
             <div class="col-sm-10">
-                <input type="text" value="${contact.surname}" pattern="([a-z]|[A-Z]|[а-я]|[А-Я])*" class="form-control" id="surname" name="surname" placeholder="Enter surname" required>
+                <input type="text" value="${contact.surname}" pattern="([a-z]|[A-Z]|[а-я]|[А-Я])*" class="form-control"
+                       id="surname" name="surname" placeholder="Enter surname" maxlength="40" required>
             </div>
         </div>
 
         <div class="form-group">
             <label class="control-label col-sm-2" for="middname">Middle name:</label>
             <div class="col-sm-10">
-                <input type="text" value="${contact.midName}" pattern="([a-z]|[A-Z]|[а-я]|[А-Я])*" class="form-control" id="middname" name="middname" placeholder="Enter middle name">
+                <input type="text" value="${contact.midName}" pattern="([a-z]|[A-Z]|[а-я]|[А-Я])*" class="form-control"
+                       id="middname" name="middname" maxlength="30" placeholder="Enter middle name">
             </div>
         </div>
 
         <div class="form-group">
             <label class="control-label col-sm-2" for="birthday">Birthday:</label>
             <div class="col-sm-10">
-                <input type="date" value="${contact.birthday}" class="form-control" id="birthday" name="birthday" placeholder="Enter birthday">
+                <input type="date" value="${contact.birthday}" max="2010-12-31"
+                      min="1900-12-31"  class="form-control" id="birthday" name="birthday"
+                       placeholder="Enter birthday">
             </div>
         </div>
 
@@ -90,28 +89,33 @@
         <div class="form-group">
             <label class="control-label col-sm-2" for="national">Nationality:</label>
             <div class="col-sm-10">
-                <input type="text" value="${contact.nationality}" class="form-control" pattern="([a-z]|[A-Z]|[а-я]|[А-Я])*" id="national" name="national" placeholder="Enter nationality">
+                <input type="text" value="${contact.nationality}" class="form-control"
+                       maxlength="20"   pattern="([a-z]|[A-Z]|[а-я]|[А-Я])*" id="national" name="national" placeholder="Enter nationality">
             </div>
         </div>
 
         <div class="form-group">
             <label class="control-label col-sm-2" for="maritStatus">Marital status:</label>
             <div class="col-sm-10">
-                <input type="text" value="${contact.maritStatus}" pattern="([a-z]|[A-Z]|[а-я]|[А-Я])*" class="form-control" id="maritStatus" name="maritStatus" placeholder="Enter marital status">
+                <input type="text" value="${contact.maritStatus}" pattern="([a-z]|[A-Z]|[а-я]|[А-Я])*"
+                       maxlength="20"   class="form-control" id="maritStatus" name="maritStatus" placeholder="Enter marital status">
             </div>
         </div>
 
         <div class="form-group">
             <label class="control-label col-sm-2" for="site">Website:</label>
             <div class="col-sm-10">
-                <input type="text" value="${contact.site}" class="form-control"  pattern="^([a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,6}$" id="site" name="site" placeholder="Enter website">
+                <input type="text" value="${contact.site}" class="form-control"
+                       pattern="^([a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,6}$" id="site"
+                       maxlength="30"   name="site" placeholder="Enter website">
             </div>
         </div>
 
         <div class="form-group">
             <label class="control-label col-sm-2" for="email">Email:</label>
             <div class="col-sm-10">
-                <input type="email" value="${contact.email}" pattern="^[-\w.]+@([A-z0-9][-A-z0-9]+\.)+[A-z]{2,4}$" class="form-control" id="email" name="email" placeholder="Enter email">
+                <input type="email" value="${contact.email}" pattern="^[-\w.]+@([A-z0-9][-A-z0-9]+\.)+[A-z]{2,4}$"
+                       maxlength="60"  class="form-control" id="email" name="email" placeholder="Enter email">
             </div>
         </div>
 
@@ -119,7 +123,8 @@
         <div class="form-group">
             <label class="control-label col-sm-2" for="company">Company:</label>
             <div class="col-sm-10">
-                <input type="text" value="${contact.company}" pattern="([a-z]|[A-Z]|[а-я]|[А-Я])*" class="form-control" id="company" name="company" placeholder="Enter company">
+                <input type="text" value="${contact.company}" pattern="([a-z]|[A-Z]|[а-я]|[А-Я])*" class="form-control"
+                       maxlength="40"  id="company" name="company" placeholder="Enter company">
             </div>
         </div>
 
@@ -128,14 +133,17 @@
         <div class="form-group">
             <label class="control-label col-sm-2" for="country">Address:</label>
             <div class="col-sm-10">
-                <input type="text" value="${contact.address.country}" pattern="([a-z]|[A-Z]|[а-я]|[А-Я])*" class="form-control" id="country" name="country" placeholder="Enter country">
+                <input type="text" value="${contact.address.country}"
+                       pattern="([a-z]|[A-Z]|[а-я]|[А-Я])*" class="form-control" id="country" name="country"
+                       maxlength="30"   placeholder="Enter country">
             </div>
         </div>
 
         <div class="form-group">
             <label class="control-label col-sm-2"></label>
             <div class="col-sm-10">
-                <input type="text" value="${contact.address.city}" pattern="([a-z]|[A-Z]|[а-я]|[А-Я])*" class="form-control"  name="city" placeholder="Enter city">
+                <input type="text" value="${contact.address.city}" pattern="([a-z]|[A-Z]|[а-я]|[А-Я])*"
+                       maxlength="20"  class="form-control"  name="city" placeholder="Enter city">
             </div>
         </div>
 
@@ -143,14 +151,16 @@
         <div class="form-group">
             <label class="control-label col-sm-2"></label>
             <div class="col-sm-10">
-                <input type="text" value="${contact.address.address}" class="form-control"  name="address" placeholder="Enter address">
+                <input type="text" value="${contact.address.address}" class="form-control"  name="address"
+                       maxlength="80"  placeholder="Enter address">
             </div>
         </div>
 
         <div class="form-group">
             <label class="control-label col-sm-2"></label>
             <div class="col-sm-10">
-                <input type="text" value="${contact.address.index}" pattern="\d*" class="form-control"  name="index" placeholder="Enter index">
+                <input type="text" maxlength="10" value="${contact.address.index}" pattern="\d*" class="form-control"
+                       name="index" placeholder="Enter index">
             </div>
         </div>
     </form>
@@ -168,14 +178,16 @@
                     <div class="form-group">
                         <label class="control-label col-sm-2" for="countryCode">Country code:</label>
                         <div class="col-sm-2">
-                            <input  type="number" min="0" class="form-control" max="1000" id="countryCode" name="countryCode" placeholder="Country code">
+                            <input  type="number" min="0" class="form-control" max="1000" id="countryCode"
+                                    name="countryCode" placeholder="Country code">
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label class="control-label col-sm-2" for="operatorCode">Operator code:</label>
                         <div class="col-sm-2">
-                            <input type="number" min="0" class="form-control" id="operatorCode" name="operatorCode" placeholder="Operator code" required>
+                            <input type="number" min="0" class="form-control" id="operatorCode" name="operatorCode"
+                                   placeholder="Operator code" required>
                         </div>
                     </div>
 
@@ -199,7 +211,8 @@
                     <div class="form-group">
                         <label class="control-label col-sm-2" for="comment">Comment:</label>
                         <div class="col-sm-5">
-                            <textarea  class="form-control" rows="5" name="comment" id="comment" placeholder="Type your comment..."></textarea>
+                            <textarea  class="form-control" rows="5" name="comment" id="comment"
+                                       maxlength="60"  placeholder="Type your comment..."></textarea>
                         </div>
                     </div>
                 </form>
@@ -240,7 +253,8 @@
                 <div class="form-group">
                     <label class="control-label col-sm-2" for="attachComment">Comment:</label>
                     <div class="col-sm-5">
-                        <textarea  class="form-control" form="form" rows="5" name="attach_comment" id="attachComment" placeholder="Type your comment..."></textarea>
+                        <textarea  class="form-control" form="form" rows="5" name="attach_comment"
+                                   id="attachComment" maxlength="60" placeholder="Type your comment..."></textarea>
                     </div>
                 </div>
 
@@ -251,6 +265,7 @@
         </div>
     </div>
 
+    <br>
 
     <!--Table of phones and buttons -->
 

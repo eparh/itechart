@@ -12,13 +12,14 @@ import service.ContactService;
 import service.ServiceFactory;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ShowCommand implements ActionCommand {
     private ContactService contactService = ServiceFactory.getContactService();
-    private HttpServletRequest request;
     private ViewSettings settings;
     private SearchCriteria criteria = new SearchCriteria();
 
@@ -26,20 +27,20 @@ public class ShowCommand implements ActionCommand {
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
-        this.request = request;
         HttpSession session = request.getSession();
 
         //Deleting attachments from session and temporary files
         session.removeAttribute("attaches");
         session.removeAttribute("temp_path_avatar");
 
+
         //For paging
         String mode = request.getParameter("mode");
         long  total = contactService.countContacts(criteria);
         if(mode != null) {
-            criteria =  getSearchCriteria(mode);
+            criteria =  getSearchCriteria(mode,request);
             total = contactService.countContacts(criteria);
-            settings =  getViewSettings(mode,total);
+            settings =  getViewSettings(mode,total,request);
         } else {
             criteria = new SearchCriteria();
             settings = new ViewSettings();
@@ -49,16 +50,17 @@ public class ShowCommand implements ActionCommand {
         session.setAttribute("criteria",criteria);
         session.setAttribute("settings",settings);
         request.setAttribute("contacts", contacts);
-        addEmailTemplates(session);
+        addEmailTemplates(session,request);
         logger.info("Contacts was shown");
         return "/jsp/show.jsp";
     }
 
-    private void addEmailTemplates(HttpSession session) {
+
+    private void addEmailTemplates(HttpSession session, HttpServletRequest request) {
         session.setAttribute("templates", TemplateContainer.getInstance().getTemplates());
     }
 
-    private ViewSettings getViewSettings(String mode,long total) {
+    private ViewSettings getViewSettings(String mode,long total,HttpServletRequest request) {
         ViewSettings settings = new ViewSettings();
         HttpSession session = request.getSession();
         String requestCount = request.getParameter("countRecords");
@@ -101,7 +103,7 @@ public class ShowCommand implements ActionCommand {
         return settings;
     }
 
-    private SearchCriteria getSearchCriteria(String mode) {
+    private SearchCriteria getSearchCriteria(String mode,HttpServletRequest request) {
         SearchCriteria criteria = new SearchCriteria();
         HttpSession session = request.getSession();
         if( mode.equals("search")) {

@@ -3,7 +3,7 @@
 <head>
     <title>Error page</title>
     <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="/style/error.css">
+    <link rel="stylesheet" href="/style/err.css">
 </head>
 <body>
     <div align="center">

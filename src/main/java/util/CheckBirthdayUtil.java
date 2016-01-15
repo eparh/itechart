@@ -28,7 +28,6 @@ public enum CheckBirthdayUtil {
             Executors.newScheduledThreadPool(1);
 
     public void startService() {
-        System.out.println("start checking");
         scheduler.scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {
@@ -70,8 +69,6 @@ public enum CheckBirthdayUtil {
         }
 
     }
-
-
 
     private List<Contact> whoHave() {
         List<Contact> contacts = contactService.getBirthdayContacts();

@@ -17,15 +17,15 @@ import javax.servlet.http.HttpServletResponse;
 
 @WebServlet(name = "Servlet",urlPatterns = {"/controller"})
 @MultipartConfig(fileSizeThreshold=1024*1024*2, // 2MB
-                 maxFileSize=1024*1024*10,      // 10MB
-                 maxRequestSize=1024*1024*50)   // 50MB
+        maxFileSize=1024*1024*10,      // 10MB
+        maxRequestSize=1024*1024*50)   // 50MB
 public class Servlet extends HttpServlet {
     private Logger logger = LogManager.getLogger(Servlet.class);
 
     public void init() throws ServletException{
         try {
             logger.info("Init servlet");
-         //   CheckBirthdayUtil.getInstance().startService();
+            CheckBirthdayUtil.getInstance().startService();
         } catch (Exception e) {
             logger.error("Error while init", e);
         }
@@ -35,7 +35,7 @@ public class Servlet extends HttpServlet {
     @Override
     public void destroy() {
         try {
-        //   CheckBirthdayUtil.getInstance().stopService();
+            CheckBirthdayUtil.getInstance().stopService();
         } catch (Exception e) {
             logger.error("Error while destroy servlet", e);
         }
@@ -62,12 +62,9 @@ public class Servlet extends HttpServlet {
             } else {
                 // Do nothing, command returns response manually
             }
-         } catch (Exception e) {
+        } catch (Exception e) {
             logger.error("Error while process request", e);
             response.sendRedirect(request.getContextPath() + "/jsp/error.jsp");
         }
-
     }
-
-
 }

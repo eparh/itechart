@@ -50,8 +50,7 @@ public class SetAttachCommand implements ActionCommand{
             attachList = new ArrayList<>();
             Long idContact = contact.getId();
             if(idContact != null) {
-                System.out.println("start delete");
-                System.out.println(contactService.getAttaches(idContact));
+
                 for (Attach attach : contactService.getAttaches(idContact)) {
                     attachMap.put(attach.getName(), attach);
 
@@ -62,7 +61,6 @@ public class SetAttachCommand implements ActionCommand{
         for (Attach attach: attachList) {
             attachMap.put(attach.getName(), attach);
         }
-        System.out.println(attachMap);
         //Processing of buttons
         String attachMode =  request.getParameter("attachMode");
         switch(attachMode) {
@@ -96,13 +94,9 @@ public class SetAttachCommand implements ActionCommand{
         List<Phone> phones = ContactUtil.getPhones(request, null);
         request.setAttribute("phones", phones);
 
-        //Some crutch
-        request.setAttribute("mode", request.getParameter("mode"));
-
         List<Attach> finalAttaches = new ArrayList<>();
 
         finalAttaches.addAll(attachMap.values());
-        System.out.println(finalAttaches);
         session.setAttribute("attaches",finalAttaches);
         logger.info("File was attached");
         return "/jsp/contact.jsp";

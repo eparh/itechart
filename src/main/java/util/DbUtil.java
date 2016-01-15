@@ -1,12 +1,12 @@
 package util;
 import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
+import persistence.dao.exception.DaoException;
 
 import javax.sql.DataSource;
 import java.io.IOException;
 import java.util.Properties;
 
 public class DbUtil {
-
     private static final DataSource dataSource = initDataSource();
 
     public static DataSource getDataSource() {
@@ -19,7 +19,7 @@ public class DbUtil {
         try {
             properties.load(DbUtil.class.getResourceAsStream("/db.properties"));
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new DaoException("Error while getting data source",e);
         }
         MysqlDataSource mysqlDS = new MysqlDataSource();
         mysqlDS.setURL(properties.getProperty("MYSQL_DB_URL"));

@@ -6,7 +6,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import persistence.model.Attach;
 import command.util.ContactUtil;
-import util.GeneralUtil;
 import persistence.model.Contact;
 import persistence.model.Phone;
 import service.ContactService;
@@ -35,6 +34,7 @@ public class SaveCommand implements ActionCommand {
     public String execute(HttpServletRequest request, HttpServletResponse response)  {
         this.request = request;
         session = request.getSession();
+
         Contact contact = ContactUtil.makeContact(request);
         idContact = contactService.setContact(contact);
         savePhones();
