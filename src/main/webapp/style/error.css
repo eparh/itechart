@@ -1,15 +1,16 @@
 body {
     background-color: gainsboro;
 }
-h1 {
-    font-size: 2000%;
-    margin-top: 10px;
-    margin-bottom: 5px;
-}
-h2 {
-    margin-top: 70px;
+h1.one {
+    margin-top: 200px;
     font-size: 450%;
 }
+h1.two {
+    font-size: 300%;
+    margin-top: 5px;
+    margin-bottom: 15px;
+}
+
 button {
     background-color: black;
     border: none;

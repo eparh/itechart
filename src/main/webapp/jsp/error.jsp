@@ -7,8 +7,8 @@
 </head>
 <body>
     <div align="center">
-        <h2>Ooops! Could not Find it :(</h2>
-        <h1>404</h1>
+        <h1 class="one">Ooops! Something gonna bad :(</h1>
+        <h1 class="two">Try to back home </h1>
         <button type="submit" form="form">Home</button>
     </div>
     <form action="/controller" id="form">

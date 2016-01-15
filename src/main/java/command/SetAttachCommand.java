@@ -96,6 +96,9 @@ public class SetAttachCommand implements ActionCommand{
         List<Phone> phones = ContactUtil.getPhones(request, null);
         request.setAttribute("phones", phones);
 
+        //Some crutch
+        request.setAttribute("mode", request.getParameter("mode"));
+
         List<Attach> finalAttaches = new ArrayList<>();
 
         finalAttaches.addAll(attachMap.values());

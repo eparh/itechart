@@ -42,8 +42,6 @@
     <!--Main form with input fields -->
 
     <form id="form" action="/controller" class="form-horizontal" method="post" accept-charset="utf-8" enctype="multipart/form-data" role="form">
-        <input type="hidden" name="title" value="${title}">
-
         <!--For paging-->
         <input type="hidden" name="mode" value="${mode}">
 
