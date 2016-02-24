@@ -3,9 +3,9 @@
 <html>
 <head>
     <title>Create contact</title>
-    <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="${pageContext.request.contextPath}/images/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-    <script type="text/javascript" src="/js/contact.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/js/contact.js"></script>
     <link rel="stylesheet" href="/style/contact.css">
 </head>
 <body  onload="selectAvatar()">
@@ -15,11 +15,13 @@
 <nav class="navbar navbar-inverse">
     <div class="container-fluid">
         <div class="navbar-header">
-            <a class="navbar-brand" href="/controller?command=show" ><span class="glyphicon glyphicon-user"></span> My contacts</a>
+            <a class="navbar-brand" href="${pageContext.request.contextPath}/controller?command=show">
+                <span class="glyphicon glyphicon-user"></span> My contacts</a>
         </div>
         <div>
             <ul class="nav navbar-nav">
-                <li><a href="/controller?command=search"><span class="glyphicon glyphicon-search"></span> Search contacts</a></li>
+                <li><a href="${pageContext.request.contextPath}/controller?command=search">
+                    <span class="glyphicon glyphicon-search"></span> Search contacts</a></li>
             </ul>
         </div>
     </div>
@@ -27,7 +29,7 @@
 
 <div class="container">
     <a href="javascript:{}" onclick="document.getElementById('avatar').click()">
-        <img id="image" src="/controller?command=avatar&idContact=${contact.id}">
+        <img id="image" src="${pageContext.request.contextPath}/controller?command=avatar&idContact=${contact.id}">
     </a>
     <input id="avatar" type="file" name="avatar" form="form" class="file" accept="image/*" style="display: none">
 
@@ -35,7 +37,8 @@
 
     <!--Main form with input fields -->
 
-    <form id="form" action="/controller" class="form-horizontal" method="post" accept-charset="utf-8" enctype="multipart/form-data" role="form">
+    <form id="form" action="${pageContext.request.contextPath}/controller" class="form-horizontal" method="post"
+          accept-charset="utf-8" enctype="multipart/form-data" role="form">
         <!--For paging-->
         <input type="hidden" name="mode" value="${mode}">
 
@@ -90,7 +93,8 @@
             <label class="control-label col-sm-2" for="national">Nationality:</label>
             <div class="col-sm-10">
                 <input type="text" value="${contact.nationality}" class="form-control"
-                       maxlength="20"   pattern="([a-z]|[A-Z]|[а-я]|[А-Я])*" id="national" name="national" placeholder="Enter nationality">
+                       maxlength="20"   pattern="([a-z]|[A-Z]|[а-я]|[А-Я])*" id="national" name="national"
+                       placeholder="Enter nationality">
             </div>
         </div>
 
@@ -98,7 +102,8 @@
             <label class="control-label col-sm-2" for="maritStatus">Marital status:</label>
             <div class="col-sm-10">
                 <input type="text" value="${contact.maritStatus}" pattern="([a-z]|[A-Z]|[а-я]|[А-Я])*"
-                       maxlength="20"   class="form-control" id="maritStatus" name="maritStatus" placeholder="Enter marital status">
+                       maxlength="20"   class="form-control" id="maritStatus" name="maritStatus"
+                       placeholder="Enter marital status">
             </div>
         </div>
 
@@ -217,8 +222,8 @@
                     </div>
                 </form>
 
-                <button  onclick="phoneService.savePhone()" class="btn-default">Save</button>
-                <button onclick="phoneService.cancelPhone()" class="btn-default">Cancel</button>
+                <button  onclick="phoneService.savePhone()" class="btn btn-default">Save</button>
+                <button onclick="phoneService.cancelPhone()" class="btn btn-default">Cancel</button>
             </div>
         </div>
     </div>
@@ -259,8 +264,8 @@
                 </div>
 
                 <input form="form" type="hidden" name="attachMode">
-                <button  onclick="attachService.saveAttach()" class="btn-default">Save</button>
-                <button onclick="attachService.cancelAttach()" class="btn-default">Cancel</button>
+                <button  onclick="attachService.saveAttach()" class="btn btn-default">Save</button>
+                <button onclick="attachService.cancelAttach()" class="btn btn-default">Cancel</button>
             </div>
         </div>
     </div>
@@ -269,13 +274,17 @@
 
     <!--Table of phones and buttons -->
 
+    <div class="panel panel-default">
     <div style="float: right;">
-        <button onclick="phoneService.addPhone()" class="btn-default">Add phone</button>
-        <button onclick="phoneService.deletePhone()" class="btn-default">Delete phone</button>
-        <button onclick="phoneService.editPhone()" class="btn-default">Edit phone</button>
+        <button onclick="phoneService.addPhone()" class="btn btn-default">Add</button>
+        <button onclick="phoneService.deletePhone()" class="btn btn-default">Delete</button>
+        <button onclick="phoneService.editPhone()" class="btn btn-default">Edit</button>
     </div>
-    <div>
-        <table class="table" >
+
+        <div class="panel-heading">
+            <h3 class="panel-title"><span class="glyphicon glyphicon-phone-alt"></span> Phones</h3>
+        </div>
+        <table class="table">
             <thead>
             <tr>
                 <th></th>
@@ -304,13 +313,15 @@
 
     <hr>
     <!--Table of attachments and buttons-->
-
-    <div style="float: right;">
-        <button onclick="attachService.addAttach()" class="btn-default">Add attachment</button>
-        <button onclick="attachService.deleteAttach()" class="btn-default">Delete attachment</button>
-        <button onclick="attachService.editAttach()" class="btn-default">Edit attachment</button>
+    <div class="panel panel-default">
+    <div style="float: right">
+        <button onclick="attachService.addAttach()" class="btn btn-default">Add</button>
+        <button onclick="attachService.deleteAttach()" class="btn btn-default">Delete</button>
+        <button onclick="attachService.editAttach()" class="btn btn-default">Edit</button>
     </div>
-    <div>
+        <div class="panel-heading">
+            <h3 class="panel-title"><span class="glyphicon glyphicon-paperclip"></span> Attachments</h3>
+        </div>
         <table class="table" >
             <thead>
             <tr>
@@ -322,7 +333,8 @@
             </thead>
             <tbody id="attachTable">
             <c:forEach items="${attaches}" var="attach" varStatus="num">
-                <c:set var="link"  value= 'href= "/controller?command=attach&idContact=${contact.id}&name=${attach.name}" class="active"'/>
+                <c:set var="link"  value= 'href= "/controller?command=attach&idContact=${contact.id}&name=${attach.name}"
+                class="active"'/>
                 <tr>
                     <td>
                         <input type='checkbox' form="form" name='attaches' value="${attach.name}"/>
@@ -342,7 +354,7 @@
         </table>
     </div>
 
-    <button form="form" type="submit" class="btn-default">Save</button>
+    <button form="form" type="submit" class="btn btn-default pull-left btn-lg">Save</button>
 </div>
 
 </body>

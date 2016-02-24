@@ -2,46 +2,56 @@
 <html>
 <head>
     <title>Search</title>
-    <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="${pageContext.request.contextPath}/images/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 </head>
 <body>
 <nav class="navbar navbar-inverse">
     <div class="container-fluid">
         <div class="navbar-header">
-            <a class="navbar-brand" href="/controller?command=show" ><span class="glyphicon glyphicon-user"></span>My Contacts</a>
+            <a class="navbar-brand" href="${pageContext.request.contextPath}/controller?command=show">
+                <span class="glyphicon glyphicon-user"></span>My Contacts
+            </a>
         </div>
         div>
         <ul class="nav navbar-nav">
-            <li><a href="/jsp/contact.jsp"><span class="glyphicon glyphicon-plus"></span>Add contact</a></li>
+            <li>
+                <a href="${pageContext.request.contextPath}/jsp/contact.jsp">
+                    <span class="glyphicon glyphicon-plus"></span>
+                    Add contact
+                </a></li>
         </ul>
     </div>
     </div>
 </nav>
 <div class="container">
 <h1 style="margin: auto 30% 2% auto;">Search contacts</h1>
-<form id="form" action="/controller" class="form-horizontal" method="post" accept-charset="utf-8" role="form">
+<form id="form" action="${pageContext.request.contextPath}/controller" class="form-horizontal" method="post"
+      accept-charset="utf-8" role="form">
     <input type="hidden" name="command" value="show">
     <input type="hidden" name="mode" value="search">
 
     <div class="form-group">
         <label class="control-label col-sm-2" for="name">Name:</label>
         <div class="col-sm-10">
-            <input type="text" class="form-control"  pattern="([a-z]|[A-Z]|[а-я]|[А-Я])*" id="name" name="s_name" placeholder="Enter name">
+            <input type="text" class="form-control"  pattern="([a-z]|[A-Z]|[а-я]|[А-Я])*" id="name" name="s_name"
+                   placeholder="Enter name">
         </div>
     </div>
 
     <div class="form-group">
         <label class="control-label col-sm-2" for="surname">Surname:</label>
         <div class="col-sm-10">
-            <input type="text" class="form-control"  pattern="([a-z]|[A-Z]|[а-я]|[А-Я])*" id="surname" name="s_surname" placeholder="Enter surname">
+            <input type="text" class="form-control"  pattern="([a-z]|[A-Z]|[а-я]|[А-Я])*" id="surname" name="s_surname"
+                   placeholder="Enter surname">
         </div>
     </div>
 
     <div class="form-group">
         <label class="control-label col-sm-2" for="middname">Middle name:</label>
         <div class="col-sm-10">
-            <input type="text" class="form-control"  pattern="([a-z]|[A-Z]|[а-я]|[А-Я])*" id="middname" name="s_middname" placeholder="Enter middle name">
+            <input type="text" class="form-control"  pattern="([a-z]|[A-Z]|[а-я]|[А-Я])*" id="middname" name="s_middname"
+                   placeholder="Enter middle name">
         </div>
     </div>
 
@@ -67,28 +77,32 @@
     <div class="form-group">
         <label class="control-label col-sm-2" for="national">Nationality:</label>
         <div class="col-sm-10">
-            <input type="text" class="form-control" pattern="([a-z]|[A-Z]|[а-я]|[А-Я])*" id="national" name="s_national" placeholder="Enter nationality">
+            <input type="text" class="form-control" pattern="([a-z]|[A-Z]|[а-я]|[А-Я])*" id="national" name="s_national"
+                   placeholder="Enter nationality">
         </div>
     </div>
 
     <div class="form-group">
         <label class="control-label col-sm-2" for="maritStatus">Marital status:</label>
         <div class="col-sm-10">
-            <input type="text"  pattern="([a-z]|[A-Z]|[а-я]|[А-Я])*" class="form-control" id="maritStatus" name="s_maritStatus" placeholder="Enter marital status">
+            <input type="text"  pattern="([a-z]|[A-Z]|[а-я]|[А-Я])*" class="form-control" id="maritStatus"
+                   name="s_maritStatus" placeholder="Enter marital status">
         </div>
     </div>
 
     <div class="form-group">
         <label class="control-label col-sm-2" for="country">Address:</label>
         <div class="col-sm-10">
-            <input type="text"  pattern="([a-z]|[A-Z]|[а-я]|[А-Я])*" class="form-control" id="country" name="s_country" placeholder="Enter country">
+            <input type="text"  pattern="([a-z]|[A-Z]|[а-я]|[А-Я])*" class="form-control" id="country"
+                   name="s_country" placeholder="Enter country">
         </div>
     </div>
 
     <div class="form-group">
         <label class="control-label col-sm-2"></label>
         <div class="col-sm-10">
-            <input type="text"  class="form-control"   pattern="([a-z]|[A-Z]|[а-я]|[А-Я])*" name="s_city" placeholder="Enter city">
+            <input type="text"  class="form-control"   pattern="([a-z]|[A-Z]|[а-я]|[А-Я])*" name="s_city"
+                   placeholder="Enter city">
         </div>
     </div>
 
@@ -106,7 +120,7 @@
         </div>
     </div>
 </form>
-<button type="submit" form="form" class="btn-default">Search</button>
+<button type="submit" form="form" class="btn btn-default pull-left btn-lg">Search</button>
 </div>
 </body>
 </html>

@@ -77,7 +77,7 @@ public class ShowCommand implements ActionCommand {
                     case "edit":
                         settings.setPageNumber(sessSettings.getPageNumber());
                         break;
-                    case "add":
+                    case "": //<-- this's add mode
                         settings.setPageNumber(pages);
                         break;
                     case  "search":

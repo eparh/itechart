@@ -11,7 +11,7 @@
         <h1 class="two">Try to back home </h1>
         <button type="submit" form="form">Home</button>
     </div>
-    <form action="/controller" id="form">
+    <form action="${pageContext.request.contextPath}/controller" id="form">
         <input type="hidden" name="command" value="show">
     </form>
 </body>

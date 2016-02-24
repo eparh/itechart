@@ -5,34 +5,55 @@
     <title>My contacts</title>
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
     <link rel="stylesheet" href="/style/show.css">
-    <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
-    <script type="text/javascript" src="/js/show.js"></script>
+    <link rel="shortcut icon" href="${pageContext.request.contextPath}/images/favicon.ico" type="image/x-icon">
+    <script type="text/javascript" src="${pageContext.request.contextPath}/js/show.js"></script>
 </head>
 <body>
 
 <nav class="navbar navbar-inverse">
     <div class="container-fluid">
         <div class="navbar-header">
-            <a class="navbar-brand" href="/controller?command=show" ><span class="glyphicon glyphicon-user"></span>My Contacts</a>
+            <a class="navbar-brand" href="${pageContext.request.contextPath}/controller?command=show">
+                <span class="glyphicon glyphicon-user"></span>My Contacts
+            </a>
         </div>
         <div>
             <ul class="nav navbar-nav">
-                <li><a href="/jsp/contact.jsp?mode=add"><span class="glyphicon glyphicon-plus"></span> Add contact</a></li>
-                <li><a href="javascript:{}" onclick="getContact(); return false;"><span class="glyphicon glyphicon-pencil"></span> Edit contact</a></li>
-                <li><a href="javascript:{}" onclick="deleteContact(); return false;"><span class="glyphicon glyphicon-trash"></span> Delete contacts</a></li>
-                <li><a href="/jsp/search.jsp"><span class="glyphicon glyphicon-search"></span> Search contacts</a></li>
-                <li><a href="javascript:{}" onclick="email(); return false;"><span class="glyphicon glyphicon-send"></span> Send Email </a></li>
+                <li>
+                    <a href="${pageContext.request.contextPath}${pageContext.request.contextPath}/jsp/contact.jsp">
+                        <span class="glyphicon glyphicon-plus"></span> Add contact
+                    </a>
+                </li>
+                <li>
+                    <a href="javascript:{}" onclick="getContact(); return false;">
+                        <span class="glyphicon glyphicon-pencil"></span> Edit contact
+                    </a>
+                </li>
+                <li>
+                    <a href="javascript:{}" onclick="deleteContact(); return false;">
+                        <span class="glyphicon glyphicon-trash"></span> Delete contacts
+                    </a>
+                </li>
+                <li>
+                    <a href="${pageContext.request.contextPath}/jsp/search.jsp"><span class="glyphicon glyphicon-search">
+                </span> Search contacts
+                    </a>
+                </li>
+                <li><a href="javascript:{}" onclick="email(); return false;">
+                    <span class="glyphicon glyphicon-send"></span> Send Email
+                </a>
+                </li>
             </ul>
         </div>
     </div>
 </nav>
-<form action="/controller" id="checkbox" method="post">
+<form action="${pageContext.request.contextPath}/controller" id="checkbox" method="post">
     <input type="hidden" name="command">
     <input type="hidden" name="idContact">
     <input type="hidden" name="mode">
 </form>
 
-<form action="/controller" id="paging" method="post">
+<form action="${pageContext.request.contextPath}/controller" id="paging" method="post">
     <input type="hidden" name="command"  value="show">
     <input type="hidden" name="mode"  value="paging">
 </form>
@@ -54,7 +75,8 @@
 <div id="emailPopUp" style="display:none">
     <div class="tt">
         <div class="container">
-            <form action="/controller" id="email" class="form-horizontal" accept-charset="utf-8" role="form">
+            <form action="${pageContext.request.contextPath}/controller" id="email" class="form-horizontal"
+                  accept-charset="utf-8" role="form">
                 <input type="hidden" name="command" value="email">
                 <div style="margin: auto auto 3% auto">
                     <div class="close" onclick="openbox('emailPopUp')">x</div>
@@ -88,7 +110,8 @@
                 <div class="form-group">
                     <label class="control-label col-sm-1" for="text">Text:</label>
                     <div class="col-sm-7">
-                        <textarea  class="form-control" rows="8" name="text" id="text" placeholder="Type message..." required ></textarea>
+                        <textarea  class="form-control" rows="8" name="text" id="text" placeholder="Type message..."
+                                   required ></textarea>
                     </div>
                 </div>
             </form>
@@ -117,7 +140,10 @@
             <td>
                 <input type="checkbox" name="marked" form="checkbox" value="${contact.id}">
             </td>
-            <td><a href="javascript:{}" onclick="getContactByClick(${ num.count }); return false;">${ contact.getFullName()}</a></td>
+            <td>
+                <a href="javascript:{}" onclick="getContactByClick(${ num.count }); return false;">${ contact.getFullName()}
+                </a>
+            </td>
             <td>${ contact.birthday}</td>
             <td>${ contact.address }</td>
             <td>${ contact.company }</td>
@@ -126,25 +152,27 @@
     </c:forEach>
     </tbody>
 </table>
-
+<footer>
 <span style="float: left; margin: 2% auto auto 5%; ">
     <p><b> Total pages: ${settings.pages}</b></p>
 </span>
-<div align="center">
-    <ul class="pagination">
-        <li onclick="prev()"><span class="glyphicon glyphicon-menu-left"></span></li>
-        <li>
+    <div align="center">
+        <ul class="pagination">
+            <li onclick="prev()"><span class="glyphicon glyphicon-menu-left"></span></li>
+            <li>
                 <span class="col-sm-6">
-                    <input type="number" form="paging" class="form-control" name="pageNumber" min="1" max="${settings.pages}" value="${settings.getPageNumber()}">
+                    <input type="number" form="paging" class="form-control" name="pageNumber" min="1"
+                           max="${settings.pages}" value="${settings.getPageNumber()}">
                 </span>
-        </li>
-        <li onclick="next()"><span class="glyphicon glyphicon-menu-right"></span></li>
-    </ul>
-</div>
+            </li>
+            <li onclick="next()"><span class="glyphicon glyphicon-menu-right"></span></li>
+        </ul>
+    </div>
+</footer>
 </body>
 <script>
     (function() {
-       informUser();
+        informUser();
 
     })();
 </script>

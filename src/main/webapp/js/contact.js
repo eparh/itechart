@@ -1,4 +1,5 @@
 function openbox(id) {
+    "use strict";
     var div = document.getElementById(id);
 
     if(div.style.display == 'block') {
@@ -10,6 +11,7 @@ function openbox(id) {
 }
 
 function selectAvatar() {
+    "use strict";
     document.getElementById("avatar").onchange = function () {
         var reader = new FileReader();
 
@@ -23,36 +25,22 @@ function selectAvatar() {
     };
 }
 
-function getDate() {
-    var today = new Date();
-    var dd = today.getDate();
-    var mm = today.getMonth()+1; //January is 0!
-    var yyyy = today.getFullYear();
-
-    if(dd<10) {
-        dd='0'+dd
-    }
-
-    if(mm<10) {
-        mm='0'+mm
-    }
-    today = yyyy +'-'+mm+'-'+dd;
-
-    return today;
-}
-
 var phoneService = {
     pos : 0,
     popUp: 'phonePopUp',
     mode: 0,
+    MINVALUE : 1000,
+    MAXVALUE : 99999999,
 
     savePhone: function () {
+        "use strict";
         var form= document.getElementById("telephone");
-        if (form.operatorCode.value == "" || form.phone.value == "") {
+        if (!(form.operatorCode.value && form.phone.value )) {
             alert("Please, fill required fields");
             return false;
         }
-        if (form.countryCode.value > 1000 ||  form.phone.value > 99999999 || form.operatorCode.value > 1000) {
+        if (form.countryCode.value > this.MINVALUE  ||  form.phone.value > this.MAXVALUE ||
+            form.operatorCode.value > this.MINVALUE ){
             alert("Please, check input fields");
             return false;
         }
@@ -60,26 +48,28 @@ var phoneService = {
 
         var table = document.getElementById("phoneTable");
 
+        var i, row,cell1, cell2, cell3,cell4,cell5,cell6,cell7;
+
         if (this.mode == 0) {
-            var i = table.rows.length;
-            var row = table.insertRow(i);
-            var cell1 = row.insertCell(0);
-            var cell2 = row.insertCell(1);
-            var cell3 = row.insertCell(2);
-            var cell4 = row.insertCell(3);
-            var cell5 = row.insertCell(4);
-            var cell6 = row.insertCell(5);
-            var cell7 = row.insertCell(6);
+            i = table.rows.length;
+            row = table.insertRow(i);
+            cell1 = row.insertCell(0);
+            cell2 = row.insertCell(1);
+            cell3 = row.insertCell(2);
+            cell4 = row.insertCell(3);
+            cell5 = row.insertCell(4);
+            cell6 = row.insertCell(5);
+            cell7 = row.insertCell(6);
         }  else {
-            var i = this.pos;
-            var row = table.rows[i];
-            var cell1 = row.cells[0];
-            var cell2 = row.cells[1];
-            var cell3 = row.cells[2];
-            var cell4 = row.cells[3];
-            var cell5 = row.cells[4];
-            var cell6 = row.cells[5];
-            var cell7 = row.cells[6];
+            i = this.pos;
+            row = table.rows[i];
+            cell1 = row.cells[0];
+            cell2 = row.cells[1];
+            cell3 = row.cells[2];
+            cell4 = row.cells[3];
+            cell5 = row.cells[4];
+            cell6 = row.cells[5];
+            cell7 = row.cells[6];
         }
 
         cell1.innerHTML = "<input type='checkbox'  name='phones'/>";
@@ -89,18 +79,19 @@ var phoneService = {
         cell2.innerHTML ="<input type='text' form='form' value='"+ fullPhone +"' readonly/>";
 
         cell3.innerHTML ="<input type='text' form='form' name='kind"+i+"' value='"+form.kind.value+"' readonly/>";
-        cell4.innerHTML ="<input type='text'form='form' name='comment"+i+"' value='"+form.comment.value+"' readonly/>";
-        cell5.innerHTML ="<input type='hidden'form='form' name='countryCode"+i+"' value='"+form.countryCode.value+"' />";
-        cell6.innerHTML ="<input type='hidden'form='form' name='operatorCode"+i+"' value='"+form.operatorCode.value+"' />";
-        cell7.innerHTML ="<input type='hidden'form='form' name='phone"+i+"' value='"+form.phone.value+"' />";
+        cell4.innerHTML ="<input type='text' form='form' name='comment"+i+"' value='"+form.comment.value+"' readonly/>";
+        cell5.innerHTML ="<input type='hidden' form='form' name='countryCode"+i+"' value='"+form.countryCode.value+"' />";
+        cell6.innerHTML ="<input type='hidden' form='form' name='operatorCode"+i+"' value='"+form.operatorCode.value+"' />";
+        cell7.innerHTML ="<input type='hidden' form='form' name='phone"+i+"' value='"+form.phone.value+"' />";
         form.reset();
     },
 
     deletePhone: function () {
+        "use strict";
         var table = document.getElementById("phoneTable");
-        var checkboxes = document.getElementsByName('phones');
+        var checkboxes = document.getElementsByName('phones'), length = checkboxes.length;
 
-        for (var i=checkboxes.length - 1; i>=0; i--) {
+        for (var i=length - 1; i>=0; i--) {
             if (checkboxes[i].checked) {
                 table.deleteRow(i);
             }
@@ -108,11 +99,12 @@ var phoneService = {
     },
 
     editPhone: function () {
+        "use strict";
         var form= document.getElementById("telephone");
         var table = document.getElementById("phoneTable");
-        var checkboxes = document.getElementsByName('phones');
+        var checkboxes = document.getElementsByName('phones'), length = checkboxes.length;
 
-        for (var i=0; i<checkboxes.length; i++) {
+        for (var i=0; i<length; i++) {
             if (checkboxes[i].checked) {
                 var row = table.rows[i];
                 form.countryCode.value = row.cells[4].childNodes[0].value;
@@ -130,20 +122,23 @@ var phoneService = {
     },
 
     addPhone: function () {
+        "use strict";
         this.mode = 0;
         openbox(this.popUp);
     },
 
     cancelPhone: function () {
+        "use strict";
         document.getElementById("telephone").reset();
         openbox(this.popUp);
     }
-}
+};
 
 var attachService = {
     popUp: 'attachPopUp',
 
     saveAttach: function () {
+        "use strict";
         var input_file = document.getElementById("b_attach");
         var form= document.getElementById("form");
 
@@ -163,16 +158,18 @@ var attachService = {
     },
 
     deleteAttach: function () {
+        "use strict";
         var form= document.getElementById("form");
         var checkboxes = document.getElementsByName('attaches');
+        var length = document.getElementsByName('attaches').length;
         var flag = false;
-        for (var i=checkboxes.length - 1; i>=0; i--) {
+        for (var i=length - 1; i>=0; i--) {
             if (checkboxes[i].checked) {
                 flag = true;
                 break;
             }
         }
-        if (flag == false) {
+        if (flag === false) {
             return false;
         }
         form.command.value = 'setattach';
@@ -181,9 +178,10 @@ var attachService = {
     },
 
     editAttach: function () {
+        "use strict";
         var comment= document.getElementById("attachComment");
         var table = document.getElementById("attachTable");
-        var checkboxes = document.getElementsByName('attaches');
+        var checkboxes = document.getElementsByName('attaches'), length = checkboxes.length;
 
         document.getElementById("form").attachMode.value = "edit";
 
@@ -192,7 +190,7 @@ var attachService = {
         input_file.style.display = "none";
         file_name.style.display = "initial";
 
-        for (var i=0; i<checkboxes.length; i++) {
+        for (var i=0; i<length; i++) {
             if (checkboxes[i].checked) {
                 var row = table.rows[i];
                 document.getElementById("file_name").value = row.cells[4].firstElementChild.value;
@@ -205,6 +203,7 @@ var attachService = {
     },
 
     addAttach: function () {
+        "use strict";
         var input_file = document.getElementById("b_attach");
         var file_name = document.getElementById("b_file_name");
         input_file.style.display = "initial";
@@ -214,8 +213,9 @@ var attachService = {
     },
 
     cancelAttach: function () {
+        "use strict";
         var comment= document.getElementById("attachComment");
         comment.value = '';
         openbox(this.popUp);
     }
-}
+};

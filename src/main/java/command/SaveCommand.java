@@ -35,6 +35,7 @@ public class SaveCommand implements ActionCommand {
         this.request = request;
         session = request.getSession();
 
+        String mode = request.getParameter("mode");
         Contact contact = ContactUtil.makeContact(request);
         idContact = contactService.setContact(contact);
         savePhones();
@@ -47,6 +48,7 @@ public class SaveCommand implements ActionCommand {
         }
 
         logger.info("Saving contact with full name:"+contact.getFullName());
+
         return "/controller?command=show";
     }
 
